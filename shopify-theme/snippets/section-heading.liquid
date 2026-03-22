@@ -1,0 +1,30 @@
+{% comment %}
+  Reusable section heading snippet.
+  Parameters:
+    heading      - (string) main heading text
+    subheading   - (string) optional sub text below heading
+    align        - (string) 'left' | 'center' | 'right', default 'left'
+    size         - (string) 'sm' | 'md' | 'lg' | 'xl', default 'lg'
+    accent       - (boolean) show accent underline
+    tag          - (string) HTML tag, default 'h2'
+  Usage:
+    {% render 'section-heading', heading: section.settings.heading, align: 'center', accent: true %}
+{% endcomment %}
+
+{%- assign heading_tag = tag | default: 'h2' -%}
+{%- assign heading_align = align | default: 'left' -%}
+{%- assign heading_size = size | default: 'lg' -%}
+
+{%- if heading != blank -%}
+  <div class="section-heading section-heading--{{ heading_align }}">
+    <{{ heading_tag }} class="section-heading__title section-heading__title--{{ heading_size }}">
+      {{- heading -}}
+    </{{ heading_tag }}>
+    {%- if accent -%}
+      <span class="section-heading__accent" aria-hidden="true"></span>
+    {%- endif -%}
+    {%- if subheading != blank -%}
+      <p class="section-heading__sub">{{ subheading }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}

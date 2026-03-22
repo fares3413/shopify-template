@@ -1,0 +1,140 @@
+<section class="best-sellers section-padding" id="BestSellers-{{ section.id }}">
+  <div class="page-width">
+
+    <!-- Header row -->
+    <div class="best-sellers__header">
+      <h2 class="best-sellers__heading">{{ section.settings.heading | default: 'Best Sellers' }}</h2>
+
+      {%- if section.blocks.size > 1 -%}
+        <div class="best-sellers__tabs" role="tablist" aria-label="Product categories">
+          {%- for block in section.blocks -%}
+            <button
+              class="best-sellers__tab {% if forloop.first %}active{% endif %}"
+              role="tab"
+              aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              aria-controls="tab-panel-{{ block.id }}"
+              data-tab="{{ block.id }}"
+              {{ block.shopify_attributes }}
+            >
+              {{ block.settings.tab_label }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- Panels -->
+    {%- for block in section.blocks -%}
+      {%- assign collection = collections[block.settings.collection] -%}
+      <div
+        class="best-sellers__panel {% if forloop.first %}active{% endif %}"
+        id="tab-panel-{{ block.id }}"
+        role="tabpanel"
+        aria-label="{{ block.settings.tab_label }}"
+        {{ block.shopify_attributes }}
+      >
+        <div class="best-sellers__grid" style="--col-count: {{ section.settings.products_per_row }};">
+          {%- if collection != blank and collection.products.size > 0 -%}
+            {%- for product in collection.products limit: section.settings.products_per_row -%}
+              {% render 'product-card', product: product, show_vendor: section.settings.show_vendor %}
+            {%- endfor -%}
+          {%- else -%}
+            {%- for i in (1..section.settings.products_per_row) -%}
+              <div class="product-card product-card--placeholder">
+                <div class="product-card__image-link">
+                  <div class="product-card__image-wrap">
+                    {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'product-card__placeholder' }}
+                  </div>
+                </div>
+                <div class="product-card__info">
+                  {%- if section.settings.show_vendor -%}
+                    <span class="product-card__vendor">VENDOR</span>
+                  {%- endif -%}
+                  <div class="product-card__name-price">
+                    <span class="product-card__name">Example product {{ forloop.index }}</span>
+                    <span class="product-card__price">€19,99</span>
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
+          {%- endif -%}
+        </div>
+
+        {%- if collection != blank and block.settings.show_view_all -%}
+          <div class="best-sellers__cta">
+            <a href="{{ collection.url }}" class="btn btn--outline">
+              View all {{ block.settings.tab_label }}
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Best Sellers",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Best Sellers"
+    },
+    {
+      "type": "range",
+      "id": "products_per_row",
+      "min": 2,
+      "max": 6,
+      "step": 1,
+      "label": "Products per row",
+      "default": 4
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tab",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_label",
+          "label": "Tab label",
+          "default": "Category"
+        },
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_view_all",
+          "label": "Show \"View all\" button",
+          "default": true
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Best Sellers",
+      "blocks": [
+        { "type": "tab", "settings": { "tab_label": "Headphones" } },
+        { "type": "tab", "settings": { "tab_label": "Earphones" } },
+        { "type": "tab", "settings": { "tab_label": "Speakers" } },
+        { "type": "tab", "settings": { "tab_label": "Accessories" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

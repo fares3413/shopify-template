@@ -1,0 +1,16 @@
+{
+  "current": {
+    "color_primary": "#1a1a1a",
+    "color_accent": "#c9a96e",
+    "color_bg": "#ffffff",
+    "color_text": "#1a1a1a",
+    "color_border": "#e8e8e8",
+    "font_size_base": 16,
+    "menu": "main-menu",
+    "footer_menu": "footer",
+    "footer_menu_2": "footer",
+    "promo_tab_text": "GET 20% OFF",
+    "phone_number": "+21 (0) 987654321",
+    "email_address": "hello@domain.com"
+  }
+}

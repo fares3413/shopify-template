@@ -1,0 +1,537 @@
+<section class="bundle-builder section-padding" id="BundleBuilder-{{ section.id }}">
+  <div class="page-width">
+
+    <!-- Section header -->
+    <div class="bundle-builder__header">
+      <div class="bundle-builder__header-text">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="bundle-builder__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        <h2 class="bundle-builder__heading">{{ section.settings.heading | default: 'Build your Bundle' }}</h2>
+        {%- if section.settings.subtext != blank -%}
+          <p class="bundle-builder__subtext">{{ section.settings.subtext }}</p>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.discount > 0 -%}
+        <div class="bundle-builder__deal-badge">
+          <span class="bundle-builder__deal-badge-value">{{ section.settings.discount }}%</span>
+          <span class="bundle-builder__deal-badge-label">OFF when you add {{ section.settings.min_items }}+ items</span>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="bundle-builder__layout">
+
+      <!-- ── Product grid ── -->
+      <div class="bundle-builder__main">
+        <div class="bundle-builder__grid" id="BundleGrid-{{ section.id }}">
+          {%- for block in section.blocks -%}
+            {%- assign bp = all_products[block.settings.product] -%}
+            {%- assign first_variant = bp.selected_or_first_available_variant -%}
+            <div
+              class="bundle-card"
+              role="checkbox"
+              aria-checked="false"
+              tabindex="0"
+              data-bundle-id="{{ block.id }}"
+              data-product-title="{% if bp != blank %}{{ bp.title | escape }}{% else %}Example Product {{ forloop.index }}{% endif %}"
+              data-product-price="{% if bp != blank %}{{ first_variant.price | default: bp.price }}{% else %}1999{% endif %}"
+              data-product-price-formatted="{% if bp != blank %}{{ first_variant.price | default: bp.price | money }}{% else %}€19,99{% endif %}"
+              data-variant-id="{% if first_variant != blank %}{{ first_variant.id }}{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              <!-- Badge -->
+              {%- if block.settings.badge != blank -%}
+                <span class="bundle-card__badge">{{ block.settings.badge }}</span>
+              {%- endif -%}
+
+              <!-- Image -->
+              <div class="bundle-card__image-wrap">
+                {%- if bp != blank and bp.featured_image != blank -%}
+                  <img
+                    src="{{ bp.featured_image | image_url: width: 600 }}"
+                    alt="{{ bp.featured_image.alt | escape }}"
+                    class="bundle-card__image"
+                    loading="lazy"
+                    width="{{ bp.featured_image.width }}"
+                    height="{{ bp.featured_image.height }}"
+                  >
+                {%- else -%}
+                  {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'bundle-card__placeholder' }}
+                {%- endif -%}
+
+                <!-- Selected checkmark overlay -->
+                <div class="bundle-card__check" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+              </div>
+
+              <!-- Info -->
+              <div class="bundle-card__info">
+                {%- if bp != blank -%}
+                  {%- if bp.vendor != blank -%}
+                    <span class="bundle-card__vendor">{{ bp.vendor | upcase }}</span>
+                  {%- endif -%}
+                  <div class="bundle-card__name-price">
+                    <span class="bundle-card__name">{{ bp.title }}</span>
+                    <span class="bundle-card__price">{{ first_variant.price | default: bp.price | money }}</span>
+                  </div>
+
+                  <!-- Variant selector (if product has variants) -->
+                  {%- if bp.variants.size > 1 -%}
+                    <div class="bundle-card__variants" id="BundleVariants-{{ block.id }}">
+                      {%- for variant in bp.variants -%}
+                        <button
+                          class="bundle-card__variant-btn{% if forloop.first %} active{% endif %}"
+                          type="button"
+                          data-variant-id="{{ variant.id }}"
+                          data-variant-price="{{ variant.price }}"
+                          data-variant-price-formatted="{{ variant.price | money }}"
+                          {% unless variant.available %}disabled title="Sold out"{% endunless %}
+                          aria-label="{{ variant.title }}"
+                        >{{ variant.title }}</button>
+                      {%- endfor -%}
+                    </div>
+                  {%- endif -%}
+                {%- else -%}
+                  <span class="bundle-card__vendor">VENDOR</span>
+                  <div class="bundle-card__name-price">
+                    <span class="bundle-card__name">Example product {{ forloop.index }}</span>
+                    <span class="bundle-card__price">€19,99</span>
+                  </div>
+                {%- endif -%}
+              </div>
+
+              <!-- Add indicator -->
+              <div class="bundle-card__add-hint" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Add
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <!-- ── Sticky sidebar ── -->
+      <div class="bundle-builder__sidebar-wrap">
+        <div class="bundle-sidebar" id="BundleSidebar-{{ section.id }}">
+
+          <div class="bundle-sidebar__top">
+            <h3 class="bundle-sidebar__title">Your Bundle</h3>
+            <button class="bundle-sidebar__clear" id="BundleClear-{{ section.id }}" type="button" style="display:none;">
+              Clear all
+            </button>
+          </div>
+
+          <!-- Hint / status -->
+          <p class="bundle-sidebar__hint" id="BundleHint-{{ section.id }}">
+            Select at least <strong>{{ section.settings.min_items }}</strong> items to unlock <strong>{{ section.settings.discount }}% off</strong>
+          </p>
+
+          <!-- Progress -->
+          <div class="bundle-sidebar__progress-wrap">
+            <div class="bundle-sidebar__progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="{{ section.settings.min_items }}" aria-valuenow="0" id="BundleProgress-{{ section.id }}">
+              <div class="bundle-sidebar__progress-fill" id="BundleProgressFill-{{ section.id }}"></div>
+            </div>
+            <div class="bundle-sidebar__progress-meta">
+              <span id="BundleProgressLabel-{{ section.id }}">0 of {{ section.settings.min_items }} selected</span>
+              <span class="bundle-sidebar__progress-pct" id="BundleDiscountStatus-{{ section.id }}" style="display:none;">
+                🎉 {{ section.settings.discount }}% off applied!
+              </span>
+            </div>
+          </div>
+
+          <!-- Selected items -->
+          <ul class="bundle-sidebar__items" id="BundleItems-{{ section.id }}" aria-live="polite" aria-label="Selected bundle items">
+            <!-- Populated by JS -->
+          </ul>
+
+          <!-- Empty state -->
+          <div class="bundle-sidebar__empty" id="BundleEmpty-{{ section.id }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            <p>No items selected yet</p>
+          </div>
+
+          <div class="bundle-sidebar__divider"></div>
+
+          <!-- Totals -->
+          <div class="bundle-sidebar__totals">
+            <div class="bundle-sidebar__total-row" id="BundleOriginalRow-{{ section.id }}" style="display:none;">
+              <span>Original</span>
+              <span class="bundle-sidebar__total-strike" id="BundleOriginalPrice-{{ section.id }}"></span>
+            </div>
+            <div class="bundle-sidebar__total-row bundle-sidebar__total-row--saving" id="BundleDiscountRow-{{ section.id }}" style="display:none;">
+              <span>You save ({{ section.settings.discount }}%)</span>
+              <span class="bundle-sidebar__total-saving" id="BundleDiscountPrice-{{ section.id }}"></span>
+            </div>
+            <div class="bundle-sidebar__total-row bundle-sidebar__total-row--total">
+              <span>Total</span>
+              <span class="bundle-sidebar__total-value" id="BundleTotal-{{ section.id }}">—</span>
+            </div>
+          </div>
+
+          <button
+            class="btn btn--primary btn--full bundle-sidebar__atc"
+            id="BundleAddToCart-{{ section.id }}"
+            type="button"
+            disabled
+            aria-disabled="true"
+          >
+            <span id="BundleAtcLabel-{{ section.id }}">Add {{ section.settings.min_items }} items to unlock deal</span>
+          </button>
+
+          {%- if section.settings.disclaimer != blank -%}
+            <p class="bundle-sidebar__disclaimer">{{ section.settings.disclaimer }}</p>
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  'use strict';
+  var sectionId = '{{ section.id }}';
+  var minItems  = {{ section.settings.min_items | default: 3 }};
+  var maxItems  = {{ section.settings.max_items | default: 0 }}; // 0 = unlimited
+  var discPct   = {{ section.settings.discount | default: 30 }};
+
+  var grid         = document.getElementById('BundleGrid-' + sectionId);
+  if (!grid) return;
+
+  var progressFill = document.getElementById('BundleProgressFill-' + sectionId);
+  var progressBar  = document.getElementById('BundleProgress-' + sectionId);
+  var progressLbl  = document.getElementById('BundleProgressLabel-' + sectionId);
+  var discStatus   = document.getElementById('BundleDiscountStatus-' + sectionId);
+  var itemsList    = document.getElementById('BundleItems-' + sectionId);
+  var emptyEl      = document.getElementById('BundleEmpty-' + sectionId);
+  var totalEl      = document.getElementById('BundleTotal-' + sectionId);
+  var origEl       = document.getElementById('BundleOriginalPrice-' + sectionId);
+  var discEl       = document.getElementById('BundleDiscountPrice-' + sectionId);
+  var origRow      = document.getElementById('BundleOriginalRow-' + sectionId);
+  var discRow      = document.getElementById('BundleDiscountRow-' + sectionId);
+  var atcBtn       = document.getElementById('BundleAddToCart-' + sectionId);
+  var atcLabel     = document.getElementById('BundleAtcLabel-' + sectionId);
+  var clearBtn     = document.getElementById('BundleClear-' + sectionId);
+  var hintEl       = document.getElementById('BundleHint-' + sectionId);
+
+  // Map: blockId → { title, price, formattedPrice, variantId, cardEl }
+  var selected = {};
+
+  /* ─── helpers ─── */
+  function formatMoney(cents) {
+    return (cents / 100).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',') + ' ' + (window.Shopify && Shopify.currency ? Shopify.currency.active : 'EUR');
+  }
+
+  function count() { return Object.keys(selected).length; }
+
+  /* ─── render ─── */
+  function render() {
+    var n        = count();
+    var raw      = Object.values(selected).reduce(function(s, v) { return s + v.price; }, 0);
+    var hasDisc  = n >= minItems;
+    var saving   = hasDisc ? Math.round(raw * discPct / 100) : 0;
+    var final    = raw - saving;
+    var pct      = minItems > 0 ? Math.min(100, (n / minItems) * 100) : 100;
+
+    /* progress */
+    if (progressFill) progressFill.style.width = pct + '%';
+    if (progressBar)  progressBar.setAttribute('aria-valuenow', n);
+    if (progressLbl) {
+      if (hasDisc) {
+        progressLbl.textContent = n + ' item' + (n !== 1 ? 's' : '') + ' selected';
+      } else {
+        var need = minItems - n;
+        progressLbl.textContent = 'Add ' + need + ' more to unlock ' + discPct + '% off';
+      }
+    }
+    if (discStatus) discStatus.style.display = hasDisc ? 'inline' : 'none';
+
+    /* items list */
+    if (itemsList) {
+      itemsList.innerHTML = '';
+      Object.keys(selected).forEach(function(id) {
+        var item = selected[id];
+        var li   = document.createElement('li');
+        li.className = 'bundle-sidebar__item';
+        li.innerHTML =
+          '<span class="bundle-sidebar__item-name">' + item.title + '</span>' +
+          '<span class="bundle-sidebar__item-price">' + item.formattedPrice + '</span>' +
+          '<button class="bundle-sidebar__item-remove" type="button" data-id="' + id + '" aria-label="Remove ' + item.title + '">' +
+            '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+          '</button>';
+        itemsList.appendChild(li);
+      });
+    }
+
+    /* empty state */
+    if (emptyEl) emptyEl.style.display = n === 0 ? 'flex' : 'none';
+    if (itemsList) itemsList.style.display = n > 0 ? 'block' : 'none';
+
+    /* totals */
+    if (hasDisc) {
+      if (origRow)  origRow.style.display  = 'flex';
+      if (discRow)  discRow.style.display  = 'flex';
+      if (origEl)   origEl.textContent     = formatMoney(raw);
+      if (discEl)   discEl.textContent     = '−' + formatMoney(saving);
+    } else {
+      if (origRow)  origRow.style.display  = 'none';
+      if (discRow)  discRow.style.display  = 'none';
+    }
+    if (totalEl) totalEl.textContent = n > 0 ? formatMoney(final) : '—';
+
+    /* CTA */
+    var ready = n >= minItems;
+    if (atcBtn) {
+      atcBtn.disabled = !ready;
+      atcBtn.setAttribute('aria-disabled', !ready ? 'true' : 'false');
+    }
+    if (atcLabel) {
+      if (ready) {
+        atcLabel.textContent = 'Add ' + n + ' item' + (n !== 1 ? 's' : '') + ' to cart';
+      } else {
+        var need2 = minItems - n;
+        atcLabel.textContent = 'Add ' + need2 + ' more item' + (need2 !== 1 ? 's' : '') + ' to unlock deal';
+      }
+    }
+    if (clearBtn) clearBtn.style.display = n > 0 ? 'inline-flex' : 'none';
+    if (hintEl)   hintEl.style.display   = n >= minItems ? 'none' : 'block';
+
+    /* max items — disable unselected cards */
+    if (maxItems > 0 && n >= maxItems) {
+      grid.querySelectorAll('.bundle-card:not(.bundle-card--selected)').forEach(function(c) {
+        c.classList.add('bundle-card--disabled');
+      });
+    } else {
+      grid.querySelectorAll('.bundle-card--disabled').forEach(function(c) {
+        c.classList.remove('bundle-card--disabled');
+      });
+    }
+  }
+
+  /* ─── toggle card ─── */
+  function toggleCard(card) {
+    var id = card.dataset.bundleId;
+    if (selected[id]) {
+      /* deselect */
+      delete selected[id];
+      card.classList.remove('bundle-card--selected');
+      card.setAttribute('aria-checked', 'false');
+    } else {
+      /* guard max */
+      if (maxItems > 0 && count() >= maxItems) return;
+      /* read active variant */
+      var variantBtn = card.querySelector('.bundle-card__variant-btn.active');
+      var variantId       = variantBtn ? variantBtn.dataset.variantId       : card.dataset.variantId;
+      var price           = parseInt(variantBtn ? variantBtn.dataset.variantPrice : card.dataset.productPrice, 10);
+      var formattedPrice  = variantBtn ? variantBtn.dataset.variantPriceFormatted : card.dataset.productPriceFormatted;
+
+      selected[id] = {
+        title:          card.dataset.productTitle,
+        price:          price,
+        formattedPrice: formattedPrice,
+        variantId:      variantId
+      };
+      card.classList.add('bundle-card--selected');
+      card.setAttribute('aria-checked', 'true');
+    }
+    render();
+  }
+
+  /* ─── card clicks / keyboard ─── */
+  grid.addEventListener('click', function(e) {
+    /* variant button — don't toggle card */
+    var vBtn = e.target.closest('.bundle-card__variant-btn');
+    if (vBtn) {
+      var card = vBtn.closest('.bundle-card');
+      card.querySelectorAll('.bundle-card__variant-btn').forEach(function(b) { b.classList.remove('active'); });
+      vBtn.classList.add('active');
+      /* update card data attrs */
+      card.dataset.variantId              = vBtn.dataset.variantId;
+      card.dataset.productPrice           = vBtn.dataset.variantPrice;
+      card.dataset.productPriceFormatted  = vBtn.dataset.variantPriceFormatted;
+      /* if already selected, update its price */
+      var bid = card.dataset.bundleId;
+      if (selected[bid]) {
+        selected[bid].price          = parseInt(vBtn.dataset.variantPrice, 10);
+        selected[bid].formattedPrice = vBtn.dataset.variantPriceFormatted;
+        selected[bid].variantId      = vBtn.dataset.variantId;
+        render();
+      }
+      return;
+    }
+
+    var card = e.target.closest('.bundle-card');
+    if (!card || card.classList.contains('bundle-card--disabled')) return;
+    toggleCard(card);
+  });
+
+  grid.addEventListener('keydown', function(e) {
+    if (e.key !== ' ' && e.key !== 'Enter') return;
+    var card = e.target.closest('.bundle-card');
+    if (!card || card.classList.contains('bundle-card--disabled')) return;
+    e.preventDefault();
+    toggleCard(card);
+  });
+
+  /* ─── remove item from sidebar ─── */
+  if (itemsList) {
+    itemsList.addEventListener('click', function(e) {
+      var btn = e.target.closest('.bundle-sidebar__item-remove');
+      if (!btn) return;
+      var id   = btn.dataset.id;
+      var card = grid.querySelector('[data-bundle-id="' + id + '"]');
+      if (card) {
+        delete selected[id];
+        card.classList.remove('bundle-card--selected');
+        card.setAttribute('aria-checked', 'false');
+        render();
+      }
+    });
+  }
+
+  /* ─── clear all ─── */
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function() {
+      Object.keys(selected).forEach(function(id) {
+        var card = grid.querySelector('[data-bundle-id="' + id + '"]');
+        if (card) { card.classList.remove('bundle-card--selected'); card.setAttribute('aria-checked', 'false'); }
+      });
+      selected = {};
+      render();
+    });
+  }
+
+  /* ─── add to cart ─── */
+  if (atcBtn) {
+    atcBtn.addEventListener('click', async function() {
+      if (count() < minItems) return;
+      var items = Object.values(selected)
+        .filter(function(v) { return v.variantId; })
+        .map(function(v) { return { id: parseInt(v.variantId, 10), quantity: 1 }; });
+      if (!items.length) return;
+
+      atcBtn.disabled = true;
+      if (atcLabel) atcLabel.textContent = 'Adding…';
+
+      try {
+        var res  = await fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items: items })
+        });
+        var data = await res.json();
+        if (data.items) {
+          var cartRes = await fetch('/cart.js');
+          var cart    = await cartRes.json();
+          /* update header count */
+          var countEl = document.querySelector('.header__cart-count');
+          if (countEl) { countEl.textContent = cart.item_count; countEl.style.display = 'flex'; }
+          /* open cart drawer */
+          var cartToggle = document.getElementById('CartToggle');
+          if (cartToggle) cartToggle.click();
+        }
+      } catch(err) { console.error(err); }
+      finally {
+        render(); /* re-enables btn if still has items */
+      }
+    });
+  }
+
+  /* ─── init ─── */
+  render();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Bundle Builder",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Mix & Save"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Build your Bundle"
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Description",
+      "default": "The choice is yours. With our bundle builder, you can select any combination from our range of products. The easiest way to keep everyone happy."
+    },
+    {
+      "type": "range",
+      "id": "min_items",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "label": "Minimum items to unlock discount",
+      "default": 3
+    },
+    {
+      "type": "range",
+      "id": "max_items",
+      "min": 0,
+      "max": 10,
+      "step": 1,
+      "label": "Maximum items (0 = unlimited)",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "discount",
+      "min": 0,
+      "max": 60,
+      "step": 5,
+      "unit": "%",
+      "label": "Bundle discount %",
+      "default": 30
+    },
+    {
+      "type": "text",
+      "id": "disclaimer",
+      "label": "Disclaimer text (below CTA)",
+      "default": "Free shipping on all bundles"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Badge label (e.g. Best Seller, New)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bundle Builder",
+      "blocks": [
+        { "type": "product", "settings": { "badge": "Best Seller" } },
+        { "type": "product", "settings": { "badge": "New" } },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" },
+        { "type": "product" }
+      ]
+    }
+  ]
+}
+{% endschema %}

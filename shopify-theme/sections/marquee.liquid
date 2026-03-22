@@ -1,0 +1,116 @@
+<section
+  class="marquee marquee--{{ section.settings.style }}"
+  id="Marquee-{{ section.id }}"
+  style="--marquee-speed: {{ section.settings.speed }}s;"
+>
+  <div class="marquee__track" aria-hidden="true">
+    <div class="marquee__inner{% if section.settings.direction == 'rtl' %} marquee__inner--rtl{% endif %}">
+      {%- for block in section.blocks -%}
+        <span class="marquee__item" {{ block.shopify_attributes }}>
+          {%- if block.settings.icon != 'none' -%}
+            <span class="marquee__icon">
+              {%- case block.settings.icon -%}
+                {%- when 'star' -%}<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                {%- when 'dot' -%}<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;vertical-align:middle;"></span>
+                {%- when 'arrow' -%}<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              {%- endcase -%}
+            </span>
+          {%- endif -%}
+          {{ block.settings.text }}
+        </span>
+      {%- endfor -%}
+      <!-- Duplicate for seamless loop -->
+      {%- for block in section.blocks -%}
+        <span class="marquee__item">
+          {%- if block.settings.icon != 'none' -%}
+            <span class="marquee__icon">
+              {%- case block.settings.icon -%}
+                {%- when 'star' -%}<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                {%- when 'dot' -%}<span style="display:inline-block;width:6px;height:6px;border-radius:50%;background:currentColor;vertical-align:middle;"></span>
+                {%- when 'arrow' -%}<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              {%- endcase -%}
+            </span>
+          {%- endif -%}
+          {{ block.settings.text }}
+        </span>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Marquee",
+  "settings": [
+    {
+      "type": "select",
+      "id": "style",
+      "label": "Style",
+      "options": [
+        { "value": "dark", "label": "Dark" },
+        { "value": "light", "label": "Light" },
+        { "value": "accent", "label": "Accent (gold)" }
+      ],
+      "default": "dark"
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Scroll direction",
+      "options": [
+        { "value": "ltr", "label": "Left to right" },
+        { "value": "rtl", "label": "Right to left" }
+      ],
+      "default": "ltr"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "label": "Scroll speed",
+      "default": 25
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Text item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Premium quality"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon before text",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "star", "label": "Star" },
+            { "value": "dot", "label": "Dot" },
+            { "value": "arrow", "label": "Arrow" }
+          ],
+          "default": "star"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee",
+      "blocks": [
+        { "type": "item", "settings": { "text": "Day-long comfort", "icon": "star" } },
+        { "type": "item", "settings": { "text": "Play anything", "icon": "star" } },
+        { "type": "item", "settings": { "text": "Premium quality", "icon": "star" } },
+        { "type": "item", "settings": { "text": "Free shipping", "icon": "star" } },
+        { "type": "item", "settings": { "text": "2-year warranty", "icon": "star" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

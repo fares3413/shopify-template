@@ -1,0 +1,129 @@
+<section class="latest-stories section-padding" id="LatestStories-{{ section.id }}">
+  <div class="page-width">
+
+    <div class="latest-stories__header">
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="latest-stories__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        <h2 class="latest-stories__heading">{{ section.settings.heading | default: 'Latest Stories' }}</h2>
+      </div>
+      {%- assign blog = blogs[section.settings.blog] -%}
+      {%- if blog != blank and section.settings.show_view_all -%}
+        <a href="{{ blog.url }}" class="btn btn--outline btn--sm">
+          View all stories
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="latest-stories__grid">
+      {%- if blog != blank and blog.articles.size > 0 -%}
+        {%- for article in blog.articles limit: section.settings.post_count -%}
+          <article class="story-card">
+            <a href="{{ article.url }}" class="story-card__image-link" tabindex="-1" aria-hidden="true">
+              <div class="story-card__image-wrap">
+                {%- if article.image != blank -%}
+                  <img
+                    src="{{ article.image | image_url: width: 800 }}"
+                    alt="{{ article.image.alt | escape }}"
+                    class="story-card__image"
+                    loading="lazy"
+                    width="{{ article.image.width }}"
+                    height="{{ article.image.height }}"
+                  >
+                {%- else -%}
+                  {{ 'image' | placeholder_svg_tag: 'story-card__placeholder' }}
+                {%- endif -%}
+              </div>
+            </a>
+            <div class="story-card__info">
+              {%- if article.tags.size > 0 -%}
+                <span class="story-card__tag">{{ article.tags.first }}</span>
+              {%- endif -%}
+              <h3 class="story-card__title">
+                <a href="{{ article.url }}">{{ article.title }}</a>
+              </h3>
+              {%- if article.excerpt != blank -%}
+                <p class="story-card__excerpt">{{ article.excerpt | strip_html | truncatewords: 18 }}</p>
+              {%- endif -%}
+              <div class="story-card__meta">
+                <time class="story-card__date" datetime="{{ article.published_at | date: '%Y-%m-%d' }}">
+                  {{ article.published_at | date: '%b %d, %Y' }}
+                </time>
+                <a href="{{ article.url }}" class="story-card__read-more">
+                  Read more
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..section.settings.post_count) -%}
+          <article class="story-card story-card--placeholder">
+            <div class="story-card__image-link">
+              <div class="story-card__image-wrap">
+                {{ 'image' | placeholder_svg_tag: 'story-card__placeholder' }}
+              </div>
+            </div>
+            <div class="story-card__info">
+              <span class="story-card__tag">Category</span>
+              <h3 class="story-card__title">Article title goes here</h3>
+              <p class="story-card__excerpt">Connect a blog to display your latest stories and editorial content.</p>
+              <div class="story-card__meta">
+                <span class="story-card__date">Jan 01, 2025</span>
+              </div>
+            </div>
+          </article>
+        {%- endfor -%}
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Latest Stories",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "From the blog"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Latest Stories"
+    },
+    {
+      "type": "blog",
+      "id": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "range",
+      "id": "post_count",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "label": "Number of articles",
+      "default": 3
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "label": "Show \"View all\" button",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Latest Stories"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,112 @@
+<footer class="footer">
+
+  <div class="footer__trust-bar">
+    <div class="footer__trust-bar-inner page-width">
+      <div class="footer__trust-item">
+        {% render 'icon-headphone' %}
+        <div>
+          <span class="footer__trust-title">Customer service</span>
+          <span class="footer__trust-text">{{ settings.trust_1_text | default: "We're always here for you" }}</span>
+        </div>
+      </div>
+      <div class="footer__trust-item">
+        {% render 'icon-truck' %}
+        <div>
+          <span class="footer__trust-title">Fast Free Shipping</span>
+          <span class="footer__trust-text">{{ settings.trust_2_text | default: "Get free shipping on orders of $150 or more" }}</span>
+        </div>
+      </div>
+      <div class="footer__trust-item">
+        {% render 'icon-gift' %}
+        <div>
+          <span class="footer__trust-title">Refer a friend</span>
+          <span class="footer__trust-text">{{ settings.trust_3_text | default: "Refer a friend and get 15% off each other." }}</span>
+        </div>
+      </div>
+      <div class="footer__trust-item">
+        {% render 'icon-shield' %}
+        <div>
+          <span class="footer__trust-title">Secure payment</span>
+          <span class="footer__trust-text">{{ settings.trust_4_text | default: "Your payment information is processed securely" }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer__main">
+    <div class="footer__main-inner page-width">
+
+      <div class="footer__col footer__col--links">
+        <h3 class="footer__heading">Quick links</h3>
+        {%- if settings.footer_menu != blank -%}
+          <ul class="footer__link-list">
+            {%- for link in linklists[settings.footer_menu].links -%}
+              <li><a href="{{ link.url }}" class="footer__link">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+        <div class="footer__contact">
+          {%- if settings.phone_number != blank -%}
+            <a href="tel:{{ settings.phone_number }}" class="footer__contact-link">{{ settings.phone_number }}</a>
+          {%- endif -%}
+          {%- if settings.email_address != blank -%}
+            <a href="mailto:{{ settings.email_address }}" class="footer__contact-link">{{ settings.email_address }}</a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <div class="footer__col footer__col--info">
+        <h3 class="footer__heading">Information</h3>
+        {%- if settings.footer_menu_2 != blank -%}
+          <ul class="footer__link-list">
+            {%- for link in linklists[settings.footer_menu_2].links -%}
+              <li><a href="{{ link.url }}" class="footer__link">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      <div class="footer__col footer__col--newsletter">
+        <h3 class="footer__heading footer__heading--large">Stay in the loop with our weekly newsletter</h3>
+        {% form 'customer', id: 'FooterNewsletter' %}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          <div class="footer__newsletter-form">
+            <input
+              type="email"
+              name="contact[email]"
+              class="footer__newsletter-input"
+              placeholder="Enter your email"
+              autocorrect="off"
+              autocapitalize="off"
+              aria-label="Email address"
+              required
+            >
+            <button type="submit" class="footer__newsletter-btn" aria-label="Subscribe">
+              {% render 'icon-arrow-right' %}
+            </button>
+          </div>
+        {% endform %}
+        <div class="footer__newsletter-social">
+          {%- if settings.social_facebook_link != blank -%}
+            <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook">{% render 'icon-facebook' %}</a>
+          {%- endif -%}
+          {%- if settings.social_twitter_link != blank -%}
+            <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener" aria-label="X">{% render 'icon-x' %}</a>
+          {%- endif -%}
+          {%- if settings.social_instagram_link != blank -%}
+            <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram">{% render 'icon-instagram' %}</a>
+          {%- endif -%}
+          {%- if settings.social_youtube_link != blank -%}
+            <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube">{% render 'icon-youtube' %}</a>
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="footer__bottom">
+    <p class="footer__copyright">© {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.</p>
+  </div>
+
+</footer>

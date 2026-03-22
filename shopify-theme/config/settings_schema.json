@@ -1,0 +1,260 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Luxe Store",
+    "theme_version": "2.0.0",
+    "theme_author": "Custom Theme",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Logo & Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo image"
+      },
+      {
+        "type": "range",
+        "id": "logo_width",
+        "min": 80,
+        "max": 300,
+        "step": 10,
+        "unit": "px",
+        "label": "Logo width",
+        "default": 140
+      },
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image"
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary color",
+        "default": "#1a1a1a"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent color (gold/beige)",
+        "default": "#c9a96e"
+      },
+      {
+        "type": "color",
+        "id": "color_bg",
+        "label": "Page background",
+        "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Body text color",
+        "default": "#1a1a1a"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "range",
+        "id": "font_size_body",
+        "min": 14,
+        "max": 18,
+        "step": 1,
+        "unit": "px",
+        "label": "Body font size",
+        "default": 16
+      }
+    ]
+  },
+  {
+    "name": "Navigation",
+    "settings": [
+      {
+        "type": "link_list",
+        "id": "menu",
+        "label": "Main navigation menu",
+        "default": "main-menu"
+      },
+      {
+        "type": "link_list",
+        "id": "footer_menu",
+        "label": "Footer quick links",
+        "default": "footer"
+      },
+      {
+        "type": "link_list",
+        "id": "footer_menu_2",
+        "label": "Footer information links"
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "X (Twitter) URL"
+      },
+      {
+        "type": "text",
+        "id": "social_instagram_link",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube_link",
+        "label": "YouTube URL"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_sidebar_social",
+        "label": "Show floating social sidebar",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Contact info",
+    "settings": [
+      {
+        "type": "text",
+        "id": "phone_number",
+        "label": "Phone number",
+        "default": "+21 (0) 987654321"
+      },
+      {
+        "type": "text",
+        "id": "email_address",
+        "label": "Email address",
+        "default": "hello@domain.com"
+      }
+    ]
+  },
+  {
+    "name": "Promo tab",
+    "settings": [
+      {
+        "type": "text",
+        "id": "promo_tab_text",
+        "label": "Promo tab text",
+        "default": "GET 20% OFF"
+      },
+      {
+        "type": "url",
+        "id": "promo_tab_link",
+        "label": "Promo tab link"
+      }
+    ]
+  },
+  {
+    "name": "Trust & Reassurance",
+    "settings": [
+      {
+        "type": "text",
+        "id": "trust_1_text",
+        "label": "Trust item 1 text",
+        "default": "It's not actually free we just price it into the products."
+      },
+      {
+        "type": "text",
+        "id": "trust_2_text",
+        "label": "Trust item 2 text",
+        "default": "Get free shipping on orders of $150 or more"
+      },
+      {
+        "type": "text",
+        "id": "trust_3_text",
+        "label": "Trust item 3 text",
+        "default": "Refer a friend and get 15% off each other."
+      },
+      {
+        "type": "text",
+        "id": "trust_4_text",
+        "label": "Trust item 4 text",
+        "default": "Your payment information is processed securely"
+      }
+    ]
+  },
+  {
+    "name": "Newsletter popup",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "popup_enabled",
+        "label": "Enable newsletter popup",
+        "default": true
+      },
+      {
+        "type": "select",
+        "id": "popup_delay",
+        "label": "Show popup after",
+        "options": [
+          { "value": "1", "label": "1 second" },
+          { "value": "3", "label": "3 seconds" },
+          { "value": "5", "label": "5 seconds" },
+          { "value": "8", "label": "8 seconds" },
+          { "value": "15", "label": "15 seconds" }
+        ],
+        "default": "3"
+      },
+      {
+        "type": "checkbox",
+        "id": "popup_show_once",
+        "label": "Show once per session",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "popup_kicker",
+        "label": "Eyebrow label",
+        "default": "First timer?"
+      },
+      {
+        "type": "richtext",
+        "id": "popup_heading",
+        "label": "Heading",
+        "default": "<p>Sign up and get <em>20% off</em> your first order</p>"
+      },
+      {
+        "type": "text",
+        "id": "popup_placeholder",
+        "label": "Email placeholder",
+        "default": "Enter your email"
+      },
+      {
+        "type": "text",
+        "id": "popup_success",
+        "label": "Success message",
+        "default": "You're in! Check your inbox for your discount code."
+      },
+      {
+        "type": "text",
+        "id": "popup_disclaimer",
+        "label": "Disclaimer text",
+        "default": "Subscribe to our newsletter and be the first to hear about our new arrivals, special promotions and online exclusives."
+      },
+      {
+        "type": "text",
+        "id": "popup_dismiss_label",
+        "label": "Dismiss link text",
+        "default": "No thanks, I prefer full price"
+      }
+    ]
+  }
+]

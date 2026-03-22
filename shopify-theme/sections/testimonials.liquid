@@ -1,0 +1,153 @@
+<section class="testimonials" id="Testimonials-{{ section.id }}">
+  <div class="testimonials__inner">
+
+    {%- if section.settings.background_image != blank -%}
+      <img
+        src="{{ section.settings.background_image | image_url: width: 1920 }}"
+        alt=""
+        class="testimonials__bg"
+        loading="lazy"
+        aria-hidden="true"
+        width="{{ section.settings.background_image.width }}"
+        height="{{ section.settings.background_image.height }}"
+      >
+    {%- endif -%}
+    <div class="testimonials__overlay"></div>
+
+    <div class="page-width testimonials__layout">
+
+      {%- if section.settings.heading != blank -%}
+        <div class="testimonials__header">
+          <p class="testimonials__eyebrow">{{ section.settings.eyebrow | default: 'Testimonials' }}</p>
+          <h2 class="testimonials__heading">{{ section.settings.heading }}</h2>
+        </div>
+      {%- endif -%}
+
+      <div class="testimonials__slider" id="TestimonialsSlider-{{ section.id }}">
+        {%- for block in section.blocks -%}
+          <div
+            class="testimonials__slide {% if forloop.first %}active{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            <!-- Stars -->
+            {%- if block.settings.rating > 0 -%}
+              <div class="testimonials__stars" aria-label="{{ block.settings.rating }} out of 5 stars">
+                {%- for i in (1..5) -%}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="{% if i <= block.settings.rating %}currentColor{% else %}none{% endif %}" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+
+            <div class="testimonials__quote-mark" aria-hidden="true">"</div>
+            <blockquote class="testimonials__quote">{{ block.settings.quote }}</blockquote>
+
+            <cite class="testimonials__author">
+              {%- if block.settings.author_image != blank -%}
+                <img
+                  src="{{ block.settings.author_image | image_url: width: 80 }}"
+                  alt="{{ block.settings.author | escape }}"
+                  class="testimonials__author-image"
+                  width="40" height="40"
+                  loading="lazy"
+                >
+              {%- endif -%}
+              <span class="testimonials__author-name">— {{ block.settings.author }}</span>
+            </cite>
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- if section.blocks.size > 1 -%}
+        <div class="testimonials__controls">
+          <button class="testimonials__nav testimonials__nav--prev" aria-label="Previous testimonial">
+            {% render 'icon-arrow-left' %}
+          </button>
+          <div class="testimonials__dots" role="tablist">
+            {%- for block in section.blocks -%}
+              <button
+                class="testimonials__dot {% if forloop.first %}active{% endif %}"
+                role="tab"
+                data-index="{{ forloop.index0 }}"
+                aria-label="Testimonial {{ forloop.index }}"
+                aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+              ></button>
+            {%- endfor -%}
+          </div>
+          <button class="testimonials__nav testimonials__nav--next" aria-label="Next testimonial">
+            {% render 'icon-arrow-right' %}
+          </button>
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "What customers say"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Loved by audiophiles worldwide"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "quote",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "min": 0,
+          "max": 5,
+          "step": 1,
+          "label": "Star rating (0 = hidden)",
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote",
+          "default": "This store's meticulous curation of premium audio tech truly stands out. Their offerings consistently raise the bar."
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author",
+          "default": "Nathan W., Verified Buyer"
+        },
+        {
+          "type": "image_picker",
+          "id": "author_image",
+          "label": "Author photo (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [
+        { "type": "quote", "settings": { "rating": 5, "quote": "Harmony Sound's meticulous curation of premium audio tech truly stands out. Their offerings consistently raise the bar.", "author": "Nathan Wright, Rolling Stone" } },
+        { "type": "quote", "settings": { "rating": 5, "quote": "An unmatched audio experience. Quality that speaks for itself every single day.", "author": "Anna S., Verified Buyer" } },
+        { "type": "quote", "settings": { "rating": 5, "quote": "The best audio products I've ever owned. The service is exceptional too.", "author": "Marcus R., Audiophile" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

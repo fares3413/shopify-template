@@ -1,0 +1,143 @@
+<!-- Newsletter Popup -->
+<div
+  class="nl-popup"
+  id="NewsletterPopup"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="NewsletterPopupTitle"
+  aria-hidden="true"
+  data-delay="{{ settings.popup_delay | default: 3 }}"
+  data-once="{{ settings.popup_show_once | default: true }}"
+>
+  <div class="nl-popup__backdrop" id="NewsletterBackdrop"></div>
+
+  <div class="nl-popup__panel">
+
+    <!-- Close -->
+    <button class="nl-popup__close" id="NewsletterClose" aria-label="Close newsletter popup">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+
+    <!-- Header -->
+    <p class="nl-popup__kicker">{{ settings.popup_kicker | default: 'First timer?' }}</p>
+    <h2 class="nl-popup__title" id="NewsletterPopupTitle">
+      {{ settings.popup_heading | default: 'Sign up and get <em>20% off</em> your first order' }}
+    </h2>
+
+    <!-- Form -->
+    {%- form 'customer', id: 'NewsletterPopupForm' -%}
+      <input type="hidden" name="contact[tags]" value="newsletter,popup">
+
+      <div class="nl-popup__field-wrap">
+        <label for="NewsletterEmail" class="visually-hidden">Email address</label>
+        <input
+          id="NewsletterEmail"
+          type="email"
+          name="contact[email]"
+          class="nl-popup__input"
+          placeholder="{{ settings.popup_placeholder | default: 'Enter your email' }}"
+          autocomplete="email"
+          required
+          aria-required="true"
+        >
+        <button type="submit" class="nl-popup__submit" aria-label="Subscribe">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </div>
+
+      {%- if form.posted_successfully? -%}
+        <p class="nl-popup__success">
+          🎉 {{ settings.popup_success | default: "You're in! Check your inbox for your discount code." }}
+        </p>
+      {%- endif -%}
+      {%- if form.errors -%}
+        <p class="nl-popup__error">{{ form.errors.translated_fields['email'] | capitalize }} {{ form.errors.messages['email'] }}</p>
+      {%- endif -%}
+    {%- endform -%}
+
+    <!-- Disclaimer -->
+    {%- if settings.popup_disclaimer != blank -%}
+      <p class="nl-popup__disclaimer">{{ settings.popup_disclaimer }}</p>
+    {%- endif -%}
+
+    <!-- Social icons -->
+    <div class="nl-popup__social">
+      {%- if settings.social_facebook_link != blank -%}
+        <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" aria-label="Facebook" class="nl-popup__social-link">{% render 'icon-facebook' %}</a>
+      {%- endif -%}
+      {%- if settings.social_twitter_link != blank -%}
+        <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener" aria-label="X" class="nl-popup__social-link">{% render 'icon-x' %}</a>
+      {%- endif -%}
+      {%- if settings.social_instagram_link != blank -%}
+        <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" aria-label="Instagram" class="nl-popup__social-link">{% render 'icon-instagram' %}</a>
+      {%- endif -%}
+      {%- if settings.social_youtube_link != blank -%}
+        <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" aria-label="YouTube" class="nl-popup__social-link">{% render 'icon-youtube' %}</a>
+      {%- endif -%}
+    </div>
+
+    <!-- Dismiss link -->
+    <button class="nl-popup__dismiss" id="NewsletterDismiss" type="button">
+      {{ settings.popup_dismiss_label | default: 'No thanks, I prefer full price' }}
+    </button>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  var popup     = document.getElementById('NewsletterPopup');
+  var backdrop  = document.getElementById('NewsletterBackdrop');
+  var closeBtn  = document.getElementById('NewsletterClose');
+  var dismissBtn = document.getElementById('NewsletterDismiss');
+  if (!popup) return;
+
+  var delay    = parseInt(popup.dataset.delay, 10) * 1000 || 3000;
+  var showOnce = popup.dataset.once !== 'false';
+  var STORAGE_KEY = 'nl_popup_closed';
+
+  function open() {
+    popup.setAttribute('aria-hidden', 'false');
+    popup.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    /* focus the email input */
+    setTimeout(function () {
+      var input = popup.querySelector('.nl-popup__input');
+      if (input) input.focus();
+    }, 350);
+  }
+
+  function close() {
+    popup.setAttribute('aria-hidden', 'true');
+    popup.classList.remove('is-open');
+    document.body.style.overflow = '';
+    if (showOnce) {
+      try { sessionStorage.setItem(STORAGE_KEY, '1'); } catch(e) {}
+    }
+  }
+
+  /* Don't show if already dismissed this session */
+  try {
+    if (showOnce && sessionStorage.getItem(STORAGE_KEY)) return;
+  } catch(e) {}
+
+  /* Trigger after delay */
+  setTimeout(open, delay);
+
+  closeBtn   && closeBtn.addEventListener('click', close);
+  dismissBtn && dismissBtn.addEventListener('click', close);
+  backdrop   && backdrop.addEventListener('click', close);
+
+  /* ESC key */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && popup.classList.contains('is-open')) close();
+  });
+
+  /* If form was posted successfully, close after 3s */
+  if (popup.querySelector('.nl-popup__success')) {
+    popup.setAttribute('aria-hidden', 'false');
+    popup.classList.add('is-open');
+    setTimeout(close, 3500);
+  }
+}());
+</script>

@@ -1,0 +1,376 @@
+{%- assign slide_count = section.blocks.size -%}
+
+<div
+  class="hero-slider"
+  id="HeroSlider-{{ section.id }}"
+  data-autoplay="{{ section.settings.autoplay }}"
+  data-autoplay-speed="{{ section.settings.autoplay_speed }}"
+  style="--slide-height: {{ section.settings.height }}vh;"
+>
+  <div class="hero-slider__track">
+    {%- for block in section.blocks -%}
+      <div
+        class="hero-slider__slide{% if forloop.first %} is-active{% endif %}"
+        data-index="{{ forloop.index0 }}"
+        {{ block.shopify_attributes }}
+      >
+        <!-- Background media -->
+        <div class="hero-slider__media">
+          {%- if block.settings.video_url != blank -%}
+            {%- assign video_id = '' -%}
+            {%- assign video_type = '' -%}
+            {%- if block.settings.video_url contains 'youtube.com' or block.settings.video_url contains 'youtu.be' -%}
+              {%- assign video_type = 'youtube' -%}
+              {%- if block.settings.video_url contains 'v=' -%}
+                {%- assign video_id = block.settings.video_url | split: 'v=' | last | split: '&' | first -%}
+              {%- else -%}
+                {%- assign video_id = block.settings.video_url | split: '/' | last | split: '?' | first -%}
+              {%- endif -%}
+              <iframe
+                class="hero-slider__video-iframe"
+                src="https://www.youtube.com/embed/{{ video_id }}?autoplay=1&mute=1&loop=1&playlist={{ video_id }}&controls=0&showinfo=0&rel=0&enablejsapi=0"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+                loading="lazy"
+                title="{{ block.settings.heading | escape }}"
+              ></iframe>
+            {%- elsif block.settings.video_url contains 'vimeo.com' -%}
+              {%- assign video_type = 'vimeo' -%}
+              {%- assign video_id = block.settings.video_url | split: '/' | last | split: '?' | first -%}
+              <iframe
+                class="hero-slider__video-iframe"
+                src="https://player.vimeo.com/video/{{ video_id }}?autoplay=1&muted=1&loop=1&background=1"
+                allow="autoplay; fullscreen"
+                loading="lazy"
+                title="{{ block.settings.heading | escape }}"
+              ></iframe>
+            {%- endif -%}
+            {%- if block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 1920 }}"
+                alt="{{ block.settings.image.alt | escape }}"
+                class="hero-slider__image hero-slider__image--video-fallback"
+                loading="lazy"
+                width="{{ block.settings.image.width }}"
+                height="{{ block.settings.image.height }}"
+              >
+            {%- endif -%}
+          {%- elsif block.settings.image != blank -%}
+            <img
+              src="{{ block.settings.image | image_url: width: 1920 }}"
+              srcset="
+                {{ block.settings.image | image_url: width: 750 }} 750w,
+                {{ block.settings.image | image_url: width: 1100 }} 1100w,
+                {{ block.settings.image | image_url: width: 1500 }} 1500w,
+                {{ block.settings.image | image_url: width: 1920 }} 1920w
+              "
+              sizes="100vw"
+              alt="{{ block.settings.image.alt | escape }}"
+              class="hero-slider__image"
+              {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}
+              width="{{ block.settings.image.width }}"
+              height="{{ block.settings.image.height }}"
+            >
+          {%- else -%}
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'hero-slider__placeholder' }}
+          {%- endif -%}
+          <div
+            class="hero-slider__overlay"
+            style="--overlay-opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};"
+          ></div>
+        </div>
+
+        <!-- Text content -->
+        <div class="hero-slider__content hero-slider__content--{{ block.settings.content_position | default: 'bottom-left' }}">
+          {%- if block.settings.eyebrow != blank -%}
+            <p class="hero-slider__eyebrow">{{ block.settings.eyebrow }}</p>
+          {%- endif -%}
+          {%- if block.settings.heading != blank -%}
+            <h2 class="hero-slider__heading">{{ block.settings.heading }}</h2>
+          {%- endif -%}
+          {%- if block.settings.subheading != blank -%}
+            <p class="hero-slider__subheading">{{ block.settings.subheading }}</p>
+          {%- endif -%}
+          {%- if block.settings.button_label != blank or block.settings.button_2_label != blank -%}
+            <div class="hero-slider__btns">
+              {%- if block.settings.button_label != blank -%}
+                <a
+                  href="{{ block.settings.button_link | default: '#' }}"
+                  class="btn btn--white btn--rounded"
+                >{{ block.settings.button_label }}</a>
+              {%- endif -%}
+              {%- if block.settings.button_2_label != blank -%}
+                <a
+                  href="{{ block.settings.button_2_link | default: '#' }}"
+                  class="btn btn--ghost-white btn--rounded"
+                >{{ block.settings.button_2_label }}</a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- if slide_count > 1 -%}
+    <!-- Prev / Next -->
+    <button class="hero-slider__nav hero-slider__nav--prev" aria-label="Previous slide">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="hero-slider__nav hero-slider__nav--next" aria-label="Next slide">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+    <!-- Dot indicators -->
+    <div class="hero-slider__dots" role="tablist" aria-label="Slide navigation">
+      {%- for block in section.blocks -%}
+        <button
+          class="hero-slider__dot{% if forloop.first %} is-active{% endif %}"
+          role="tab"
+          data-index="{{ forloop.index0 }}"
+          aria-label="Go to slide {{ forloop.index }}"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+        ></button>
+      {%- endfor -%}
+    </div>
+
+    <!-- Pause (only when autoplay on) -->
+    {%- if section.settings.autoplay -%}
+      <button class="hero-slider__pause" id="SliderPause-{{ section.id }}" aria-label="Pause slideshow" aria-pressed="false">
+        <svg class="icon-pause" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        <svg class="icon-play" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none;"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </button>
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+<script>
+(function () {
+  var slider = document.getElementById('HeroSlider-{{ section.id }}');
+  if (!slider) return;
+
+  var slides   = slider.querySelectorAll('.hero-slider__slide');
+  var dots     = slider.querySelectorAll('.hero-slider__dot');
+  var prevBtn  = slider.querySelector('.hero-slider__nav--prev');
+  var nextBtn  = slider.querySelector('.hero-slider__nav--next');
+  var pauseBtn = slider.querySelector('.hero-slider__pause');
+  var autoplay = slider.dataset.autoplay === 'true';
+  var speed    = parseInt(slider.dataset.autoplaySpeed, 10) || 5000;
+  var current  = 0;
+  var total    = slides.length;
+  var timer    = null;
+  var paused   = false;
+
+  if (total <= 1) return;
+
+  function goTo(idx) {
+    slides[current].classList.remove('is-active');
+    dots[current] && dots[current].classList.remove('is-active');
+    dots[current] && dots[current].setAttribute('aria-selected', 'false');
+    current = (idx + total) % total;
+    slides[current].classList.add('is-active');
+    dots[current] && dots[current].classList.add('is-active');
+    dots[current] && dots[current].setAttribute('aria-selected', 'true');
+  }
+
+  function startTimer() {
+    if (!autoplay || paused) return;
+    clearInterval(timer);
+    timer = setInterval(function () { goTo(current + 1); }, speed);
+  }
+
+  function stopTimer() { clearInterval(timer); }
+
+  prevBtn && prevBtn.addEventListener('click', function () { goTo(current - 1); startTimer(); });
+  nextBtn && nextBtn.addEventListener('click', function () { goTo(current + 1); startTimer(); });
+
+  dots.forEach(function (dot) {
+    dot.addEventListener('click', function () { goTo(parseInt(dot.dataset.index, 10)); startTimer(); });
+  });
+
+  if (pauseBtn) {
+    pauseBtn.addEventListener('click', function () {
+      paused = !paused;
+      pauseBtn.setAttribute('aria-pressed', paused ? 'true' : 'false');
+      pauseBtn.querySelector('.icon-pause').style.display = paused ? 'none' : '';
+      pauseBtn.querySelector('.icon-play').style.display  = paused ? ''     : 'none';
+      paused ? stopTimer() : startTimer();
+    });
+  }
+
+  /* Touch swipe */
+  var touchStartX = 0;
+  slider.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+  slider.addEventListener('touchend', function (e) {
+    var diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { goTo(diff > 0 ? current + 1 : current - 1); startTimer(); }
+  }, { passive: true });
+
+  /* Keyboard */
+  slider.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft')  { goTo(current - 1); startTimer(); }
+    if (e.key === 'ArrowRight') { goTo(current + 1); startTimer(); }
+  });
+
+  /* Pause on hover */
+  slider.addEventListener('mouseenter', stopTimer);
+  slider.addEventListener('mouseleave', startTimer);
+
+  if (autoplay) startTimer();
+}());
+</script>
+
+{% schema %}
+{
+  "name": "Hero Slider",
+  "tag": "section",
+  "class": "section-hero-slider",
+  "settings": [
+    {
+      "type": "range",
+      "id": "height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "label": "Slide height",
+      "default": 85
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "autoplay_speed",
+      "label": "Change slides every",
+      "options": [
+        { "value": "3000", "label": "3 seconds" },
+        { "value": "4000", "label": "4 seconds" },
+        { "value": "5000", "label": "5 seconds" },
+        { "value": "7000", "label": "7 seconds" },
+        { "value": "10000", "label": "10 seconds" }
+      ],
+      "default": "5000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image"
+        },
+        {
+          "type": "text",
+          "id": "video_url",
+          "label": "Background video URL (YouTube or Vimeo — overrides image)",
+          "info": "Paste a YouTube or Vimeo URL. Add a fallback image above."
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "min": 0,
+          "max": 80,
+          "step": 5,
+          "unit": "%",
+          "label": "Overlay opacity",
+          "default": 40
+        },
+        {
+          "type": "select",
+          "id": "content_position",
+          "label": "Content position",
+          "options": [
+            { "value": "bottom-left", "label": "Bottom left" },
+            { "value": "bottom-right", "label": "Bottom right" },
+            { "value": "center", "label": "Center" },
+            { "value": "top-left", "label": "Top left" }
+          ],
+          "default": "bottom-left"
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow text",
+          "default": "New Collection"
+        },
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Heading",
+          "default": "UNIQUELY CRAFTED PRODUCTS FOR YOUR STYLE"
+        },
+        {
+          "type": "text",
+          "id": "subheading",
+          "label": "Subheading"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button 1 label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button 1 link"
+        },
+        {
+          "type": "text",
+          "id": "button_2_label",
+          "label": "Button 2 label (optional)"
+        },
+        {
+          "type": "url",
+          "id": "button_2_link",
+          "label": "Button 2 link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Slider",
+      "blocks": [
+        {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "New Collection",
+            "heading": "UNIQUELY CRAFTED EARPHONES FOR YOUR STYLE",
+            "button_label": "Shop Earphones",
+            "content_position": "bottom-left",
+            "overlay_opacity": 40
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "Discover More",
+            "heading": "PREMIUM AUDIO EXCELLENCE",
+            "button_label": "Explore Now",
+            "content_position": "center",
+            "overlay_opacity": 40
+          }
+        },
+        {
+          "type": "slide",
+          "settings": {
+            "eyebrow": "New Arrivals",
+            "heading": "SOUND DESIGNED FOR YOU",
+            "button_label": "Discover More",
+            "content_position": "bottom-left",
+            "overlay_opacity": 40
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,255 @@
+<footer class="footer">
+
+  <!-- Trust bar -->
+  {%- if section.blocks.size > 0 -%}
+    <div class="footer__trust-bar">
+      <div class="footer__trust-bar-inner page-width">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'trust_item' -%}
+            <div class="footer__trust-item" {{ block.shopify_attributes }}>
+              <span class="footer__trust-icon">
+                {%- case block.settings.icon -%}
+                  {%- when 'truck' -%}{% render 'icon-truck' %}
+                  {%- when 'headphone' -%}{% render 'icon-headphone' %}
+                  {%- when 'gift' -%}{% render 'icon-gift' %}
+                  {%- when 'shield' -%}{% render 'icon-shield' %}
+                  {%- else -%}{% render 'icon-shield' %}
+                {%- endcase -%}
+              </span>
+              <div class="footer__trust-copy">
+                <span class="footer__trust-title">{{ block.settings.heading }}</span>
+                <span class="footer__trust-text">{{ block.settings.text }}</span>
+              </div>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <!-- Main footer body -->
+  <div class="footer__main">
+    <div class="footer__main-inner page-width">
+
+      <!-- Brand column -->
+      <div class="footer__col footer__col--brand">
+        <a href="{{ routes.root_url }}" class="footer__logo-link" aria-label="{{ shop.name }}">
+          {%- if settings.logo != blank -%}
+            <img
+              src="{{ settings.logo | image_url: width: 200 }}"
+              alt="{{ shop.name }}"
+              class="footer__logo-image"
+              width="{{ settings.logo_width | default: 120 }}"
+              height="auto"
+              loading="lazy"
+            >
+          {%- else -%}
+            <span class="footer__logo-text">{{ shop.name }}</span>
+          {%- endif -%}
+        </a>
+        {%- if section.settings.brand_text != blank -%}
+          <p class="footer__brand-text">{{ section.settings.brand_text }}</p>
+        {%- endif -%}
+        <div class="footer__brand-contact">
+          {%- if settings.phone_number != blank -%}
+            <a href="tel:{{ settings.phone_number }}" class="footer__contact-link">{{ settings.phone_number }}</a>
+          {%- endif -%}
+          {%- if settings.email_address != blank -%}
+            <a href="mailto:{{ settings.email_address }}" class="footer__contact-link">{{ settings.email_address }}</a>
+          {%- endif -%}
+        </div>
+      </div>
+
+      <!-- Quick links -->
+      <div class="footer__col footer__col--links">
+        <h3 class="footer__heading">{{ section.settings.links_heading | default: 'Quick links' }}</h3>
+        {%- assign footer_nav = section.settings.footer_menu | default: settings.footer_menu -%}
+        {%- if footer_nav != blank -%}
+          <ul class="footer__link-list">
+            {%- for link in linklists[footer_nav].links -%}
+              <li><a href="{{ link.url }}" class="footer__link">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      <!-- Information links -->
+      <div class="footer__col footer__col--info">
+        <h3 class="footer__heading">{{ section.settings.info_heading | default: 'Information' }}</h3>
+        {%- assign footer_nav_2 = section.settings.footer_menu_2 | default: settings.footer_menu_2 -%}
+        {%- if footer_nav_2 != blank -%}
+          <ul class="footer__link-list">
+            {%- for link in linklists[footer_nav_2].links -%}
+              <li><a href="{{ link.url }}" class="footer__link">{{ link.title }}</a></li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      <!-- Newsletter + social -->
+      <div class="footer__col footer__col--newsletter">
+        <h3 class="footer__heading footer__heading--large">
+          {{ section.settings.newsletter_heading | default: 'Stay in the loop' }}
+        </h3>
+        {%- if section.settings.newsletter_subtext != blank -%}
+          <p class="footer__newsletter-sub">{{ section.settings.newsletter_subtext }}</p>
+        {%- endif -%}
+        {%- form 'customer', id: 'FooterNewsletter' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+          {%- if form.posted_successfully? -%}
+            <p class="footer__newsletter-success">Thanks for subscribing!</p>
+          {%- else -%}
+            <div class="footer__newsletter-form">
+              <input
+                type="email"
+                name="contact[email]"
+                class="footer__newsletter-input"
+                placeholder="{{ section.settings.newsletter_placeholder | default: 'Enter your email' }}"
+                autocorrect="off"
+                autocapitalize="off"
+                aria-label="Email address"
+                required
+              >
+              <button type="submit" class="footer__newsletter-btn" aria-label="Subscribe">
+                {% render 'icon-arrow-right' %}
+              </button>
+            </div>
+          {%- endif -%}
+        {%- endform -%}
+
+        <div class="footer__social">
+          {%- if settings.social_facebook_link != blank -%}
+            <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" class="footer__social-link" aria-label="Facebook">{% render 'icon-facebook' %}</a>
+          {%- endif -%}
+          {%- if settings.social_twitter_link != blank -%}
+            <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener" class="footer__social-link" aria-label="X">{% render 'icon-x' %}</a>
+          {%- endif -%}
+          {%- if settings.social_instagram_link != blank -%}
+            <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" class="footer__social-link" aria-label="Instagram">{% render 'icon-instagram' %}</a>
+          {%- endif -%}
+          {%- if settings.social_youtube_link != blank -%}
+            <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" class="footer__social-link" aria-label="YouTube">{% render 'icon-youtube' %}</a>
+          {%- endif -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="footer__bottom">
+    <div class="footer__bottom-inner page-width">
+      <p class="footer__copyright">
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}.
+        {{ section.settings.copyright_text | default: 'All rights reserved.' }}
+      </p>
+      <div class="footer__payment-icons" aria-label="Accepted payment methods">
+        {{ shop.enabled_payment_types | payment_type_svg_tag: class: 'footer__payment-icon' }}
+      </div>
+    </div>
+  </div>
+
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_text",
+      "label": "Brand tagline",
+      "default": "Premium audio for discerning ears."
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu",
+      "label": "Quick links menu",
+      "default": "footer"
+    },
+    {
+      "type": "link_list",
+      "id": "footer_menu_2",
+      "label": "Information menu"
+    },
+    {
+      "type": "text",
+      "id": "links_heading",
+      "label": "Quick links heading",
+      "default": "Quick links"
+    },
+    {
+      "type": "text",
+      "id": "info_heading",
+      "label": "Information heading",
+      "default": "Information"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_heading",
+      "label": "Newsletter heading",
+      "default": "Stay in the loop with our weekly newsletter"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_subtext",
+      "label": "Newsletter subtext",
+      "default": "New products, exclusive deals, and editorial stories."
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Input placeholder",
+      "default": "Enter your email"
+    },
+    {
+      "type": "text",
+      "id": "copyright_text",
+      "label": "Additional copyright text"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "trust_item",
+      "name": "Trust item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "headphone", "label": "Headphone" },
+            { "value": "truck", "label": "Truck" },
+            { "value": "gift", "label": "Gift" },
+            { "value": "shield", "label": "Shield" }
+          ],
+          "default": "shield"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Customer service"
+        },
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Supporting text",
+          "default": "We're always here to help"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Footer",
+      "blocks": [
+        { "type": "trust_item", "settings": { "icon": "headphone", "heading": "Customer service", "text": "We're always here to help" } },
+        { "type": "trust_item", "settings": { "icon": "truck", "heading": "Fast free shipping", "text": "Free on orders over $150" } },
+        { "type": "trust_item", "settings": { "icon": "gift", "heading": "Refer a friend", "text": "Get 15% off each other" } },
+        { "type": "trust_item", "settings": { "icon": "shield", "heading": "Secure payment", "text": "256-bit SSL encryption" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,106 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#1a1a1a">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  <!-- Favicon -->
+  {%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+    <link rel="apple-touch-icon" href="{{ settings.favicon | image_url: width: 180, height: 180 }}">
+  {%- endif -%}
+
+  <!-- Page title -->
+  <title>
+    {{ page_title }}
+    {%- if current_tags %} &ndash; {{ current_tags | join: ', ' }}{% endif -%}
+    {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+    {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+  </title>
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- endif -%}
+
+  <!-- Open Graph -->
+  <meta property="og:site_name" content="{{ shop.name }}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ page_title | escape }}">
+  {%- if page_description -%}
+    <meta property="og:description" content="{{ page_description | escape }}">
+  {%- endif -%}
+  <meta property="og:url" content="{{ canonical_url }}">
+  {%- if settings.logo != blank -%}
+    <meta property="og:image" content="{{ settings.logo | image_url: width: 1200 }}">
+  {%- endif -%}
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page_title | escape }}">
+  {%- if page_description -%}
+    <meta name="twitter:description" content="{{ page_description | escape }}">
+  {%- endif -%}
+
+  <!-- Font preconnect -->
+  <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Shopify required hook -->
+  {{ content_for_header }}
+
+  <!-- Critical inline token -->
+  <style>
+    :root {
+      --font-body-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      --font-heading-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+  </style>
+
+  <!-- Theme styles -->
+  <link rel="stylesheet" href="{{ 'base.css' | asset_url }}">
+  <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}">
+
+  <script>
+    document.documentElement.classList.replace('no-js', 'js');
+  </script>
+</head>
+
+<body
+  class="template-{{ template.name | handle }}{% if template.suffix != blank %} template-{{ template.name | handle }}-{{ template.suffix | handle }}{% endif %}"
+  data-template="{{ template.name }}"
+>
+
+  <a class="skip-to-content visually-hidden" href="#MainContent">Skip to content</a>
+
+  {%- section 'announcement-bar' -%}
+  {%- section 'header' -%}
+
+  {%- if settings.show_sidebar_social -%}
+    {%- render 'sidebar-social' -%}
+  {%- endif -%}
+
+  {%- if settings.promo_tab_text != blank -%}
+    {%- render 'promo-tab' -%}
+  {%- endif -%}
+
+  <main id="MainContent" class="main-content" role="main" tabindex="-1">
+    {{ content_for_layout }}
+  </main>
+
+  {%- section 'footer' -%}
+
+  {%- render 'cart-drawer' -%}
+
+  {%- if settings.popup_enabled -%}
+    {%- render 'newsletter-popup' -%}
+  {%- endif -%}
+
+  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+<section class="image-banner section-spacing" id="ImageBanner-{{ section.id }}">
+  <div class="image-banner__inner" style="--banner-height: {{ section.settings.height }}vh;">
+    {%- if section.settings.image != blank -%}
+      <img
+        src="{{ section.settings.image | image_url: width: 1920 }}"
+        alt="{{ section.settings.heading | escape }}"
+        class="image-banner__image"
+        loading="lazy"
+        width="{{ section.settings.image.width }}"
+        height="{{ section.settings.image.height }}"
+      >
+    {%- else -%}
+      {{ 'lifestyle-2' | placeholder_svg_tag: 'image-banner__placeholder' }}
+    {%- endif -%}
+    <div class="image-banner__overlay" style="--overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+    <div class="image-banner__content">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="image-banner__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="image-banner__subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a href="{{ section.settings.button_link }}" class="btn btn--white btn--rounded">
+          {{ section.settings.button_label }} →
+        </a>
+      {%- endif -%}
+    </div>
+    {%- if section.settings.autoplay -%}
+      <button class="image-banner__pause-btn" aria-label="Pause">
+        {% render 'icon-pause' %}
+      </button>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "min": 40,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "label": "Banner height",
+      "default": 70
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 35
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Sound. Sculpted."
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "A product that excites the eye from every angle."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Show pause button",
+      "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image Banner"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,61 @@
+{
+  "sections": {
+    "main": {
+      "type": "contact-main",
+      "settings": {
+        "eyebrow": "Get in touch",
+        "heading": "Contact Us",
+        "subtitle": "<p>We'd love to hear from you. Our team is here to help.<br>Let your customers get in touch with you by filling out the email form below.</p>",
+        "subject_options": "Order inquiry\nReturn & refund\nProduct question\nPartnership\nOther",
+        "button_label": "Send message",
+        "success_message": "Thanks for reaching out! We'll get back to you within 1–2 business days.",
+        "show_recaptcha_notice": true,
+        "address": "620 King St W, Toronto, ON M5V 1M7, Canada",
+        "email_1": "contact@yourstore.com",
+        "email_2": "sales@yourstore.com",
+        "phone": "+33 (0) 31-305-210",
+        "hours": "mo – fri: 09:00 – 17:00",
+        "show_map": false
+      }
+    },
+    "usp": {
+      "type": "usp-row",
+      "blocks": {
+        "usp_1": {
+          "type": "usp",
+          "settings": {
+            "icon": "headphone",
+            "heading": "Customer service",
+            "text": "Our dedicated team is available to help with any question you have."
+          }
+        },
+        "usp_2": {
+          "type": "usp",
+          "settings": {
+            "icon": "truck",
+            "heading": "Fast Free Shipping",
+            "text": "Get free shipping on orders of $150 or more"
+          }
+        },
+        "usp_3": {
+          "type": "usp",
+          "settings": {
+            "icon": "gift",
+            "heading": "Refer a friend",
+            "text": "Refer a friend and get 15% off each other."
+          }
+        },
+        "usp_4": {
+          "type": "usp",
+          "settings": {
+            "icon": "shield",
+            "heading": "Secure payment",
+            "text": "Your payment information is processed securely"
+          }
+        }
+      },
+      "block_order": ["usp_1", "usp_2", "usp_3", "usp_4"]
+    }
+  },
+  "order": ["main", "usp"]
+}

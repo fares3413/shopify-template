@@ -1,0 +1,23 @@
+<section class="search-page section-padding">
+  <div class="page-width">
+    <h1 class="search-page__title">Search</h1>
+    <form action="{{ routes.search_url }}" method="get" class="search-page__form">
+      <input type="hidden" name="type" value="product">
+      <div class="search-page__input-wrap">
+        <input type="text" name="q" value="{{ search.terms | escape }}" placeholder="Search products..." class="search-page__input">
+        <button type="submit" class="btn btn--primary">Search</button>
+      </div>
+    </form>
+    {%- if search.performed -%}
+      <p class="search-page__count">{{ search.results_count }} results for "{{ search.terms }}"</p>
+      <div class="search-page__grid">
+        {%- for result in search.results -%}
+          {%- if result.object_type == 'product' -%}
+            {% render 'product-card', product: result, show_vendor: true %}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+{% schema %}{"name":"Search","presets":[{"name":"Search"}]}{% endschema %}

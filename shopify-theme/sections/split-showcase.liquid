@@ -1,0 +1,180 @@
+<section class="split-showcase section-padding" id="SplitShowcase-{{ section.id }}">
+  {%- if section.settings.heading != blank -%}
+    <div class="split-showcase__header page-width">
+      <h2 class="split-showcase__heading">{{ section.settings.heading }}</h2>
+    </div>
+  {%- endif -%}
+
+  <div class="split-showcase__stage" id="SplitStage-{{ section.id }}">
+
+    <!-- Left side -->
+    <div class="split-showcase__side split-showcase__side--left">
+      {%- if section.settings.image_left != blank -%}
+        <img
+          src="{{ section.settings.image_left | image_url: width: 1400 }}"
+          alt="{{ section.settings.label_left | escape }}"
+          class="split-showcase__image"
+          loading="lazy"
+          width="{{ section.settings.image_left.width }}"
+          height="{{ section.settings.image_left.height }}"
+        >
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'split-showcase__image split-showcase__placeholder' }}
+      {%- endif -%}
+      <div class="split-showcase__side-content">
+        {%- if section.settings.sublabel_left != blank -%}
+          <span class="split-showcase__sublabel">{{ section.settings.sublabel_left }}</span>
+        {%- endif -%}
+        {%- if section.settings.label_left != blank -%}
+          <strong class="split-showcase__label">{{ section.settings.label_left }}</strong>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.link_left != blank -%}
+        <a href="{{ section.settings.link_left }}" class="split-showcase__overlay-link" aria-label="{{ section.settings.label_left }}"></a>
+      {%- endif -%}
+    </div>
+
+    <!-- Draggable handle -->
+    <div class="split-showcase__handle" id="SplitHandle-{{ section.id }}" role="slider" aria-label="Drag to compare" aria-valuenow="50" aria-valuemin="10" aria-valuemax="90" tabindex="0">
+      <div class="split-showcase__handle-bar"></div>
+      <div class="split-showcase__handle-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <polyline points="9 18 3 12 9 6"/><polyline points="15 6 21 12 15 18"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Right side -->
+    <div class="split-showcase__side split-showcase__side--right">
+      {%- if section.settings.image_right != blank -%}
+        <img
+          src="{{ section.settings.image_right | image_url: width: 1400 }}"
+          alt="{{ section.settings.label_right | escape }}"
+          class="split-showcase__image"
+          loading="lazy"
+          width="{{ section.settings.image_right.width }}"
+          height="{{ section.settings.image_right.height }}"
+        >
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'split-showcase__image split-showcase__placeholder' }}
+      {%- endif -%}
+      <div class="split-showcase__side-content split-showcase__side-content--right">
+        {%- if section.settings.sublabel_right != blank -%}
+          <span class="split-showcase__sublabel">{{ section.settings.sublabel_right }}</span>
+        {%- endif -%}
+        {%- if section.settings.label_right != blank -%}
+          <strong class="split-showcase__label">{{ section.settings.label_right }}</strong>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.link_right != blank -%}
+        <a href="{{ section.settings.link_right }}" class="split-showcase__overlay-link" aria-label="{{ section.settings.label_right }}"></a>
+      {%- endif -%}
+    </div>
+
+  </div>
+</section>
+
+<script>
+(function() {
+  var stage = document.getElementById('SplitStage-{{ section.id }}');
+  var handle = document.getElementById('SplitHandle-{{ section.id }}');
+  if (!stage || !handle) return;
+
+  var leftSide = stage.querySelector('.split-showcase__side--left');
+  var isDragging = false;
+  var currentPercent = 50;
+
+  function setPosition(percent) {
+    percent = Math.max(10, Math.min(90, percent));
+    currentPercent = percent;
+    leftSide.style.width = percent + '%';
+    handle.style.left = percent + '%';
+    handle.setAttribute('aria-valuenow', Math.round(percent));
+  }
+
+  function getPercent(clientX) {
+    var rect = stage.getBoundingClientRect();
+    return ((clientX - rect.left) / rect.width) * 100;
+  }
+
+  handle.addEventListener('mousedown', function(e) { isDragging = true; e.preventDefault(); });
+  document.addEventListener('mousemove', function(e) { if (isDragging) setPosition(getPercent(e.clientX)); });
+  document.addEventListener('mouseup', function() { isDragging = false; });
+
+  handle.addEventListener('touchstart', function(e) { isDragging = true; }, { passive: true });
+  document.addEventListener('touchmove', function(e) {
+    if (isDragging && e.touches[0]) setPosition(getPercent(e.touches[0].clientX));
+  }, { passive: true });
+  document.addEventListener('touchend', function() { isDragging = false; });
+
+  handle.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowLeft') setPosition(currentPercent - 5);
+    if (e.key === 'ArrowRight') setPosition(currentPercent + 5);
+  });
+
+  setPosition(50);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Split Showcase",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Vibrant Headphone Choices"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_left",
+      "label": "Left image"
+    },
+    {
+      "type": "text",
+      "id": "sublabel_left",
+      "label": "Left sublabel",
+      "default": "Flow Harmony"
+    },
+    {
+      "type": "text",
+      "id": "label_left",
+      "label": "Left label",
+      "default": "Gold Tone"
+    },
+    {
+      "type": "url",
+      "id": "link_left",
+      "label": "Left link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_right",
+      "label": "Right image"
+    },
+    {
+      "type": "text",
+      "id": "sublabel_right",
+      "label": "Right sublabel",
+      "default": "Flow Harmony"
+    },
+    {
+      "type": "text",
+      "id": "label_right",
+      "label": "Right label",
+      "default": "Crimson Shadow"
+    },
+    {
+      "type": "url",
+      "id": "link_right",
+      "label": "Right link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split Showcase"
+    }
+  ]
+}
+{% endschema %}

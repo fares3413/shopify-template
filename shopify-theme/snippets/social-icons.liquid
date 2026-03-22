@@ -1,0 +1,36 @@
+{% comment %}
+  Social icons snippet.
+  Parameters:
+    class      - (string) class on the wrapper
+    icon_size  - (number) icon size, default 18
+    style      - (string) 'light' | 'dark' | 'muted', default 'dark'
+  Usage:
+    {% render 'social-icons', class: 'my-class', icon_size: 20, style: 'light' %}
+{% endcomment %}
+
+{%- assign social_size = icon_size | default: 18 -%}
+{%- assign wrapper_class = 'social-icons social-icons--' | append: style | default: 'dark' -%}
+{%- if class != blank -%}{%- assign wrapper_class = wrapper_class | append: ' ' | append: class -%}{%- endif -%}
+
+<div class="{{ wrapper_class }}">
+  {%- if settings.social_facebook_link != blank -%}
+    <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" class="social-icons__link" aria-label="Facebook">
+      {% render 'icon', name: 'facebook', size: social_size %}
+    </a>
+  {%- endif -%}
+  {%- if settings.social_twitter_link != blank -%}
+    <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener" class="social-icons__link" aria-label="X (Twitter)">
+      {% render 'icon', name: 'x', size: social_size %}
+    </a>
+  {%- endif -%}
+  {%- if settings.social_instagram_link != blank -%}
+    <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" class="social-icons__link" aria-label="Instagram">
+      {% render 'icon', name: 'instagram', size: social_size %}
+    </a>
+  {%- endif -%}
+  {%- if settings.social_youtube_link != blank -%}
+    <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" class="social-icons__link" aria-label="YouTube">
+      {% render 'icon', name: 'youtube', size: social_size %}
+    </a>
+  {%- endif -%}
+</div>

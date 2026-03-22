@@ -1,0 +1,164 @@
+<section class="promo-banner" id="PromoBanner-{{ section.id }}">
+  <div class="promo-banner__inner" style="--banner-bg: {{ section.settings.background_color }}; --overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};">
+    {%- if section.settings.image != blank -%}
+      <img
+        src="{{ section.settings.image | image_url: width: 1920 }}"
+        alt=""
+        class="promo-banner__bg"
+        loading="lazy"
+        aria-hidden="true"
+      >
+    {%- endif -%}
+    <div class="promo-banner__overlay" aria-hidden="true"></div>
+    <div class="promo-banner__content">
+      {%- if section.settings.subheading != blank -%}
+        <p class="promo-banner__subheading">{{ section.settings.subheading }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="promo-banner__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.show_countdown and section.settings.countdown_end != blank -%}
+        <div class="promo-banner__countdown" id="PBCountdown-{{ section.id }}" data-end="{{ section.settings.countdown_end }}" aria-label="Countdown timer">
+          <div class="promo-banner__countdown-unit">
+            <span class="promo-banner__countdown-num" id="PBDays-{{ section.id }}">00</span>
+            <span class="promo-banner__countdown-label">Days</span>
+          </div>
+          <span class="promo-banner__countdown-sep" aria-hidden="true">:</span>
+          <div class="promo-banner__countdown-unit">
+            <span class="promo-banner__countdown-num" id="PBHours-{{ section.id }}">00</span>
+            <span class="promo-banner__countdown-label">Hours</span>
+          </div>
+          <span class="promo-banner__countdown-sep" aria-hidden="true">:</span>
+          <div class="promo-banner__countdown-unit">
+            <span class="promo-banner__countdown-num" id="PBMins-{{ section.id }}">00</span>
+            <span class="promo-banner__countdown-label">Mins</span>
+          </div>
+          <span class="promo-banner__countdown-sep" aria-hidden="true">:</span>
+          <div class="promo-banner__countdown-unit">
+            <span class="promo-banner__countdown-num" id="PBSecs-{{ section.id }}">00</span>
+            <span class="promo-banner__countdown-label">Secs</span>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank -%}
+        <a href="{{ section.settings.button_link | default: '#' }}" class="btn btn--white btn--rounded promo-banner__btn">
+          {{ section.settings.button_label }} →
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{%- if section.settings.show_countdown and section.settings.countdown_end != blank -%}
+<script>
+(function() {
+  var end = new Date('{{ section.settings.countdown_end }}').getTime();
+  var dEl = document.getElementById('PBDays-{{ section.id }}');
+  var hEl = document.getElementById('PBHours-{{ section.id }}');
+  var mEl = document.getElementById('PBMins-{{ section.id }}');
+  var sEl = document.getElementById('PBSecs-{{ section.id }}');
+  if (!dEl) return;
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tick() {
+    var diff = end - Date.now();
+    if (diff <= 0) {
+      dEl.textContent = hEl.textContent = mEl.textContent = sEl.textContent = '00';
+      return;
+    }
+    var d = Math.floor(diff / 86400000);
+    var h = Math.floor((diff % 86400000) / 3600000);
+    var m = Math.floor((diff % 3600000) / 60000);
+    var s = Math.floor((diff % 60000) / 1000);
+    dEl.textContent = pad(d);
+    hEl.textContent = pad(h);
+    mEl.textContent = pad(m);
+    sEl.textContent = pad(s);
+  }
+
+  tick();
+  setInterval(tick, 1000);
+}());
+</script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Promo Banner",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color fallback",
+      "default": "#888888"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0,
+      "max": 80,
+      "step": 5,
+      "unit": "%",
+      "label": "Overlay opacity",
+      "default": 45
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Get up to 50% off"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "on waterproof speakers"
+    },
+    {
+      "type": "header",
+      "content": "Countdown Timer"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_countdown",
+      "label": "Show countdown timer",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "countdown_end",
+      "label": "Countdown end date",
+      "info": "Format: YYYY-MM-DDTHH:MM:SS e.g. 2025-12-31T23:59:59",
+      "default": "2025-12-31T23:59:59"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Discover sales"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promo Banner"
+    }
+  ]
+}
+{% endschema %}

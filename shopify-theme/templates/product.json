@@ -1,0 +1,17 @@
+{
+  "sections": {
+    "main": {
+      "type": "product-main",
+      "blocks": {},
+      "block_order": [],
+      "settings": {
+        "show_vendor": true
+      }
+    },
+    "product_recommendations": {
+      "type": "product-recommendations",
+      "settings": {}
+    }
+  },
+  "order": ["main", "product_recommendations"]
+}

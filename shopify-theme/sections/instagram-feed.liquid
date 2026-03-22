@@ -1,0 +1,137 @@
+<section class="instagram-feed section-padding" id="InstagramFeed-{{ section.id }}">
+  <div class="page-width">
+    <div class="instagram-feed__header">
+      <div>
+        <h2 class="instagram-feed__heading">
+        {%- assign raw_heading = section.settings.heading | default: 'Shop the Feed' -%}
+        {%- if section.settings.heading_highlight != blank -%}
+          {%- assign hl_wrapped = '<em>' | append: section.settings.heading_highlight | append: '</em>' -%}
+          {{- raw_heading | replace: section.settings.heading_highlight, hl_wrapped -}}
+        {%- else -%}
+          {{- raw_heading | replace: 'Feed', '<em>Feed</em>' -}}
+        {%- endif -%}
+      </h2>
+        {%- if section.settings.subheading != blank -%}
+          <p class="instagram-feed__subheading">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.handle != blank -%}
+        <div class="instagram-feed__handle-wrap">
+          <span class="instagram-feed__handle">@{{ section.settings.handle }}</span>
+          <a href="https://instagram.com/{{ section.settings.handle }}" target="_blank" rel="noopener" class="btn btn--outline btn--sm">Follow</a>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="instagram-feed__grid">
+      {%- for block in section.blocks -%}
+        <div class="instagram-feed__item" {{ block.shopify_attributes }}>
+          <a href="{{ block.settings.link | default: '#' }}" class="instagram-feed__link" {% if block.settings.link != blank %}target="_blank" rel="noopener"{% endif %}>
+            {%- if block.settings.image != blank -%}
+              <img
+                src="{{ block.settings.image | image_url: width: 600 }}"
+                alt="{{ block.settings.image.alt | escape }}"
+                class="instagram-feed__image"
+                loading="lazy"
+                width="600" height="600"
+              >
+            {%- else -%}
+              {{ 'collection-' | append: forloop.index | placeholder_svg_tag: 'instagram-feed__placeholder' }}
+            {%- endif -%}
+            <div class="instagram-feed__overlay">
+              {% render 'icon-instagram' %}
+            </div>
+          </a>
+          {%- if block.settings.product_1 != blank or block.settings.product_2 != blank -%}
+            <div class="instagram-feed__products">
+              {%- if block.settings.product_1 != blank -%}
+                {%- assign p1 = all_products[block.settings.product_1] -%}
+                <a href="{{ p1.url }}" class="instagram-feed__product-chip">
+                  <img src="{{ p1.featured_image | image_url: width: 60 }}" alt="{{ p1.title | escape }}" width="30" height="30">
+                </a>
+              {%- endif -%}
+              {%- if block.settings.product_2 != blank -%}
+                {%- assign p2 = all_products[block.settings.product_2] -%}
+                <a href="{{ p2.url }}" class="instagram-feed__product-chip">
+                  <img src="{{ p2.featured_image | image_url: width: 60 }}" alt="{{ p2.title | escape }}" width="30" height="30">
+                </a>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Instagram Feed",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop the Feed"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Discover premium products from our Instagram."
+    },
+    {
+      "type": "text",
+      "id": "handle",
+      "label": "Instagram handle (without @)",
+      "default": "yourstore"
+    },
+    {
+      "type": "text",
+      "id": "heading_highlight",
+      "label": "Word to highlight in heading (italic accent)",
+      "info": "Must match a word in your heading exactly. Leave blank to auto-highlight 'Feed'."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "post",
+      "name": "Post",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "product",
+          "id": "product_1",
+          "label": "Tagged product 1"
+        },
+        {
+          "type": "product",
+          "id": "product_2",
+          "label": "Tagged product 2"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Instagram Feed",
+      "blocks": [
+        { "type": "post" },
+        { "type": "post" },
+        { "type": "post" },
+        { "type": "post" },
+        { "type": "post" }
+      ]
+    }
+  ]
+}
+{% endschema %}

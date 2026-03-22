@@ -1,0 +1,22 @@
+<div class="sidebar-social">
+  {%- if settings.social_facebook_link != blank -%}
+    <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" class="sidebar-social__link" aria-label="Facebook">
+      {% render 'icon-facebook' %}
+    </a>
+  {%- endif -%}
+  {%- if settings.social_twitter_link != blank -%}
+    <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener" class="sidebar-social__link" aria-label="X">
+      {% render 'icon-x' %}
+    </a>
+  {%- endif -%}
+  {%- if settings.social_instagram_link != blank -%}
+    <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" class="sidebar-social__link" aria-label="Instagram">
+      {% render 'icon-instagram' %}
+    </a>
+  {%- endif -%}
+  {%- if settings.social_youtube_link != blank -%}
+    <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" class="sidebar-social__link" aria-label="YouTube">
+      {% render 'icon-youtube' %}
+    </a>
+  {%- endif -%}
+</div>
