@@ -154,6 +154,26 @@
         "autoplay": false
       }
     },
+    "product_hotspots": {
+      "type": "product-hotspots",
+      "blocks": {
+        "hs_1": { "type": "hotspot", "settings": { "pos_x": 28, "pos_y": 38 } },
+        "hs_2": { "type": "hotspot", "settings": { "pos_x": 60, "pos_y": 52 } },
+        "hs_3": { "type": "hotspot", "settings": { "pos_x": 43, "pos_y": 72 } }
+      },
+      "block_order": ["hs_1", "hs_2", "hs_3"],
+      "settings": {
+        "heading": "Shop the Look",
+        "subheading": "Premium Speakers",
+        "section_bg": "#ffffff",
+        "card_bg": "#f5f5f3",
+        "text_color": "#1a1a1a",
+        "text_muted_color": "#888888",
+        "hotspot_color": "#ffffff",
+        "btn_label": "Shop Now",
+        "show_description": true
+      }
+    },
     "testimonials": {
       "type": "testimonials",
       "blocks": {
@@ -277,6 +297,7 @@
     "image_comparison",
     "best_sellers",
     "product_showcase",
+    "product_hotspots",
     "testimonials",
     "bundle_builder",
     "marquee",
