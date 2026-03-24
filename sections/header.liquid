@@ -240,68 +240,7 @@
 
 </header>
 
-<script>
-(function () {
-  'use strict';
-
-  var header    = document.getElementById('Header');
-  if (!header) return;
-
-  var isCompact = header.dataset.compact === 'true';
-  if (!isCompact) return;
-
-  var threshold = parseInt(header.dataset.compactThreshold, 10) || 80;
-  var pill      = document.getElementById('HeaderPill');
-  var pillMenu  = document.getElementById('HeaderPillMenu');
-  var mainMenu  = document.getElementById('MobileMenuToggle');
-  var ticking   = false;
-  var lastY     = window.scrollY;
-
-  /* Delegate pill hamburger → existing mobile toggle */
-  if (pillMenu && mainMenu) {
-    pillMenu.addEventListener('click', function () {
-      mainMenu.click();
-    });
-  }
-
-  function update() {
-    var currentY = window.scrollY;
-    var goingDown = currentY > lastY;
-
-    if (currentY <= threshold) {
-      /* At the top — full header, no pill, not hidden */
-      header.classList.remove('is-compact');
-      header.classList.remove('is-hidden');
-    } else if (goingDown) {
-      /* Scrolling down — hide everything */
-      header.classList.remove('is-compact');
-      header.classList.add('is-hidden');
-    } else {
-      /* Scrolling up past threshold — show compact pill */
-      header.classList.remove('is-hidden');
-      header.classList.add('is-compact');
-    }
-
-    if (pill) {
-      var showPill = header.classList.contains('is-compact');
-      pill.setAttribute('aria-hidden', showPill ? 'false' : 'true');
-    }
-
-    lastY   = currentY;
-    ticking = false;
-  }
-
-  window.addEventListener('scroll', function () {
-    if (!ticking) {
-      requestAnimationFrame(update);
-      ticking = true;
-    }
-  }, { passive: true });
-
-  /* Run once on load in case page is already scrolled */
-  update();
-}());
-</script>
+{%- comment -%} Scroll behaviour handled by assets/theme.js updateHeader() {%- endcomment -%}
 
 {% schema %}
 {

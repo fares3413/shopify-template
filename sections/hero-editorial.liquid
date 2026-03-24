@@ -1,0 +1,662 @@
+{%- assign slide_count = section.blocks.size -%}
+{%- assign s = section.settings -%}
+
+<div
+  class="hero-editorial"
+  id="HeroEditorial-{{ section.id }}"
+  data-autoplay="{{ s.autoplay }}"
+  data-autoplay-speed="{{ s.autoplay_speed }}"
+  style="
+    --he-height:   {{ s.height }}vh;
+    --he-bg:       {{ s.hero_bg }};
+    --he-text:     {{ s.hero_text_color }};
+  "
+>
+
+  {%- comment -%} ── Floating top bar ── {%- endcomment -%}
+  {%- if s.show_hero_bar -%}
+    <div class="hero-editorial__bar" aria-hidden="true">
+      <button class="hero-editorial__bar-btn" type="button" aria-label="Menu">
+        <svg width="17" height="13" viewBox="0 0 17 13" fill="none" aria-hidden="true">
+          <rect width="17" height="2" rx="1" fill="currentColor"/>
+          <rect y="5.5" width="12" height="2" rx="1" fill="currentColor"/>
+          <rect y="11" width="17" height="2" rx="1" fill="currentColor"/>
+        </svg>
+      </button>
+      <span class="hero-editorial__bar-name">{{ s.bar_store_name | default: shop.name | upcase }}</span>
+      <a href="/cart" class="hero-editorial__bar-btn" aria-label="Cart">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+      </a>
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ── Slide track ── {%- endcomment -%}
+  <div class="hero-editorial__track">
+    {%- for block in section.blocks -%}
+      {%- assign lines = block.settings.heading | newline_to_br | split: '<br />' -%}
+
+      <div
+        class="hero-editorial__slide{% if forloop.first %} is-active{% endif %}"
+        data-index="{{ forloop.index0 }}"
+        {{ block.shopify_attributes }}
+      >
+
+        {%- comment -%} Layer 1: background collage image {%- endcomment -%}
+        <div class="hero-editorial__media">
+          {%- if block.settings.image != blank -%}
+            <img
+              src="{{ block.settings.image | image_url: width: 1920 }}"
+              srcset="
+                {{ block.settings.image | image_url: width: 750 }} 750w,
+                {{ block.settings.image | image_url: width: 1200 }} 1200w,
+                {{ block.settings.image | image_url: width: 1920 }} 1920w
+              "
+              sizes="100vw"
+              alt="{{ block.settings.image.alt | escape }}"
+              class="hero-editorial__bg-img"
+              {% if forloop.first %}loading="eager" fetchpriority="high"{% else %}loading="lazy"{% endif %}
+              width="{{ block.settings.image.width }}"
+              height="{{ block.settings.image.height }}"
+            >
+          {%- else -%}
+            {%- assign ph_i = forloop.index0 | modulo: 3 | plus: 1 -%}
+            {{ 'lifestyle-' | append: ph_i | placeholder_svg_tag: 'hero-editorial__placeholder' }}
+          {%- endif -%}
+          <div class="hero-editorial__overlay" style="--overlay-opacity: {{ block.settings.overlay_opacity | divided_by: 100.0 }};"></div>
+        </div>
+
+        {%- comment -%} Layer 2: giant editorial text {%- endcomment -%}
+        <div class="hero-editorial__big-text" aria-hidden="true">
+          {%- for line in lines -%}
+            {%- assign clean = line | strip_html | strip -%}
+            {%- if clean != blank -%}
+              <span class="hero-editorial__big-line">{{ clean }}</span>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- comment -%} Layer 3: floating product card {%- endcomment -%}
+        <div class="hero-editorial__card" style="--card-bg: {{ block.settings.card_bg }};">
+          {%- if block.settings.card_image != blank -%}
+            <img
+              src="{{ block.settings.card_image | image_url: width: 600 }}"
+              srcset="
+                {{ block.settings.card_image | image_url: width: 300 }} 300w,
+                {{ block.settings.card_image | image_url: width: 600 }} 600w
+              "
+              sizes="(max-width: 768px) 180px, 280px"
+              alt="{{ block.settings.card_image.alt | default: block.settings.heading | escape }}"
+              class="hero-editorial__card-img"
+              loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+              width="600" height="600"
+            >
+          {%- else -%}
+            {%- assign pp = forloop.index0 | modulo: 6 | plus: 1 -%}
+            <div class="hero-editorial__card-placeholder">
+              {{ 'product-' | append: pp | placeholder_svg_tag: 'hero-editorial__card-svg' }}
+            </div>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Layer 4: bottom CTA {%- endcomment -%}
+        {%- if block.settings.button_label != blank -%}
+          <div class="hero-editorial__cta">
+            <a href="{{ block.settings.button_link | default: '#' }}" class="hero-editorial__cta-btn">
+              {{ block.settings.button_label }}
+            </a>
+          </div>
+        {%- endif -%}
+
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- if slide_count > 1 -%}
+    <button class="hero-editorial__nav hero-editorial__nav--prev" aria-label="Previous slide" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="hero-editorial__nav hero-editorial__nav--next" aria-label="Next slide" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+
+    <div class="hero-editorial__dots" role="tablist" aria-label="Slide navigation">
+      {%- for block in section.blocks -%}
+        <button
+          class="hero-editorial__dot{% if forloop.first %} is-active{% endif %}"
+          role="tab"
+          data-index="{{ forloop.index0 }}"
+          aria-label="Go to slide {{ forloop.index }}"
+          aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          type="button"
+        ></button>
+      {%- endfor -%}
+    </div>
+
+    {%- if s.autoplay -%}
+      <button class="hero-editorial__pause" id="EditorialPause-{{ section.id }}" aria-label="Pause" aria-pressed="false" type="button">
+        <svg class="icon-pause" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+        <svg class="icon-play" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </button>
+    {%- endif -%}
+  {%- endif -%}
+</div>
+
+<style>
+/* ── Hero Editorial — scoped ── */
+#HeroEditorial-{{ section.id }} {
+  position: relative;
+  overflow: hidden;
+  height: var(--he-height, 85vh);
+  background: var(--he-bg, #f5f4f0);
+  border-radius: var(--radius-lg, 16px);
+  margin: 0 var(--gutter, 2rem);
+}
+
+/* Track & slides */
+#HeroEditorial-{{ section.id }} .hero-editorial__track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.75s ease, visibility 0.75s ease;
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
+/* Background media */
+#HeroEditorial-{{ section.id }} .hero-editorial__media {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__bg-img,
+#HeroEditorial-{{ section.id }} .hero-editorial__placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0.7;
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0,0,0,calc(var(--overlay-opacity, 0) * 1.5)) 0%,
+    rgba(0,0,0,calc(var(--overlay-opacity, 0) * 0.4)) 60%,
+    transparent 100%
+  );
+}
+
+/* Giant editorial typography */
+#HeroEditorial-{{ section.id }} .hero-editorial__big-text {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  overflow: hidden;
+  gap: 0;
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__big-line {
+  display: block;
+  font-size: clamp(5rem, 17vw, 21rem);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--he-text, #1a1a1a);
+  user-select: none;
+}
+
+/* Floating product card */
+#HeroEditorial-{{ section.id }} .hero-editorial__card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 3;
+  background: var(--card-bg, #ffffff);
+  border-radius: 20px;
+  box-shadow: 0 20px 64px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.08);
+  width: clamp(160px, 20vw, 300px);
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__card:hover {
+  transform: translate(-50%, -50%) scale(1.03);
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 1.25rem;
+  display: block;
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__card-svg {
+  width: 100%;
+  height: 100%;
+  opacity: 0.35;
+}
+
+/* Bottom CTA */
+#HeroEditorial-{{ section.id }} .hero-editorial__cta {
+  position: absolute;
+  bottom: 2.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  white-space: nowrap;
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__cta-btn {
+  display: inline-block;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  padding: 0.875rem 2.5rem;
+  border-radius: 100px;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.22);
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__cta-btn:hover {
+  background: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.28);
+}
+
+/* Floating top bar */
+#HeroEditorial-{{ section.id }} .hero-editorial__bar {
+  position: absolute;
+  top: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  background: #1a1a1a;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.625rem 1.125rem;
+  min-width: 260px;
+  max-width: 380px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+  white-space: nowrap;
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__bar-btn {
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 0.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+  flex-shrink: 0;
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__bar-btn:hover { opacity: 1; }
+#HeroEditorial-{{ section.id }} .hero-editorial__bar-name {
+  flex: 1;
+  text-align: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Nav arrows */
+#HeroEditorial-{{ section.id }} .hero-editorial__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  background: #1a1a1a;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
+  transition: background var(--transition, 0.25s ease);
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__nav:hover { background: #333; }
+#HeroEditorial-{{ section.id }} .hero-editorial__nav--prev { left: 1.25rem; }
+#HeroEditorial-{{ section.id }} .hero-editorial__nav--next { right: 1.25rem; }
+
+/* Dots */
+#HeroEditorial-{{ section.id }} .hero-editorial__dots {
+  position: absolute;
+  bottom: 5.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(26,26,26,0.25);
+  transition: background var(--transition, 0.25s ease), transform var(--transition, 0.25s ease);
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__dot.is-active {
+  background: #1a1a1a;
+  width: 22px;
+  border-radius: 4px;
+}
+
+/* Pause */
+#HeroEditorial-{{ section.id }} .hero-editorial__pause {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 36px;
+  height: 36px;
+  background: rgba(26,26,26,0.15);
+  color: #1a1a1a;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background var(--transition, 0.25s ease);
+}
+#HeroEditorial-{{ section.id }} .hero-editorial__pause:hover {
+  background: rgba(26,26,26,0.28);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  #HeroEditorial-{{ section.id }} {
+    margin: 0 1rem;
+    border-radius: var(--radius-md, 8px);
+  }
+  #HeroEditorial-{{ section.id }} .hero-editorial__big-line {
+    font-size: clamp(3.5rem, 20vw, 8rem);
+  }
+  #HeroEditorial-{{ section.id }} .hero-editorial__card {
+    width: clamp(130px, 38vw, 200px);
+  }
+  #HeroEditorial-{{ section.id }} .hero-editorial__bar {
+    min-width: 220px;
+    padding: 0.5rem 1rem;
+  }
+  #HeroEditorial-{{ section.id }} .hero-editorial__nav {
+    width: 40px;
+    height: 40px;
+  }
+}
+@media (max-width: 480px) {
+  #HeroEditorial-{{ section.id }} {
+    margin: 0 0.5rem;
+  }
+  #HeroEditorial-{{ section.id }} .hero-editorial__big-line {
+    font-size: clamp(3rem, 22vw, 6rem);
+  }
+  #HeroEditorial-{{ section.id }} .hero-editorial__cta-btn {
+    padding: 0.75rem 2rem;
+    font-size: 0.875rem;
+  }
+}
+</style>
+
+<script>
+(function () {
+  var slider   = document.getElementById('HeroEditorial-{{ section.id }}');
+  if (!slider) return;
+
+  var slides   = slider.querySelectorAll('.hero-editorial__slide');
+  var dots     = slider.querySelectorAll('.hero-editorial__dot');
+  var prevBtn  = slider.querySelector('.hero-editorial__nav--prev');
+  var nextBtn  = slider.querySelector('.hero-editorial__nav--next');
+  var pauseBtn = slider.querySelector('.hero-editorial__pause');
+  var autoplay = slider.dataset.autoplay === 'true';
+  var speed    = parseInt(slider.dataset.autoplaySpeed, 10) || 5000;
+  var current  = 0;
+  var total    = slides.length;
+  var timer    = null;
+  var paused   = false;
+
+  if (total <= 1) return;
+
+  function goTo(idx) {
+    slides[current].classList.remove('is-active');
+    dots[current] && dots[current].classList.remove('is-active');
+    dots[current] && dots[current].setAttribute('aria-selected', 'false');
+    current = (idx + total) % total;
+    slides[current].classList.add('is-active');
+    dots[current] && dots[current].classList.add('is-active');
+    dots[current] && dots[current].setAttribute('aria-selected', 'true');
+  }
+
+  function startTimer() {
+    if (!autoplay || paused) return;
+    clearInterval(timer);
+    timer = setInterval(function () { goTo(current + 1); }, speed);
+  }
+  function stopTimer() { clearInterval(timer); }
+
+  prevBtn && prevBtn.addEventListener('click', function () { goTo(current - 1); startTimer(); });
+  nextBtn && nextBtn.addEventListener('click', function () { goTo(current + 1); startTimer(); });
+
+  dots.forEach(function (dot) {
+    dot.addEventListener('click', function () { goTo(parseInt(dot.dataset.index, 10)); startTimer(); });
+  });
+
+  if (pauseBtn) {
+    pauseBtn.addEventListener('click', function () {
+      paused = !paused;
+      pauseBtn.setAttribute('aria-pressed', paused ? 'true' : 'false');
+      pauseBtn.querySelector('.icon-pause').style.display = paused ? 'none' : '';
+      pauseBtn.querySelector('.icon-play').style.display  = paused ? ''     : 'none';
+      paused ? stopTimer() : startTimer();
+    });
+  }
+
+  var touchStartX = 0;
+  slider.addEventListener('touchstart', function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+  slider.addEventListener('touchend', function (e) {
+    var diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) { goTo(diff > 0 ? current + 1 : current - 1); startTimer(); }
+  }, { passive: true });
+
+  slider.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft')  { goTo(current - 1); startTimer(); }
+    if (e.key === 'ArrowRight') { goTo(current + 1); startTimer(); }
+  });
+
+  slider.addEventListener('mouseenter', stopTimer);
+  slider.addEventListener('mouseleave', startTimer);
+
+  if (autoplay) startTimer();
+}());
+</script>
+
+{% schema %}
+{
+  "name": "Hero Editorial",
+  "tag": "section",
+  "class": "section-hero-editorial",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "height",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "label": "Height",
+      "default": 85
+    },
+    {
+      "type": "color",
+      "id": "hero_bg",
+      "label": "Background color",
+      "default": "#f5f4f0"
+    },
+    {
+      "type": "color",
+      "id": "hero_text_color",
+      "label": "Giant text color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "header",
+      "content": "Floating top bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_hero_bar",
+      "label": "Show floating bar",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "bar_store_name",
+      "label": "Store name in bar",
+      "info": "Leave blank to use your shop name"
+    },
+    {
+      "type": "header",
+      "content": "Slideshow"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "autoplay_speed",
+      "label": "Change slides every",
+      "options": [
+        { "value": "3000", "label": "3 seconds" },
+        { "value": "4000", "label": "4 seconds" },
+        { "value": "5000", "label": "5 seconds" },
+        { "value": "7000", "label": "7 seconds" },
+        { "value": "10000", "label": "10 seconds" }
+      ],
+      "default": "5000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Background"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background / collage image"
+        },
+        {
+          "type": "range",
+          "id": "overlay_opacity",
+          "min": 0,
+          "max": 60,
+          "step": 5,
+          "unit": "%",
+          "label": "Image overlay opacity",
+          "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Giant heading"
+        },
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Heading text",
+          "default": "SLIDE\nTITLE",
+          "info": "Each line = one stacked word. Keep words short."
+        },
+        {
+          "type": "header",
+          "content": "Product card"
+        },
+        {
+          "type": "image_picker",
+          "id": "card_image",
+          "label": "Product card image"
+        },
+        {
+          "type": "color",
+          "id": "card_bg",
+          "label": "Card background",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "CTA button"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero Editorial",
+      "blocks": [
+        { "type": "slide", "settings": { "heading": "SLIDE\nTITLE", "button_label": "Shop Now", "overlay_opacity": 0 } },
+        { "type": "slide", "settings": { "heading": "NEW\nDROP", "button_label": "Explore", "overlay_opacity": 0 } },
+        { "type": "slide", "settings": { "heading": "SOUND\nCRAFTED", "button_label": "Discover", "overlay_opacity": 0 } }
+      ]
+    }
+  ]
+}
+{% endschema %}

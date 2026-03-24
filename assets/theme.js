@@ -257,15 +257,58 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ============================================
-  // STICKY HEADER — scroll shadow
+  // STICKY HEADER — scroll shadow + compact pill
   // ============================================
   const header = document.getElementById('Header');
-  const updateHeaderShadow = () => {
-    if (!header) return;
-    header.classList.toggle('scrolled', window.scrollY > 10);
-  };
-  window.addEventListener('scroll', updateHeaderShadow, { passive: true });
-  updateHeaderShadow();
+  if (header) {
+    const pill         = document.getElementById('HeaderPill');
+    const pillMenuBtn  = document.getElementById('HeaderPillMenu');
+    const mainMenuBtn  = document.getElementById('MobileMenuToggle');
+    const isCompact    = header.dataset.compact === 'true';
+    const threshold    = parseInt(header.dataset.compactThreshold, 10) || 80;
+    let   lastY        = window.scrollY;
+    let   ticking      = false;
+
+    // Pill hamburger delegates to existing mobile toggle
+    if (pillMenuBtn && mainMenuBtn) {
+      pillMenuBtn.addEventListener('click', () => mainMenuBtn.click());
+    }
+
+    function updateHeader() {
+      const currentY   = window.scrollY;
+      const goingDown  = currentY > lastY;
+
+      // Always show shadow when scrolled
+      header.classList.toggle('scrolled', currentY > 10);
+
+      if (isCompact) {
+        if (currentY <= threshold) {
+          // At top — full header
+          header.classList.remove('is-compact', 'is-hidden');
+          if (pill) pill.setAttribute('aria-hidden', 'true');
+        } else if (goingDown) {
+          // Scrolling down — hide header
+          header.classList.remove('is-compact');
+          header.classList.add('is-hidden');
+          if (pill) pill.setAttribute('aria-hidden', 'true');
+        } else {
+          // Scrolling up — show compact pill
+          header.classList.remove('is-hidden');
+          header.classList.add('is-compact');
+          if (pill) pill.setAttribute('aria-hidden', 'false');
+        }
+      }
+
+      lastY   = currentY;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) { requestAnimationFrame(updateHeader); ticking = true; }
+    }, { passive: true });
+
+    updateHeader();
+  }
 
   // ============================================
   // SMOOTH FADE IN on scroll
