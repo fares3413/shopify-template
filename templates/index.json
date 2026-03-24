@@ -586,6 +586,54 @@
         "heading": "Latest Stories",
         "post_count": 3
       }
+    },
+    "image_carousel": {
+      "type": "image-carousel",
+      "blocks": {
+        "ic_1": { "type": "image", "settings": { "label": "Card 1" } },
+        "ic_2": { "type": "image", "settings": { "label": "Card 2" } },
+        "ic_3": { "type": "image", "settings": { "label": "Card 3" } },
+        "ic_4": { "type": "image", "settings": { "label": "Card 4" } },
+        "ic_5": { "type": "image", "settings": { "label": "Card 5" } }
+      },
+      "block_order": ["ic_1", "ic_2", "ic_3", "ic_4", "ic_5"],
+      "settings": {
+        "eyebrow": "New Arrivals",
+        "heading": "Popular Products",
+        "card_width": 300,
+        "card_gap": 20,
+        "image_ratio": "portrait",
+        "speed": 30,
+        "pause_on_hover": true,
+        "bg_color": "#f5f4f0",
+        "text_color": "#1a1a1a"
+      }
+    },
+    "scroll_carousel": {
+      "type": "scroll-carousel",
+      "blocks": {
+        "sc_1": { "type": "card", "settings": { "label": "Card 1" } },
+        "sc_2": { "type": "card", "settings": { "label": "Card 2" } },
+        "sc_3": { "type": "card", "settings": { "label": "Card 3" } },
+        "sc_4": { "type": "card", "settings": { "label": "Card 4" } },
+        "sc_5": { "type": "card", "settings": { "label": "Card 5" } },
+        "sc_6": { "type": "card", "settings": { "label": "Card 6" } }
+      },
+      "block_order": ["sc_1", "sc_2", "sc_3", "sc_4", "sc_5", "sc_6"],
+      "settings": {
+        "eyebrow": "Featured",
+        "heading": "Explore the Collection",
+        "card_width": 320,
+        "card_gap": 24,
+        "image_ratio": "portrait",
+        "scroll_height": 250,
+        "viewport_height": 80,
+        "intensity": 10,
+        "smoothing": 8,
+        "direction": "ltr",
+        "bg_color": "#1a1a1a",
+        "text_color": "#ffffff"
+      }
     }
   },
   "order": [
@@ -603,6 +651,8 @@
     "testimonials",
     "bundle_builder",
     "marquee",
+    "image_carousel",
+    "scroll_carousel",
     "instagram_feed",
     "promo_banner",
     "logo_list",

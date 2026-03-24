@@ -259,41 +259,42 @@ document.addEventListener('DOMContentLoaded', function () {
   // ============================================
   // STICKY HEADER — scroll shadow + compact pill
   // ============================================
-  const header = document.getElementById('Header');
+  const header      = document.getElementById('Header');
+  // Sticky lives on the Shopify section wrapper — target that for transforms
+  const headerWrap  = document.getElementById('shopify-section-header') || header;
   if (header) {
-    const pill         = document.getElementById('HeaderPill');
-    const pillMenuBtn  = document.getElementById('HeaderPillMenu');
-    const mainMenuBtn  = document.getElementById('MobileMenuToggle');
-    const isCompact    = header.dataset.compact === 'true';
-    const threshold    = parseInt(header.dataset.compactThreshold, 10) || 80;
-    let   lastY        = window.scrollY;
-    let   ticking      = false;
+    const pill        = document.getElementById('HeaderPill');
+    const pillMenuBtn = document.getElementById('HeaderPillMenu');
+    const mainMenuBtn = document.getElementById('MobileMenuToggle');
+    const isCompact   = header.dataset.compact === 'true';
+    const threshold   = parseInt(header.dataset.compactThreshold, 10) || 80;
+    let   lastY       = window.scrollY;
+    let   ticking     = false;
 
-    // Pill hamburger delegates to existing mobile toggle
     if (pillMenuBtn && mainMenuBtn) {
       pillMenuBtn.addEventListener('click', () => mainMenuBtn.click());
     }
 
     function updateHeader() {
-      const currentY   = window.scrollY;
-      const goingDown  = currentY > lastY;
+      const currentY  = window.scrollY;
+      const goingDown = currentY > lastY;
 
-      // Always show shadow when scrolled
       header.classList.toggle('scrolled', currentY > 10);
 
       if (isCompact) {
         if (currentY <= threshold) {
-          // At top — full header
+          // At top — full header, nothing hidden
+          headerWrap.classList.remove('is-hidden');
           header.classList.remove('is-compact', 'is-hidden');
           if (pill) pill.setAttribute('aria-hidden', 'true');
         } else if (goingDown) {
-          // Scrolling down — hide header
+          // Scrolling down — slide entire section off top
+          headerWrap.classList.add('is-hidden');
           header.classList.remove('is-compact');
-          header.classList.add('is-hidden');
           if (pill) pill.setAttribute('aria-hidden', 'true');
         } else {
-          // Scrolling up — show compact pill
-          header.classList.remove('is-hidden');
+          // Scrolling up — slide section back, show compact pill
+          headerWrap.classList.remove('is-hidden');
           header.classList.add('is-compact');
           if (pill) pill.setAttribute('aria-hidden', 'false');
         }

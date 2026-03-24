@@ -1,0 +1,508 @@
+{%- assign s = section.settings -%}
+{%- assign sid = section.id -%}
+
+<style>
+/* ── Scroll Carousel — scoped ── */
+#ScrollCarousel-{{ sid }} {
+  --sc-bg:       {{ s.bg_color }};
+  --sc-text:     {{ s.text_color }};
+  --sc-gap:      {{ s.card_gap }}px;
+  --sc-width:    {{ s.card_width }}px;
+  background:    var(--sc-bg);
+  padding: 5rem 0;
+  overflow: hidden;
+}
+
+/* Header */
+#ScrollCarousel-{{ sid }} .sc__header {
+  max-width: var(--page-width, 1320px);
+  margin: 0 auto 3.5rem;
+  padding: 0 var(--gutter, 2rem);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+#ScrollCarousel-{{ sid }} .sc__header-left {}
+#ScrollCarousel-{{ sid }} .sc__eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent, #c9a96e);
+  margin: 0 0 0.75rem;
+}
+#ScrollCarousel-{{ sid }} .sc__heading {
+  font-size: clamp(1.75rem, 3.5vw, 3rem);
+  font-weight: 800;
+  color: var(--sc-text);
+  margin: 0 0 0.75rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+#ScrollCarousel-{{ sid }} .sc__desc {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--sc-text);
+  opacity: 0.6;
+  max-width: 480px;
+  margin: 0;
+}
+#ScrollCarousel-{{ sid }} .sc__progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+#ScrollCarousel-{{ sid }} .sc__progress-bar {
+  width: 120px;
+  height: 3px;
+  background: rgba(0,0,0,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+#ScrollCarousel-{{ sid }} .sc__progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--sc-text);
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
+#ScrollCarousel-{{ sid }} .sc__progress-label {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--sc-text);
+  opacity: 0.4;
+  white-space: nowrap;
+}
+
+/* Sticky scroll zone */
+#ScrollCarousel-{{ sid }} .sc__sticky-zone {
+  position: relative;
+}
+#ScrollCarousel-{{ sid }} .sc__sticky {
+  position: sticky;
+  top: 0;
+  overflow: hidden;
+  /* Fade edges */
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+  mask-image:         linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+}
+#ScrollCarousel-{{ sid }} .sc__track {
+  display: flex;
+  gap: var(--sc-gap);
+  width: max-content;
+  will-change: transform;
+}
+
+/* Cards */
+#ScrollCarousel-{{ sid }} .sc__card {
+  flex-shrink: 0;
+  width: var(--sc-width);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--color-bg-soft, #f5f5f3);
+  transition: transform 0.35s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.3s ease;
+  cursor: default;
+}
+#ScrollCarousel-{{ sid }} .sc__card:hover {
+  transform: scale(1.025) translateY(-4px);
+  box-shadow: 0 20px 48px rgba(0,0,0,0.13);
+}
+#ScrollCarousel-{{ sid }} .sc__card-img-wrap {
+  width: 100%;
+  {%- if s.image_ratio == 'square' -%}
+  aspect-ratio: 1 / 1;
+  {%- elsif s.image_ratio == 'portrait' -%}
+  aspect-ratio: 3 / 4;
+  {%- else -%}
+  aspect-ratio: 4 / 3;
+  {%- endif -%}
+  overflow: hidden;
+}
+#ScrollCarousel-{{ sid }} .sc__card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+#ScrollCarousel-{{ sid }} .sc__card:hover .sc__card-img {
+  transform: scale(1.05);
+}
+#ScrollCarousel-{{ sid }} .sc__card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-muted, #ebebeb);
+}
+#ScrollCarousel-{{ sid }} .sc__card-placeholder svg {
+  width: 48px;
+  height: 48px;
+  opacity: 0.25;
+}
+#ScrollCarousel-{{ sid }} .sc__card-body {
+  padding: 1rem 1.25rem 1.25rem;
+}
+#ScrollCarousel-{{ sid }} .sc__card-label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--sc-text);
+  letter-spacing: -0.01em;
+  margin: 0 0 0.25rem;
+}
+#ScrollCarousel-{{ sid }} .sc__card-sublabel {
+  font-size: 0.8125rem;
+  color: var(--sc-text);
+  opacity: 0.5;
+  margin: 0;
+}
+
+/* Mobile fallback: normal horizontal scroll */
+@media (max-width: 768px) {
+  #ScrollCarousel-{{ sid }} {
+    --sc-width: {{ s.card_width | times: 0.72 | round }}px;
+    padding: 3.5rem 0;
+  }
+  #ScrollCarousel-{{ sid }} .sc__sticky-zone {
+    height: auto !important;
+  }
+  #ScrollCarousel-{{ sid }} .sc__sticky {
+    position: static;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 var(--gutter, 2rem) 1rem;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+  #ScrollCarousel-{{ sid }} .sc__sticky::-webkit-scrollbar { display: none; }
+  #ScrollCarousel-{{ sid }} .sc__track {
+    transform: none !important;
+  }
+  #ScrollCarousel-{{ sid }} .sc__progress { display: none; }
+  #ScrollCarousel-{{ sid }} .sc__header {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+  }
+}
+</style>
+
+{%- assign block_count = section.blocks | size -%}
+
+<div id="ScrollCarousel-{{ sid }}" data-sc>
+
+  {%- if s.eyebrow != blank or s.heading != blank or s.description != blank -%}
+    <div class="sc__header">
+      <div class="sc__header-left">
+        {%- if s.eyebrow != blank -%}
+          <p class="sc__eyebrow">{{ s.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <h2 class="sc__heading">{{ s.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if s.description != blank -%}
+          <p class="sc__desc">{{ s.description | escape }}</p>
+        {%- endif -%}
+      </div>
+      <div class="sc__progress" aria-hidden="true">
+        <div class="sc__progress-bar">
+          <div class="sc__progress-fill" id="ScProgress-{{ sid }}"></div>
+        </div>
+        <span class="sc__progress-label" id="ScLabel-{{ sid }}">Scroll to explore</span>
+      </div>
+    </div>
+  {%- endif -%}
+
+  <div
+    class="sc__sticky-zone"
+    id="ScZone-{{ sid }}"
+    style="height: {{ s.scroll_height }}vh;"
+  >
+    <div class="sc__sticky" id="ScSticky-{{ sid }}" style="height: {{ s.viewport_height }}vh;">
+      <div class="sc__track" id="ScTrack-{{ sid }}">
+        {%- for block in section.blocks -%}
+          <div class="sc__card" {{ block.shopify_attributes }}>
+            <div class="sc__card-img-wrap">
+              {%- if block.settings.image != blank -%}
+                <img
+                  src="{{ block.settings.image | image_url: width: 800 }}"
+                  alt="{{ block.settings.image.alt | default: block.settings.label | escape }}"
+                  class="sc__card-img"
+                  loading="lazy"
+                  width="800" height="800"
+                >
+              {%- else -%}
+                <div class="sc__card-placeholder">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+              {%- endif -%}
+            </div>
+            {%- if block.settings.label != blank or block.settings.sublabel != blank -%}
+              <div class="sc__card-body">
+                {%- if block.settings.label != blank -%}
+                  <p class="sc__card-label">{{ block.settings.label | escape }}</p>
+                {%- endif -%}
+                {%- if block.settings.sublabel != blank -%}
+                  <p class="sc__card-sublabel">{{ block.settings.sublabel | escape }}</p>
+                {%- endif -%}
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  var isMobile = window.matchMedia('(max-width: 768px)').matches;
+  if (isMobile) return;
+
+  var zone    = document.getElementById('ScZone-{{ sid }}');
+  var sticky  = document.getElementById('ScSticky-{{ sid }}');
+  var track   = document.getElementById('ScTrack-{{ sid }}');
+  var fill    = document.getElementById('ScProgress-{{ sid }}');
+  var label   = document.getElementById('ScLabel-{{ sid }}');
+  if (!zone || !track) return;
+
+  var intensity = {{ s.intensity | default: 10 }} / 10;
+  var direction = '{{ s.direction }}' === 'rtl' ? -1 : 1;
+  var current   = 0;
+  var target    = 0;
+  var ease      = {{ s.smoothing | default: 8 }} / 100;
+  var rafId     = null;
+
+  function getProgress() {
+    var rect   = zone.getBoundingClientRect();
+    var total  = zone.offsetHeight - sticky.offsetHeight;
+    var scrolled = -rect.top;
+    return Math.max(0, Math.min(1, scrolled / total));
+  }
+
+  function getMaxShift() {
+    var trackW  = track.scrollWidth;
+    var stickyW = sticky.offsetWidth;
+    return Math.max(0, trackW - stickyW);
+  }
+
+  function tick() {
+    current += (target - current) * ease;
+    if (Math.abs(target - current) < 0.5) current = target;
+
+    track.style.transform = 'translate3d(' + (-current * direction) + 'px, 0, 0)';
+
+    var maxShift = getMaxShift();
+    var pct = maxShift > 0 ? (current / maxShift) * 100 : 0;
+    if (fill) fill.style.width = Math.min(100, pct) + '%';
+    if (label) {
+      var pctInt = Math.round(Math.min(100, pct));
+      label.textContent = pctInt < 5 ? 'Scroll to explore' : pctInt + '%';
+    }
+
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function onScroll() {
+    var progress = getProgress();
+    var maxShift = getMaxShift();
+    target = progress * maxShift * intensity;
+  }
+
+  // Only run scroll logic when section is in or near viewport
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        window.addEventListener('scroll', onScroll, { passive: true });
+        if (!rafId) rafId = requestAnimationFrame(tick);
+      } else {
+        window.removeEventListener('scroll', onScroll);
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+      }
+    });
+  }, { rootMargin: '200px 0px 200px 0px' });
+
+  observer.observe(zone);
+  onScroll(); // init position
+}());
+</script>
+
+{% schema %}
+{
+  "name": "Scroll Carousel",
+  "tag": "section",
+  "class": "section-scroll-carousel",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Featured"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Explore the Collection"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Cards"
+    },
+    {
+      "type": "range",
+      "id": "card_width",
+      "label": "Card width (px)",
+      "min": 180,
+      "max": 480,
+      "step": 20,
+      "default": 320
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Gap between cards (px)",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "label": "Image ratio",
+      "options": [
+        { "value": "square",    "label": "Square (1:1)" },
+        { "value": "portrait",  "label": "Portrait (3:4)" },
+        { "value": "landscape", "label": "Landscape (4:3)" }
+      ],
+      "default": "portrait"
+    },
+    {
+      "type": "header",
+      "content": "Scroll motion"
+    },
+    {
+      "type": "range",
+      "id": "scroll_height",
+      "label": "Scroll zone height (vh multiples)",
+      "info": "Taller = slower, more dramatic scroll effect",
+      "min": 150,
+      "max": 500,
+      "step": 50,
+      "default": 250
+    },
+    {
+      "type": "range",
+      "id": "viewport_height",
+      "label": "Visible area height (vh)",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "intensity",
+      "label": "Scroll intensity",
+      "info": "Higher = cards move further per scroll",
+      "min": 5,
+      "max": 20,
+      "step": 1,
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "smoothing",
+      "label": "Motion smoothing",
+      "info": "Lower = more lag/easing, Higher = snappier",
+      "min": 1,
+      "max": 20,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "select",
+      "id": "direction",
+      "label": "Scroll direction",
+      "options": [
+        { "value": "ltr", "label": "Left (default)" },
+        { "value": "rtl", "label": "Right (reverse)" }
+      ],
+      "default": "ltr"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        },
+        {
+          "type": "text",
+          "id": "sublabel",
+          "label": "Sublabel (e.g. price or category)"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Scroll Carousel",
+      "blocks": [
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" },
+        { "type": "card" }
+      ]
+    }
+  ],
+  "max_blocks": 20
+}
+{% endschema %}

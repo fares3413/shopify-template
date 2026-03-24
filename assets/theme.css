@@ -249,13 +249,21 @@
 /* ============================================
    HEADER
    ============================================ */
-.header {
+/* Shopify wraps every section in a div — sticky must live on that wrapper */
+#shopify-section-header {
   position: sticky;
   top: 0;
   z-index: 90;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#shopify-section-header.is-hidden {
+  transform: translateY(-100%);
+}
+.header {
+  position: relative; /* sticky is now on the wrapper above */
   background: var(--color-white);
   border-bottom: 1px solid var(--color-border);
-  transition: box-shadow var(--transition);
+  transition: box-shadow var(--transition), background 0.4s ease, border-color 0.4s ease;
 }
 .header.scrolled {
   box-shadow: 0 2px 20px rgba(0,0,0,0.08);
@@ -3974,32 +3982,11 @@
    COMPACT FLOATING PILL HEADER
    ============================================ */
 
-/* ── Base transitions on the header ── */
-.header {
-  transition:
-    background   0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow   0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    transform    0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* ── Hidden state: slides fully off the top ── */
-.header.is-hidden {
-  transform: translateY(-100%);
+/* ── Compact state: header becomes transparent ── */
+.header.is-compact {
   background: transparent;
   border-bottom-color: transparent;
   box-shadow: none;
-}
-.header.is-hidden .header__bar {
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* ── Compact state: header becomes a transparent wrapper ── */
-.header.is-compact {
-  background:    transparent;
-  border-bottom-color: transparent;
-  box-shadow:    none;
 }
 
 /* Full bar fades out on compact */
