@@ -1,4 +1,5 @@
 {%- if section.settings.show_bar -%}
+{%- assign social_pos = section.settings.social_position | default: 'left' -%}
 <div
   class="announcement-bar"
   id="AnnouncementBar-{{ section.id }}"
@@ -9,32 +10,19 @@
 >
   <div class="announcement-bar__content">
 
-    <!-- Left: social icons + separator -->
+    <!-- Left slot -->
     <div class="announcement-bar__left">
-      <div class="announcement-bar__social" aria-label="Social links">
-        {%- if settings.social_facebook_link != blank -%}
-          <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" class="announcement-bar__social-link" aria-label="Facebook">
-            {% render 'icon-facebook' %}
-          </a>
+      {%- if social_pos == 'left' -%}
+        <div class="announcement-bar__social" aria-label="Social links">
+          <a href="{{ settings.social_facebook_link | default: '#' }}" {% if settings.social_facebook_link != blank %}target="_blank" rel="noopener"{% endif %} class="announcement-bar__social-link" aria-label="Facebook">{% render 'icon-facebook' %}</a>
+          <a href="{{ settings.social_twitter_link | default: '#' }}" {% if settings.social_twitter_link != blank %}target="_blank" rel="noopener"{% endif %} class="announcement-bar__social-link" aria-label="X">{% render 'icon-x' %}</a>
+          <a href="{{ settings.social_instagram_link | default: '#' }}" {% if settings.social_instagram_link != blank %}target="_blank" rel="noopener"{% endif %} class="announcement-bar__social-link" aria-label="Instagram">{% render 'icon-instagram' %}</a>
+          <a href="{{ settings.social_tiktok_link | default: '#' }}" {% if settings.social_tiktok_link != blank %}target="_blank" rel="noopener"{% endif %} class="announcement-bar__social-link" aria-label="TikTok">{% render 'icon-tiktok' %}</a>
+          <a href="{{ settings.social_youtube_link | default: '#' }}" {% if settings.social_youtube_link != blank %}target="_blank" rel="noopener"{% endif %} class="announcement-bar__social-link" aria-label="YouTube">{% render 'icon-youtube' %}</a>
+        </div>
+        {%- if section.blocks.size > 0 -%}
+          <span class="announcement-bar__separator" aria-hidden="true"></span>
         {%- endif -%}
-        {%- if settings.social_twitter_link != blank -%}
-          <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener" class="announcement-bar__social-link" aria-label="X">
-            {% render 'icon-x' %}
-          </a>
-        {%- endif -%}
-        {%- if settings.social_instagram_link != blank -%}
-          <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" class="announcement-bar__social-link" aria-label="Instagram">
-            {% render 'icon-instagram' %}
-          </a>
-        {%- endif -%}
-        {%- if settings.social_youtube_link != blank -%}
-          <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" class="announcement-bar__social-link" aria-label="YouTube">
-            {% render 'icon-youtube' %}
-          </a>
-        {%- endif -%}
-      </div>
-      {%- if section.blocks.size > 0 -%}
-        <span class="announcement-bar__separator" aria-hidden="true"></span>
       {%- endif -%}
     </div>
 
@@ -100,8 +88,21 @@
       {%- endif -%}
     </div>
 
-    <!-- Right: balanced spacer (mirrors left width) -->
-    <div class="announcement-bar__right" aria-hidden="true"></div>
+    <!-- Right slot -->
+    <div class="announcement-bar__right">
+      {%- if social_pos == 'right' -%}
+        {%- if section.blocks.size > 0 -%}
+          <span class="announcement-bar__separator" aria-hidden="true"></span>
+        {%- endif -%}
+        <div class="announcement-bar__social" aria-label="Social links">
+          <a href="{{ settings.social_facebook_link | default: '#' }}" {% if settings.social_facebook_link != blank %}target="_blank" rel="noopener"{% endif %} class="announcement-bar__social-link" aria-label="Facebook">{% render 'icon-facebook' %}</a>
+          <a href="{{ settings.social_twitter_link | default: '#' }}" {% if settings.social_twitter_link != blank %}target="_blank" rel="noopener"{% endif %} class="announcement-bar__social-link" aria-label="X">{% render 'icon-x' %}</a>
+          <a href="{{ settings.social_instagram_link | default: '#' }}" {% if settings.social_instagram_link != blank %}target="_blank" rel="noopener"{% endif %} class="announcement-bar__social-link" aria-label="Instagram">{% render 'icon-instagram' %}</a>
+          <a href="{{ settings.social_tiktok_link | default: '#' }}" {% if settings.social_tiktok_link != blank %}target="_blank" rel="noopener"{% endif %} class="announcement-bar__social-link" aria-label="TikTok">{% render 'icon-tiktok' %}</a>
+          <a href="{{ settings.social_youtube_link | default: '#' }}" {% if settings.social_youtube_link != blank %}target="_blank" rel="noopener"{% endif %} class="announcement-bar__social-link" aria-label="YouTube">{% render 'icon-youtube' %}</a>
+        </div>
+      {%- endif -%}
+    </div>
 
   </div>
 </div>
@@ -158,6 +159,17 @@
       "id": "show_bar",
       "label": "Show announcement bar",
       "default": true
+    },
+    {
+      "type": "select",
+      "id": "social_position",
+      "label": "Social icons",
+      "options": [
+        { "value": "left",   "label": "Show on left" },
+        { "value": "right",  "label": "Show on right" },
+        { "value": "hidden", "label": "Hide" }
+      ],
+      "default": "left"
     },
     {
       "type": "checkbox",

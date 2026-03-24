@@ -41,6 +41,16 @@
         "height": 85
       }
     },
+    "promo_bar": {
+      "type": "promo-bar",
+      "settings": {
+        "eyebrow": "Limited time",
+        "heading": "Get up to 50% off on selected items — Today only",
+        "button_label": "Shop the sale",
+        "bg_color": "#1a1a1a",
+        "text_color": "#ffffff"
+      }
+    },
     "brand_story": {
       "type": "brand-story",
       "settings": {
@@ -259,6 +269,7 @@
   },
   "order": [
     "hero_slider",
+    "promo_bar",
     "brand_story",
     "featured_collections",
     "image_banner",

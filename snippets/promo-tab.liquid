@@ -1,0 +1,29 @@
+{%- unless settings.show_sidebar_social -%}
+<div class="promo-tab">
+  {%- if settings.popup_enabled -%}
+    <button class="promo-tab__link" id="PromoTabBtn" type="button">
+      <span>{{ settings.promo_tab_text | default: 'GET 20% OFF' }}</span>
+    </button>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var btn = document.getElementById('PromoTabBtn');
+      var popup = document.getElementById('NewsletterPopup');
+      if (!btn || !popup) return;
+      btn.addEventListener('click', function () {
+        popup.setAttribute('aria-hidden', 'false');
+        popup.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+        setTimeout(function () {
+          var input = popup.querySelector('.nl-popup__input');
+          if (input) input.focus();
+        }, 300);
+      });
+    });
+    </script>
+  {%- else -%}
+    <a href="{{ settings.promo_tab_link | default: routes.collections_url }}" class="promo-tab__link">
+      <span>{{ settings.promo_tab_text | default: 'GET 20% OFF' }}</span>
+    </a>
+  {%- endif -%}
+</div>
+{%- endunless -%}

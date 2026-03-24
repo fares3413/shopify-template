@@ -118,6 +118,11 @@
       },
       {
         "type": "text",
+        "id": "social_tiktok_link",
+        "label": "TikTok URL"
+      },
+      {
+        "type": "text",
         "id": "social_youtube_link",
         "label": "YouTube URL"
       },

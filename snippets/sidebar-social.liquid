@@ -1,0 +1,67 @@
+<div class="sidebar-social" id="SidebarSocial">
+
+  <!-- Social icons -->
+  {%- if settings.social_facebook_link != blank -%}
+    <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" class="sidebar-social__link" aria-label="Facebook">
+      {% render 'icon-facebook' %}
+    </a>
+  {%- endif -%}
+  {%- if settings.social_twitter_link != blank -%}
+    <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener" class="sidebar-social__link" aria-label="X">
+      {% render 'icon-x' %}
+    </a>
+  {%- endif -%}
+  {%- if settings.social_instagram_link != blank -%}
+    <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" class="sidebar-social__link" aria-label="Instagram">
+      {% render 'icon-instagram' %}
+    </a>
+  {%- endif -%}
+  {%- if settings.social_tiktok_link != blank -%}
+    <a href="{{ settings.social_tiktok_link }}" target="_blank" rel="noopener" class="sidebar-social__link" aria-label="TikTok">
+      {% render 'icon-tiktok' %}
+    </a>
+  {%- endif -%}
+  {%- if settings.social_youtube_link != blank -%}
+    <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" class="sidebar-social__link" aria-label="YouTube">
+      {% render 'icon-youtube' %}
+    </a>
+  {%- endif -%}
+
+  <!-- Divider + promo button -->
+  {%- if settings.promo_tab_text != blank -%}
+    <span class="sidebar-social__divider" aria-hidden="true"></span>
+    {%- if settings.popup_enabled -%}
+      <button
+        class="sidebar-social__promo"
+        id="SidebarPromoBtn"
+        type="button"
+        aria-label="Open newsletter — {{ settings.promo_tab_text }}"
+      >{{ settings.promo_tab_text }}</button>
+    {%- else -%}
+      <a
+        href="{{ settings.promo_tab_link | default: routes.collections_url }}"
+        class="sidebar-social__promo"
+        aria-label="{{ settings.promo_tab_text }}"
+      >{{ settings.promo_tab_text }}</a>
+    {%- endif -%}
+  {%- endif -%}
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var btn   = document.getElementById('SidebarPromoBtn');
+  var popup = document.getElementById('NewsletterPopup');
+  if (!btn || !popup) return;
+
+  btn.addEventListener('click', function () {
+    popup.setAttribute('aria-hidden', 'false');
+    popup.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    setTimeout(function () {
+      var input = popup.querySelector('.nl-popup__input');
+      if (input) input.focus();
+    }, 300);
+  });
+});
+</script>

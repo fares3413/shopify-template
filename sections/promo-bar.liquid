@@ -1,0 +1,86 @@
+<style>
+  #PromoBar-{{ section.id }} {
+    background: {{ section.settings.bg_color }};
+    color: {{ section.settings.text_color }};
+  }
+  #PromoBar-{{ section.id }} .promo-bar__btn {
+    background: {{ section.settings.text_color }};
+    color: {{ section.settings.bg_color }};
+  }
+  #PromoBar-{{ section.id }} .promo-bar__btn:hover {
+    opacity: 0.85;
+  }
+</style>
+
+<section class="promo-bar" id="PromoBar-{{ section.id }}">
+  <div class="promo-bar__inner">
+    <div class="promo-bar__text">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="promo-bar__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <p class="promo-bar__heading">{{ section.settings.heading }}</p>
+      {%- endif -%}
+    </div>
+    {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+      <a href="{{ section.settings.button_link }}" class="promo-bar__btn">
+        {{ section.settings.button_label }}
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Promo Bar",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Limited time"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Get up to 50% off on selected items — Today only"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop the sale"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promo Bar",
+      "settings": {
+        "eyebrow": "Limited time",
+        "heading": "Get up to 50% off on selected items — Today only",
+        "button_label": "Shop the sale",
+        "bg_color": "#1a1a1a",
+        "text_color": "#ffffff"
+      }
+    }
+  ]
+}
+{% endschema %}

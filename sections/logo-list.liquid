@@ -1,0 +1,200 @@
+<style>
+  #LogoList-{{ section.id }} {
+    --ll-band-color:  {{ section.settings.band_color }};
+    --ll-text-color:  {{ section.settings.text_color }};
+    --ll-band-color2: {{ section.settings.band_color_2 }};
+    --ll-text-color2: {{ section.settings.text_color_2 }};
+    --ll-speed:       {{ section.settings.speed }};
+    --ll-skew:        {{ section.settings.skew_angle }}deg;
+  }
+</style>
+
+<div class="logo-list-band" id="LogoList-{{ section.id }}">
+
+  <!-- ── Band 1: diagonal ↘, scrolls right → left ── -->
+  <div class="logo-list-band__skew logo-list-band__skew--1">
+    <div class="logo-list-band__track">
+      <div class="logo-list-band__marquee logo-list-band__marquee--rtl">
+
+        {%- for block in section.blocks -%}
+          <div class="logo-list-band__item" {{ block.shopify_attributes }}>
+            {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" target="_blank" rel="noopener" class="logo-list-band__link">{%- endif -%}
+            {%- if block.settings.image != blank -%}
+              <img src="{{ block.settings.image | image_url: width: 240 }}" alt="{{ block.settings.image.alt | default: block.settings.alt_text | escape }}" class="logo-list-band__logo" width="120" height="48" loading="lazy">
+            {%- endif -%}
+            {%- if block.settings.label != blank -%}
+              <span class="logo-list-band__text">{{ block.settings.label }}</span>
+            {%- endif -%}
+            {%- if block.settings.image == blank and block.settings.label == blank -%}
+              <span class="logo-list-band__placeholder">{{ block.settings.alt_text | default: 'BRAND' }}</span>
+            {%- endif -%}
+            {%- if block.settings.link != blank -%}</a>{%- endif -%}
+          </div>
+        {%- endfor -%}
+
+        <!-- duplicate for seamless loop -->
+        {%- for block in section.blocks -%}
+          <div class="logo-list-band__item" aria-hidden="true">
+            {%- if block.settings.image != blank -%}
+              <img src="{{ block.settings.image | image_url: width: 240 }}" alt="" class="logo-list-band__logo" width="120" height="48" loading="lazy">
+            {%- endif -%}
+            {%- if block.settings.label != blank -%}
+              <span class="logo-list-band__text">{{ block.settings.label }}</span>
+            {%- endif -%}
+            {%- if block.settings.image == blank and block.settings.label == blank -%}
+              <span class="logo-list-band__placeholder">{{ block.settings.alt_text | default: 'BRAND' }}</span>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Band 2: reverse diagonal ↗, scrolls left → right ── -->
+  <div class="logo-list-band__skew logo-list-band__skew--2">
+    <div class="logo-list-band__track">
+      <div class="logo-list-band__marquee logo-list-band__marquee--ltr">
+
+        {%- for block in section.blocks -%}
+          <div class="logo-list-band__item" {{ block.shopify_attributes }}>
+            {%- if block.settings.link != blank -%}<a href="{{ block.settings.link }}" target="_blank" rel="noopener" class="logo-list-band__link">{%- endif -%}
+            {%- if block.settings.image != blank -%}
+              <img src="{{ block.settings.image | image_url: width: 240 }}" alt="{{ block.settings.image.alt | default: block.settings.alt_text | escape }}" class="logo-list-band__logo" width="120" height="48" loading="lazy">
+            {%- endif -%}
+            {%- if block.settings.label != blank -%}
+              <span class="logo-list-band__text">{{ block.settings.label }}</span>
+            {%- endif -%}
+            {%- if block.settings.image == blank and block.settings.label == blank -%}
+              <span class="logo-list-band__placeholder">{{ block.settings.alt_text | default: 'BRAND' }}</span>
+            {%- endif -%}
+            {%- if block.settings.link != blank -%}</a>{%- endif -%}
+          </div>
+        {%- endfor -%}
+
+        <!-- duplicate for seamless loop -->
+        {%- for block in section.blocks -%}
+          <div class="logo-list-band__item" aria-hidden="true">
+            {%- if block.settings.image != blank -%}
+              <img src="{{ block.settings.image | image_url: width: 240 }}" alt="" class="logo-list-band__logo" width="120" height="48" loading="lazy">
+            {%- endif -%}
+            {%- if block.settings.label != blank -%}
+              <span class="logo-list-band__text">{{ block.settings.label }}</span>
+            {%- endif -%}
+            {%- if block.settings.image == blank and block.settings.label == blank -%}
+              <span class="logo-list-band__placeholder">{{ block.settings.alt_text | default: 'BRAND' }}</span>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Logo List",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Band 1 (right → left)"
+    },
+    {
+      "type": "color",
+      "id": "band_color",
+      "label": "Band 1 background",
+      "default": "#FDE68A"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Band 1 text / logo color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "header",
+      "content": "Band 2 (left → right)"
+    },
+    {
+      "type": "color",
+      "id": "band_color_2",
+      "label": "Band 2 background",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "text_color_2",
+      "label": "Band 2 text / logo color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Animation"
+    },
+    {
+      "type": "select",
+      "id": "speed",
+      "label": "Scroll speed",
+      "options": [
+        { "value": "24s", "label": "Slow" },
+        { "value": "14s", "label": "Medium" },
+        { "value": "8s",  "label": "Fast" }
+      ],
+      "default": "14s"
+    },
+    {
+      "type": "range",
+      "id": "skew_angle",
+      "min": -8,
+      "max": -1,
+      "step": 1,
+      "unit": "deg",
+      "label": "Diagonal angle (band 1 — band 2 mirrors it)",
+      "default": -4
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Logo image (optional)"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Text label (shown alongside or instead of logo)"
+        },
+        {
+          "type": "text",
+          "id": "alt_text",
+          "label": "Accessibility / fallback name",
+          "default": "Brand"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link (optional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Logo List",
+      "blocks": [
+        { "type": "logo", "settings": { "alt_text": "Rolling Stone", "label": "Rolling Stone" } },
+        { "type": "logo", "settings": { "alt_text": "Wired", "label": "Wired" } },
+        { "type": "logo", "settings": { "alt_text": "TechCrunch", "label": "TechCrunch" } },
+        { "type": "logo", "settings": { "alt_text": "Pitchfork", "label": "Pitchfork" } },
+        { "type": "logo", "settings": { "alt_text": "NME", "label": "NME" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
