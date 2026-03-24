@@ -1,4 +1,14 @@
-<header class="header{% if section.settings.transparent_on_home and template.name == 'index' %} header--transparent{% endif %}" id="Header" data-sticky="{{ section.settings.sticky_header }}">
+{%- assign s = section.settings -%}
+
+<header
+  class="header{% if s.transparent_on_home and template.name == 'index' %} header--transparent{% endif %}"
+  id="Header"
+  data-sticky="{{ s.sticky_header }}"
+  data-compact="{{ s.compact_on_scroll }}"
+  data-compact-threshold="{{ s.scroll_threshold }}"
+>
+
+  <!-- ═══ FULL BAR (normal / top state) ═══ -->
   <div class="header__bar">
 
     <!-- LEFT: social icons + logo -->
@@ -36,7 +46,7 @@
     </div>
 
     <!-- CENTER: navigation -->
-    {%- assign nav_menu = section.settings.menu | default: settings.menu -%}
+    {%- assign nav_menu = s.menu | default: settings.menu -%}
     <nav class="header__nav" role="navigation" aria-label="Main navigation">
       {%- if nav_menu != blank -%}
         {%- for link in linklists[nav_menu].links -%}
@@ -99,6 +109,88 @@
 
   </div><!-- /.header__bar -->
 
+
+  {%- comment -%} ── COMPACT PILL (scroll state) ── {%- endcomment -%}
+  {%- if s.compact_on_scroll -%}
+
+    <div
+      class="header__pill"
+      id="HeaderPill"
+      aria-hidden="true"
+      style="
+        --pill-bg:    {{ s.compact_bg }};
+        --pill-color: {{ s.compact_text_color }};
+        --pill-width: {{ s.compact_max_width }}px;
+      "
+    >
+      {%- comment -%} Left: hamburger (delegates to main mobile toggle) {%- endcomment -%}
+      <button
+        class="header__pill-btn"
+        id="HeaderPillMenu"
+        aria-label="Toggle menu"
+        type="button"
+      >
+        <svg width="17" height="13" viewBox="0 0 17 13" fill="none" aria-hidden="true">
+          <rect width="17" height="2" rx="1" fill="currentColor"/>
+          <rect y="5.5" width="12" height="2" rx="1" fill="currentColor"/>
+          <rect y="11" width="17" height="2" rx="1" fill="currentColor"/>
+        </svg>
+      </button>
+
+      {%- comment -%} Center: logo / store name {%- endcomment -%}
+      <a href="{{ routes.root_url }}" class="header__pill-logo" aria-label="{{ shop.name }}">
+        {%- if settings.logo != blank -%}
+          <img
+            src="{{ settings.logo | image_url: width: 200 }}"
+            alt="{{ shop.name }}"
+            class="header__pill-logo-img"
+            height="26"
+            width="auto"
+            loading="eager"
+          >
+        {%- else -%}
+          {{ shop.name | upcase }}
+        {%- endif -%}
+      </a>
+
+      {%- comment -%} Right: cart {%- endcomment -%}
+      <a href="/cart" class="header__pill-btn" aria-label="Cart ({{ cart.item_count }})">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        {%- if cart.item_count > 0 -%}
+          <span class="header__pill-count">{{ cart.item_count }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+
+    {%- comment -%} Floating promo badge {%- endcomment -%}
+    {%- if s.show_promo_badge and s.promo_badge_text != blank -%}
+      <div
+        class="header__promo-badge"
+        aria-hidden="true"
+        style="background: {{ s.promo_badge_bg }}; color: {{ s.promo_badge_color }};"
+      >
+        {{ s.promo_badge_text }}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Floating status pill {%- endcomment -%}
+    {%- if s.show_status_pill and s.status_pill_text != blank -%}
+      <div
+        class="header__status-pill"
+        aria-hidden="true"
+        style="background: {{ s.status_pill_bg }}; color: {{ s.status_pill_color }};"
+      >
+        {{ s.status_pill_text }}
+      </div>
+    {%- endif -%}
+
+  {%- endif -%}
+
+
   <!-- Mobile navigation drawer -->
   <nav class="header__mobile-nav" id="MobileNav" aria-hidden="true" aria-label="Mobile navigation">
     {%- if nav_menu != blank -%}
@@ -148,10 +240,56 @@
 
 </header>
 
+<script>
+(function () {
+  'use strict';
+
+  var header    = document.getElementById('Header');
+  if (!header) return;
+
+  var isCompact = header.dataset.compact === 'true';
+  if (!isCompact) return;
+
+  var threshold = parseInt(header.dataset.compactThreshold, 10) || 80;
+  var pill      = document.getElementById('HeaderPill');
+  var pillMenu  = document.getElementById('HeaderPillMenu');
+  var mainMenu  = document.getElementById('MobileMenuToggle');
+  var ticking   = false;
+
+  /* Delegate pill hamburger → existing mobile toggle */
+  if (pillMenu && mainMenu) {
+    pillMenu.addEventListener('click', function () {
+      mainMenu.click();
+    });
+  }
+
+  function update() {
+    var scrolled = window.scrollY > threshold;
+    header.classList.toggle('is-compact', scrolled);
+    if (pill) pill.setAttribute('aria-hidden', scrolled ? 'false' : 'true');
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      requestAnimationFrame(update);
+      ticking = true;
+    }
+  }, { passive: true });
+
+  /* Run once on load in case page is already scrolled */
+  update();
+}());
+</script>
+
 {% schema %}
 {
   "name": "Header",
   "settings": [
+    {
+      "type": "header",
+      "content": "Navigation"
+    },
     {
       "type": "link_list",
       "id": "menu",
@@ -170,6 +308,102 @@
       "label": "Transparent on homepage",
       "default": false,
       "info": "Makes the header background transparent over the hero section."
+    },
+    {
+      "type": "header",
+      "content": "Compact scroll header"
+    },
+    {
+      "type": "checkbox",
+      "id": "compact_on_scroll",
+      "label": "Enable floating pill header on scroll",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "scroll_threshold",
+      "label": "Scroll distance before activating (px)",
+      "min": 40,
+      "max": 300,
+      "step": 20,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "compact_max_width",
+      "label": "Pill max width (px)",
+      "min": 200,
+      "max": 600,
+      "step": 20,
+      "default": 360
+    },
+    {
+      "type": "color",
+      "id": "compact_bg",
+      "label": "Pill background color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "compact_text_color",
+      "label": "Pill text / icon color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Floating promo badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_promo_badge",
+      "label": "Show promo badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "promo_badge_text",
+      "label": "Promo badge text",
+      "default": "20% OFF!"
+    },
+    {
+      "type": "color",
+      "id": "promo_badge_bg",
+      "label": "Badge background",
+      "default": "#FDE68A"
+    },
+    {
+      "type": "color",
+      "id": "promo_badge_color",
+      "label": "Badge text color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "header",
+      "content": "Floating status pill"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_status_pill",
+      "label": "Show status pill",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "status_pill_text",
+      "label": "Status pill text",
+      "default": "Sold Out"
+    },
+    {
+      "type": "color",
+      "id": "status_pill_bg",
+      "label": "Status pill background",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "status_pill_color",
+      "label": "Status pill text color",
+      "default": "#ffffff"
     }
   ],
   "presets": [{ "name": "Header" }]
