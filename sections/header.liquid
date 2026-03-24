@@ -255,6 +255,7 @@
   var pillMenu  = document.getElementById('HeaderPillMenu');
   var mainMenu  = document.getElementById('MobileMenuToggle');
   var ticking   = false;
+  var lastY     = window.scrollY;
 
   /* Delegate pill hamburger → existing mobile toggle */
   if (pillMenu && mainMenu) {
@@ -264,9 +265,29 @@
   }
 
   function update() {
-    var scrolled = window.scrollY > threshold;
-    header.classList.toggle('is-compact', scrolled);
-    if (pill) pill.setAttribute('aria-hidden', scrolled ? 'false' : 'true');
+    var currentY = window.scrollY;
+    var goingDown = currentY > lastY;
+
+    if (currentY <= threshold) {
+      /* At the top — full header, no pill, not hidden */
+      header.classList.remove('is-compact');
+      header.classList.remove('is-hidden');
+    } else if (goingDown) {
+      /* Scrolling down — hide everything */
+      header.classList.remove('is-compact');
+      header.classList.add('is-hidden');
+    } else {
+      /* Scrolling up past threshold — show compact pill */
+      header.classList.remove('is-hidden');
+      header.classList.add('is-compact');
+    }
+
+    if (pill) {
+      var showPill = header.classList.contains('is-compact');
+      pill.setAttribute('aria-hidden', showPill ? 'false' : 'true');
+    }
+
+    lastY   = currentY;
     ticking = false;
   }
 

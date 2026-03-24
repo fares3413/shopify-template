@@ -4222,7 +4222,20 @@
   transition:
     background   0.4s cubic-bezier(0.4, 0, 0.2, 1),
     border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow   0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow   0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    transform    0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Hidden state: slides fully off the top ── */
+.header.is-hidden {
+  transform: translateY(-100%);
+  background: transparent;
+  border-bottom-color: transparent;
+  box-shadow: none;
+}
+.header.is-hidden .header__bar {
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* ── Compact state: header becomes a transparent wrapper ── */
