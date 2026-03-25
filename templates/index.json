@@ -15,31 +15,46 @@
         "slide_1": {
           "type": "slide",
           "settings": {
+            "video_url": "",
             "overlay_opacity": 50,
             "content_position": "bottom-left",
             "eyebrow": "New Collection",
             "heading": "EXPERIENCE UNPARALLELED AUDIO ELEGANCE",
-            "button_label": "Shop Headphones"
+            "subheading": "",
+            "button_label": "Shop Headphones",
+            "button_link": "",
+            "button_2_label": "",
+            "button_2_link": ""
           }
         },
         "slide_2": {
           "type": "slide",
           "settings": {
+            "video_url": "",
             "overlay_opacity": 45,
             "content_position": "bottom-left",
             "eyebrow": "Discover More",
             "heading": "UNIQUELY CRAFTED FOR YOUR STYLE",
-            "button_label": "Shop Now"
+            "subheading": "",
+            "button_label": "Shop Now",
+            "button_link": "",
+            "button_2_label": "",
+            "button_2_link": ""
           }
         },
         "slide_3": {
           "type": "slide",
           "settings": {
+            "video_url": "",
             "overlay_opacity": 45,
             "content_position": "bottom-left",
             "eyebrow": "New Arrivals",
             "heading": "DUST AND WATERPROOF",
-            "button_label": "Shop Speakers"
+            "subheading": "",
+            "button_label": "Shop Speakers",
+            "button_link": "",
+            "button_2_label": "",
+            "button_2_link": ""
           }
         }
       },
@@ -54,12 +69,62 @@
         "autoplay_speed": "5000"
       }
     },
+    "hero_editorial": {
+      "type": "hero-editorial",
+      "blocks": {
+        "slide_1": {
+          "type": "slide",
+          "settings": {
+            "overlay_opacity": 0,
+            "heading": "SLIDE\nTITLE",
+            "card_bg": "#ffffff",
+            "button_label": "Shop Now",
+            "button_link": ""
+          }
+        },
+        "slide_2": {
+          "type": "slide",
+          "settings": {
+            "overlay_opacity": 0,
+            "heading": "NEW\nDROP",
+            "card_bg": "#ffffff",
+            "button_label": "Explore",
+            "button_link": ""
+          }
+        },
+        "slide_3": {
+          "type": "slide",
+          "settings": {
+            "overlay_opacity": 0,
+            "heading": "SOUND\nCRAFTED",
+            "card_bg": "#ffffff",
+            "button_label": "Discover",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "slide_1",
+        "slide_2",
+        "slide_3"
+      ],
+      "settings": {
+        "height": 85,
+        "hero_bg": "#f5f4f0",
+        "hero_text_color": "#1a1a1a",
+        "show_hero_bar": true,
+        "bar_store_name": "",
+        "autoplay": true,
+        "autoplay_speed": "5000"
+      }
+    },
     "promo_bar": {
       "type": "promo-bar",
       "settings": {
         "eyebrow": "Limited time",
         "heading": "Get up to 50% off on selected items — Today only",
         "button_label": "Shop the sale",
+        "button_link": "",
         "bg_color": "#1a1a1a",
         "text_color": "#ffffff"
       }
@@ -71,7 +136,8 @@
         "show_underline": true,
         "text_1": "<p><strong>Harmony Sound</strong> is more than just an audio equipment retailer. We represent the grandeur of sound in its finest manifestations. Our mission is to cater to audiophiles and those who simply appreciate quality sound.</p>",
         "text_2": "<p>We offer everything from the warm sound of vinyl records to the clarity and crispness of modern wireless headphones, ensuring every note sounds impeccable.</p>",
-        "button_label": "Our Story"
+        "button_label": "Our Story",
+        "button_link": ""
       }
     },
     "featured_collections": {
@@ -80,49 +146,65 @@
         "col_1": {
           "type": "collection_item",
           "settings": {
-            "label": "All products"
+            "collection": "",
+            "label": "All products",
+            "custom_link": ""
           }
         },
         "col_2": {
           "type": "collection_item",
           "settings": {
-            "label": "Headphones"
+            "collection": "",
+            "label": "Headphones",
+            "custom_link": ""
           }
         },
         "col_3": {
           "type": "collection_item",
           "settings": {
-            "label": "Earphones"
+            "collection": "",
+            "label": "Earphones",
+            "custom_link": ""
           }
         },
         "col_4": {
           "type": "collection_item",
           "settings": {
-            "label": "Speakers"
+            "collection": "",
+            "label": "Speakers",
+            "custom_link": ""
           }
         },
         "col_5": {
           "type": "collection_item",
           "settings": {
-            "label": "Accessories"
+            "collection": "",
+            "label": "Accessories",
+            "custom_link": ""
           }
         },
         "col_6": {
           "type": "collection_item",
           "settings": {
-            "label": "Wireless"
+            "collection": "",
+            "label": "Wireless",
+            "custom_link": ""
           }
         },
         "col_7": {
           "type": "collection_item",
           "settings": {
-            "label": "Gaming"
+            "collection": "",
+            "label": "Gaming",
+            "custom_link": ""
           }
         },
         "col_8": {
           "type": "collection_item",
           "settings": {
-            "label": "Limited"
+            "collection": "",
+            "label": "Limited",
+            "custom_link": ""
           }
         }
       },
@@ -137,14 +219,33 @@
         "col_8"
       ],
       "settings": {
+        "heading": "",
+        "heading_size": "md",
+        "heading_alignment": "left",
+        "heading_tag": "h2",
+        "subheading": "",
+        "description": "",
+        "heading_highlight_style": "none",
+        "color_text": "",
+        "color_background": "",
+        "color_highlight": "",
+        "color_button_text": "",
+        "color_button_background": "",
         "card_style": "image",
+        "image_source": "collection",
         "image_ratio": "square",
+        "show_product_count": true,
+        "show_view_all": false,
         "columns_desktop": 4,
+        "enable_carousel": true,
         "columns_mobile": "2",
+        "enable_swipe": true,
         "padding_top": 60,
         "padding_bottom": 60,
         "show_divider": false,
-        "rounded": true
+        "full_width": false,
+        "rounded": true,
+        "custom_css": ""
       }
     },
     "image_banner": {
@@ -155,6 +256,7 @@
         "heading": "Sound. Sculpted.",
         "subheading": "A speaker that excites the eye and ear from every angle.",
         "button_label": "Shop Echo Elegance",
+        "button_link": "",
         "autoplay": true
       }
     },
@@ -164,24 +266,28 @@
         "feat_1": {
           "type": "feature",
           "settings": {
+            "icon": "shield",
             "text": "In stock! Ships within 1-2 business days."
           }
         },
         "feat_2": {
           "type": "feature",
           "settings": {
+            "icon": "shield",
             "text": "90-day risk-free trial"
           }
         },
         "feat_3": {
           "type": "feature",
           "settings": {
+            "icon": "shield",
             "text": "2-Year Warranty"
           }
         },
         "feat_4": {
           "type": "feature",
           "settings": {
+            "icon": "shield",
             "text": "Complimentary shipping & returns"
           }
         }
@@ -192,7 +298,9 @@
         "feat_3",
         "feat_4"
       ],
-      "settings": {}
+      "settings": {
+        "product": ""
+      }
     },
     "image_comparison": {
       "type": "image-comparison",
@@ -205,6 +313,9 @@
         "heading_alignment": "center",
         "heading_tag": "h2",
         "subheading": "Sound in Spectrum",
+        "description": "",
+        "button_label": "",
+        "button_link": "",
         "sublabel_before": "Flow Harmony",
         "label_before": "Gold Tone",
         "sublabel_after": "Flow Harmony",
@@ -218,25 +329,33 @@
         "tab_1": {
           "type": "tab",
           "settings": {
-            "tab_label": "Headphones"
+            "tab_label": "Headphones",
+            "collection": "",
+            "show_view_all": true
           }
         },
         "tab_2": {
           "type": "tab",
           "settings": {
-            "tab_label": "Earphones"
+            "tab_label": "Earphones",
+            "collection": "",
+            "show_view_all": true
           }
         },
         "tab_3": {
           "type": "tab",
           "settings": {
-            "tab_label": "Speakers"
+            "tab_label": "Speakers",
+            "collection": "",
+            "show_view_all": true
           }
         },
         "tab_4": {
           "type": "tab",
           "settings": {
-            "tab_label": "Accessories"
+            "tab_label": "Accessories",
+            "collection": "",
+            "show_view_all": true
           }
         }
       },
@@ -248,7 +367,7 @@
       ],
       "settings": {
         "heading": "Best Sellers",
-        "products_per_row": 6,
+        "products_per_row": 5,
         "show_vendor": true
       }
     },
@@ -258,19 +377,25 @@
         "ps_1": {
           "type": "product",
           "settings": {
-            "show_atc": false
+            "product": "",
+            "show_atc": false,
+            "atc_label": "Add to cart"
           }
         },
         "ps_2": {
           "type": "product",
           "settings": {
-            "show_atc": false
+            "product": "",
+            "show_atc": false,
+            "atc_label": "Add to cart"
           }
         },
         "ps_3": {
           "type": "product",
           "settings": {
-            "show_atc": false
+            "product": "",
+            "show_atc": false,
+            "atc_label": "Add to cart"
           }
         }
       },
@@ -283,7 +408,8 @@
         "eyebrow": "Premium Speakers",
         "heading": "Bring Quality Sound into Your Home",
         "highlight_word": "Your Home",
-        "autoplay": false
+        "autoplay": false,
+        "autoplay_speed": "4000"
       }
     },
     "product_hotspots": {
@@ -292,22 +418,28 @@
         "hs_1": {
           "type": "hotspot",
           "settings": {
+            "product": "",
             "pos_x": 28,
-            "pos_y": 38
+            "pos_y": 38,
+            "label": ""
           }
         },
         "hs_2": {
           "type": "hotspot",
           "settings": {
+            "product": "",
             "pos_x": 60,
-            "pos_y": 52
+            "pos_y": 52,
+            "label": ""
           }
         },
         "hs_3": {
           "type": "hotspot",
           "settings": {
+            "product": "",
             "pos_x": 43,
-            "pos_y": 72
+            "pos_y": 72,
+            "label": ""
           }
         }
       },
@@ -334,6 +466,7 @@
         "quote_1": {
           "type": "quote",
           "settings": {
+            "rating": 5,
             "quote": "Harmony Sound's meticulous curation of premium audio tech truly stands out. Their offerings, from headphones to expansive home theaters, consistently raise the bar.",
             "author": "Nathan Wright, Rolling Stone"
           }
@@ -341,6 +474,7 @@
         "quote_2": {
           "type": "quote",
           "settings": {
+            "rating": 5,
             "quote": "If there's one name that consistently delivers excellence in audio, it's Harmony Sound. A true audiophile's paradise.",
             "author": "Sarah K., The Audiophile Review"
           }
@@ -348,6 +482,7 @@
         "quote_3": {
           "type": "quote",
           "settings": {
+            "rating": 5,
             "quote": "Harmony Sound doesn't just sell products — they deliver experiences. Every purchase feels like an investment in pure sonic bliss.",
             "author": "James L., Sound & Vision"
           }
@@ -358,34 +493,55 @@
         "quote_2",
         "quote_3"
       ],
-      "settings": {}
+      "settings": {
+        "eyebrow": "What customers say",
+        "heading": "Loved by audiophiles worldwide"
+      }
     },
     "bundle_builder": {
       "type": "bundle-builder",
       "blocks": {
         "p1": {
           "type": "product",
-          "settings": {}
+          "settings": {
+            "product": "",
+            "badge": ""
+          }
         },
         "p2": {
           "type": "product",
-          "settings": {}
+          "settings": {
+            "product": "",
+            "badge": ""
+          }
         },
         "p3": {
           "type": "product",
-          "settings": {}
+          "settings": {
+            "product": "",
+            "badge": ""
+          }
         },
         "p4": {
           "type": "product",
-          "settings": {}
+          "settings": {
+            "product": "",
+            "badge": ""
+          }
         },
         "p5": {
           "type": "product",
-          "settings": {}
+          "settings": {
+            "product": "",
+            "badge": ""
+          }
         },
         "p6": {
           "type": "product",
-          "settings": {}
+          "settings": {
+            "product": "",
+            "badge": ""
+          }
         }
       },
       "block_order": [
@@ -397,10 +553,13 @@
         "p6"
       ],
       "settings": {
+        "eyebrow": "Mix & Save",
         "heading": "Your bundle",
         "subtext": "Add at least 3 products to proceed and Save 30%",
         "min_items": 3,
-        "discount": 30
+        "max_items": 0,
+        "discount": 30,
+        "disclaimer": "Free shipping on all bundles"
       }
     },
     "marquee": {
@@ -455,28 +614,181 @@
         "speed": 20
       }
     },
+    "image_carousel": {
+      "type": "image-carousel",
+      "blocks": {
+        "ic_1": {
+          "type": "image",
+          "settings": {
+            "label": "Card 1",
+            "link": ""
+          }
+        },
+        "ic_2": {
+          "type": "image",
+          "settings": {
+            "label": "Card 2",
+            "link": ""
+          }
+        },
+        "ic_3": {
+          "type": "image",
+          "settings": {
+            "label": "Card 3",
+            "link": ""
+          }
+        },
+        "ic_4": {
+          "type": "image",
+          "settings": {
+            "label": "Card 4",
+            "link": ""
+          }
+        },
+        "ic_5": {
+          "type": "image",
+          "settings": {
+            "label": "Card 5",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "ic_1",
+        "ic_2",
+        "ic_3",
+        "ic_4",
+        "ic_5"
+      ],
+      "settings": {
+        "eyebrow": "New Arrivals",
+        "heading": "Popular Products",
+        "description": "",
+        "card_width": 300,
+        "card_gap": 20,
+        "image_ratio": "portrait",
+        "speed": 30,
+        "pause_on_hover": true,
+        "bg_color": "#f5f4f0",
+        "text_color": "#1a1a1a"
+      }
+    },
+    "scroll_carousel": {
+      "type": "scroll-carousel",
+      "blocks": {
+        "sc_1": {
+          "type": "card",
+          "settings": {
+            "label": "Card 1",
+            "sublabel": "",
+            "link": ""
+          }
+        },
+        "sc_2": {
+          "type": "card",
+          "settings": {
+            "label": "Card 2",
+            "sublabel": "",
+            "link": ""
+          }
+        },
+        "sc_3": {
+          "type": "card",
+          "settings": {
+            "label": "Card 3",
+            "sublabel": "",
+            "link": ""
+          }
+        },
+        "sc_4": {
+          "type": "card",
+          "settings": {
+            "label": "Card 4",
+            "sublabel": "",
+            "link": ""
+          }
+        },
+        "sc_5": {
+          "type": "card",
+          "settings": {
+            "label": "Card 5",
+            "sublabel": "",
+            "link": ""
+          }
+        },
+        "sc_6": {
+          "type": "card",
+          "settings": {
+            "label": "Card 6",
+            "sublabel": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "sc_1",
+        "sc_2",
+        "sc_3",
+        "sc_4",
+        "sc_5",
+        "sc_6"
+      ],
+      "settings": {
+        "eyebrow": "Featured",
+        "heading": "Explore the Collection",
+        "description": "",
+        "columns": 3,
+        "visible_rows": 2,
+        "card_width": 320,
+        "card_height": 340,
+        "card_gap": 24,
+        "scroll_speed": 60,
+        "bg_color": "#1a1a1a",
+        "text_color": "#ffffff"
+      }
+    },
     "instagram_feed": {
       "type": "instagram-feed",
       "blocks": {
         "post_1": {
           "type": "post",
-          "settings": {}
+          "settings": {
+            "link": "",
+            "product_1": "",
+            "product_2": ""
+          }
         },
         "post_2": {
           "type": "post",
-          "settings": {}
+          "settings": {
+            "link": "",
+            "product_1": "",
+            "product_2": ""
+          }
         },
         "post_3": {
           "type": "post",
-          "settings": {}
+          "settings": {
+            "link": "",
+            "product_1": "",
+            "product_2": ""
+          }
         },
         "post_4": {
           "type": "post",
-          "settings": {}
+          "settings": {
+            "link": "",
+            "product_1": "",
+            "product_2": ""
+          }
         },
         "post_5": {
           "type": "post",
-          "settings": {}
+          "settings": {
+            "link": "",
+            "product_1": "",
+            "product_2": ""
+          }
         }
       },
       "block_order": [
@@ -489,16 +801,21 @@
       "settings": {
         "heading": "Shop the Feed",
         "subheading": "Discover premium audio from our Instagram and shop now.",
-        "handle": "Harmony"
+        "handle": "Harmony",
+        "heading_highlight": ""
       }
     },
     "promo_banner": {
       "type": "promo-banner",
       "settings": {
+        "background_color": "#888888",
         "overlay_opacity": 30,
         "subheading": "Get up to 50% off",
         "heading": "on waterproof speakers",
-        "button_label": "Discover sales"
+        "show_countdown": false,
+        "countdown_end": "2025-12-31T23:59:59",
+        "button_label": "Discover sales",
+        "button_link": ""
       }
     },
     "logo_list": {
@@ -507,43 +824,57 @@
         "l1": {
           "type": "logo",
           "settings": {
-            "alt_text": "LOGO"
+            "label": "",
+            "alt_text": "LOGO",
+            "link": ""
           }
         },
         "l2": {
           "type": "logo",
           "settings": {
-            "alt_text": "LOGO"
+            "label": "",
+            "alt_text": "LOGO",
+            "link": ""
           }
         },
         "l3": {
           "type": "logo",
           "settings": {
-            "alt_text": "LOGO"
+            "label": "",
+            "alt_text": "LOGO",
+            "link": ""
           }
         },
         "l4": {
           "type": "logo",
           "settings": {
-            "alt_text": "LOGO"
+            "label": "",
+            "alt_text": "LOGO",
+            "link": ""
           }
         },
         "l5": {
           "type": "logo",
           "settings": {
-            "alt_text": "LOGO"
+            "label": "",
+            "alt_text": "LOGO",
+            "link": ""
           }
         },
         "l6": {
           "type": "logo",
           "settings": {
-            "alt_text": "LOGO"
+            "label": "",
+            "alt_text": "LOGO",
+            "link": ""
           }
         },
         "l7": {
           "type": "logo",
           "settings": {
-            "alt_text": "LOGO"
+            "label": "",
+            "alt_text": "LOGO",
+            "link": ""
           }
         }
       },
@@ -557,82 +888,22 @@
         "l7"
       ],
       "settings": {
-        "band_color": "#FDE68A",
+        "band_color": "#fde68a",
         "text_color": "#1a1a1a",
+        "band_color_2": "#1a1a1a",
+        "text_color_2": "#ffffff",
         "speed": "14s",
         "skew_angle": -4
-      }
-    },
-    "hero_editorial": {
-      "type": "hero-editorial",
-      "blocks": {
-        "slide_1": { "type": "slide", "settings": { "heading": "SLIDE\nTITLE", "button_label": "Shop Now", "overlay_opacity": 0 } },
-        "slide_2": { "type": "slide", "settings": { "heading": "NEW\nDROP", "button_label": "Explore", "overlay_opacity": 0 } },
-        "slide_3": { "type": "slide", "settings": { "heading": "SOUND\nCRAFTED", "button_label": "Discover", "overlay_opacity": 0 } }
-      },
-      "block_order": ["slide_1", "slide_2", "slide_3"],
-      "settings": {
-        "height": 85,
-        "hero_bg": "#f5f4f0",
-        "hero_text_color": "#1a1a1a",
-        "show_hero_bar": true,
-        "autoplay": true,
-        "autoplay_speed": "5000"
       }
     },
     "latest_stories": {
       "type": "latest-stories",
       "settings": {
+        "eyebrow": "From the blog",
         "heading": "Latest Stories",
-        "post_count": 3
-      }
-    },
-    "image_carousel": {
-      "type": "image-carousel",
-      "blocks": {
-        "ic_1": { "type": "image", "settings": { "label": "Card 1" } },
-        "ic_2": { "type": "image", "settings": { "label": "Card 2" } },
-        "ic_3": { "type": "image", "settings": { "label": "Card 3" } },
-        "ic_4": { "type": "image", "settings": { "label": "Card 4" } },
-        "ic_5": { "type": "image", "settings": { "label": "Card 5" } }
-      },
-      "block_order": ["ic_1", "ic_2", "ic_3", "ic_4", "ic_5"],
-      "settings": {
-        "eyebrow": "New Arrivals",
-        "heading": "Popular Products",
-        "card_width": 300,
-        "card_gap": 20,
-        "image_ratio": "portrait",
-        "speed": 30,
-        "pause_on_hover": true,
-        "bg_color": "#f5f4f0",
-        "text_color": "#1a1a1a"
-      }
-    },
-    "scroll_carousel": {
-      "type": "scroll-carousel",
-      "blocks": {
-        "sc_1": { "type": "card", "settings": { "label": "Card 1" } },
-        "sc_2": { "type": "card", "settings": { "label": "Card 2" } },
-        "sc_3": { "type": "card", "settings": { "label": "Card 3" } },
-        "sc_4": { "type": "card", "settings": { "label": "Card 4" } },
-        "sc_5": { "type": "card", "settings": { "label": "Card 5" } },
-        "sc_6": { "type": "card", "settings": { "label": "Card 6" } }
-      },
-      "block_order": ["sc_1", "sc_2", "sc_3", "sc_4", "sc_5", "sc_6"],
-      "settings": {
-        "eyebrow": "Featured",
-        "heading": "Explore the Collection",
-        "card_width": 320,
-        "card_gap": 24,
-        "image_ratio": "portrait",
-        "scroll_height": 250,
-        "viewport_height": 80,
-        "intensity": 10,
-        "smoothing": 8,
-        "direction": "ltr",
-        "bg_color": "#1a1a1a",
-        "text_color": "#ffffff"
+        "blog": "",
+        "post_count": 3,
+        "show_view_all": true
       }
     }
   },
