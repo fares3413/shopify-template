@@ -499,7 +499,7 @@
           "type": "item",
           "settings": {
             "text": "Day-long comfort",
-            "icon": "dot"
+            "icon": "star"
           }
         },
         "m2": {
@@ -527,7 +527,7 @@
           "type": "item",
           "settings": {
             "text": "2-year warranty",
-            "icon": "dot"
+            "icon": "star"
           }
         }
       },
@@ -539,7 +539,7 @@
         "m5"
       ],
       "settings": {
-        "style": "light",
+        "style": "dark",
         "direction": "ltr",
         "speed": 20
       }
