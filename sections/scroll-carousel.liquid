@@ -89,12 +89,14 @@
   mask-image:         linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
 }
 #ScrollCarousel-{{ sid }} .sc__track {
-  /* Horizontal row of cards — track scrolls vertically */
+  /* Cards wrap into horizontal rows; the multi-row block scrolls vertically */
   display: flex;
   flex-direction: row;
-  align-items: stretch;
+  flex-wrap: wrap;
+  align-content: flex-start;
   gap: var(--sc-gap);
-  height: max-content;
+  padding: 0 var(--gutter, 2rem);
+  width: 100%;
   will-change: transform;
 }
 
@@ -184,9 +186,9 @@
   }
   #ScrollCarousel-{{ sid }} .sc__sticky::-webkit-scrollbar { display: none; }
   #ScrollCarousel-{{ sid }} .sc__track {
-    flex-direction: row !important;
+    flex-wrap: nowrap !important;
     transform: none !important;
-    height: auto !important;
+    padding: 0 var(--gutter, 2rem) !important;
   }
   #ScrollCarousel-{{ sid }} .sc__progress { display: none; }
   #ScrollCarousel-{{ sid }} .sc__header {
