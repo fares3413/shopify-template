@@ -200,6 +200,7 @@
     "image_banner": {
       "type": "image-banner",
       "settings": {
+        "image": "shopify://shop_images/image.jpg",
         "height": 75,
         "overlay_opacity": 35,
         "heading": "Sound. Sculpted.",
@@ -248,7 +249,7 @@
         "feat_4"
       ],
       "settings": {
-        "product": ""
+        "product": "nike-p-6000"
       }
     },
     "image_comparison": {
@@ -265,8 +266,10 @@
         "description": "",
         "button_label": "",
         "button_link": "",
+        "image_before": "shopify://shop_images/NIKE_P-6000_28GS_29_1.jpg",
         "sublabel_before": "Flow Harmony",
         "label_before": "Gold Tone",
+        "image_after": "shopify://shop_images/NIKE_P-6000__GS___1_-removebg-preview_1_1.png",
         "sublabel_after": "Flow Harmony",
         "label_after": "Crimson Shadow",
         "start_position": "50"
@@ -367,27 +370,36 @@
         "hs_1": {
           "type": "hotspot",
           "settings": {
-            "product": "",
-            "pos_x": 28,
-            "pos_y": 38,
+            "product": "nike-tn-shoes",
+            "pos_x": 3,
+            "pos_y": 91,
             "label": ""
           }
         },
         "hs_2": {
           "type": "hotspot",
           "settings": {
-            "product": "",
+            "product": "nike-p-6000",
             "pos_x": 60,
-            "pos_y": 52,
+            "pos_y": 80,
             "label": ""
           }
         },
         "hs_3": {
           "type": "hotspot",
           "settings": {
-            "product": "",
-            "pos_x": 43,
-            "pos_y": 72,
+            "product": "nike-tn",
+            "pos_x": 97,
+            "pos_y": 81,
+            "label": ""
+          }
+        },
+        "hotspot_3hgEi9": {
+          "type": "hotspot",
+          "settings": {
+            "product": "nike-p-6000",
+            "pos_x": 30,
+            "pos_y": 40,
             "label": ""
           }
         }
@@ -395,11 +407,13 @@
       "block_order": [
         "hs_1",
         "hs_2",
-        "hs_3"
+        "hs_3",
+        "hotspot_3hgEi9"
       ],
       "settings": {
         "heading": "Shop the Look",
         "subheading": "Premium Speakers",
+        "lifestyle_image": "shopify://shop_images/nike-just-do-it_1.jpg",
         "section_bg": "#ffffff",
         "card_bg": "#f5f5f3",
         "text_color": "#1a1a1a",
