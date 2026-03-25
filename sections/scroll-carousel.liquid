@@ -55,18 +55,18 @@
   flex-shrink: 0;
 }
 #ScrollCarousel-{{ sid }} .sc__progress-bar {
-  width: 120px;
-  height: 3px;
-  background: rgba(0,0,0,0.1);
+  width: 3px;
+  height: 80px;
+  background: rgba(255,255,255,0.15);
   border-radius: 2px;
   overflow: hidden;
 }
 #ScrollCarousel-{{ sid }} .sc__progress-fill {
-  height: 100%;
-  width: 0%;
+  width: 100%;
+  height: 0%;
   background: var(--sc-text);
   border-radius: 2px;
-  transition: width 0.1s linear;
+  transition: height 0.1s linear;
 }
 #ScrollCarousel-{{ sid }} .sc__progress-label {
   font-size: 0.8125rem;
@@ -84,14 +84,17 @@
   position: sticky;
   top: 0;
   overflow: hidden;
-  /* Fade edges */
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
-  mask-image:         linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+  /* Fade top/bottom edges */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
+  mask-image:         linear-gradient(to bottom, transparent 0%, black 6%, black 94%, transparent 100%);
 }
 #ScrollCarousel-{{ sid }} .sc__track {
+  /* Horizontal row of cards — track scrolls vertically */
   display: flex;
+  flex-direction: row;
+  align-items: stretch;
   gap: var(--sc-gap);
-  width: max-content;
+  height: max-content;
   will-change: transform;
 }
 
@@ -106,8 +109,8 @@
   cursor: default;
 }
 #ScrollCarousel-{{ sid }} .sc__card:hover {
-  transform: scale(1.025) translateY(-4px);
-  box-shadow: 0 20px 48px rgba(0,0,0,0.13);
+  transform: scale(1.025) translateY(-6px);
+  box-shadow: 0 20px 48px rgba(0,0,0,0.18);
 }
 #ScrollCarousel-{{ sid }} .sc__card-img-wrap {
   width: 100%;
@@ -160,7 +163,7 @@
   margin: 0;
 }
 
-/* Mobile fallback: normal horizontal scroll */
+/* Mobile fallback: horizontal drag-scroll */
 @media (max-width: 768px) {
   #ScrollCarousel-{{ sid }} {
     --sc-width: {{ s.card_width | times: 0.72 | round }}px;
@@ -172,6 +175,7 @@
   #ScrollCarousel-{{ sid }} .sc__sticky {
     position: static;
     overflow-x: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     padding: 0 var(--gutter, 2rem) 1rem;
@@ -180,7 +184,9 @@
   }
   #ScrollCarousel-{{ sid }} .sc__sticky::-webkit-scrollbar { display: none; }
   #ScrollCarousel-{{ sid }} .sc__track {
+    flex-direction: row !important;
     transform: none !important;
+    height: auto !important;
   }
   #ScrollCarousel-{{ sid }} .sc__progress { display: none; }
   #ScrollCarousel-{{ sid }} .sc__header {
@@ -286,20 +292,20 @@
   }
 
   function getMaxShift() {
-    var trackW  = track.scrollWidth;
-    var stickyW = sticky.offsetWidth;
-    return Math.max(0, trackW - stickyW);
+    var trackH  = track.scrollHeight;
+    var stickyH = sticky.offsetHeight;
+    return Math.max(0, trackH - stickyH);
   }
 
   function tick() {
     current += (target - current) * ease;
     if (Math.abs(target - current) < 0.5) current = target;
 
-    track.style.transform = 'translate3d(' + (-current * direction) + 'px, 0, 0)';
+    track.style.transform = 'translate3d(0, ' + (-current * direction) + 'px, 0)';
 
     var maxShift = getMaxShift();
     var pct = maxShift > 0 ? (current / maxShift) * 100 : 0;
-    if (fill) fill.style.width = Math.min(100, pct) + '%';
+    if (fill) fill.style.height = Math.min(100, pct) + '%';
     if (label) {
       var pctInt = Math.round(Math.min(100, pct));
       label.textContent = pctInt < 5 ? 'Scroll to explore' : pctInt + '%';
