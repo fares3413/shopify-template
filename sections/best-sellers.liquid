@@ -40,10 +40,11 @@
             {%- endfor -%}
           {%- else -%}
             {%- for i in (1..section.settings.products_per_row) -%}
+              {%- assign placeholder_index = forloop.index0 | modulo: 5 | plus: 1 -%}
               <div class="product-card product-card--placeholder">
                 <div class="product-card__image-link">
                   <div class="product-card__image-wrap">
-                    {{ 'product-' | append: forloop.index | placeholder_svg_tag: 'product-card__placeholder' }}
+                    {{ 'product-' | append: placeholder_index | placeholder_svg_tag: 'product-card__placeholder' }}
                   </div>
                 </div>
                 <div class="product-card__info">
