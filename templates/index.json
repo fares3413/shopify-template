@@ -394,22 +394,12 @@
             "pos_y": 81,
             "label": ""
           }
-        },
-        "hotspot_3hgEi9": {
-          "type": "hotspot",
-          "settings": {
-            "product": "nike-p-6000",
-            "pos_x": 30,
-            "pos_y": 40,
-            "label": ""
-          }
         }
       },
       "block_order": [
         "hs_1",
         "hs_2",
-        "hs_3",
-        "hotspot_3hgEi9"
+        "hs_3"
       ],
       "settings": {
         "heading": "Shop the Look",
@@ -468,42 +458,21 @@
         "p1": {
           "type": "product",
           "settings": {
-            "product": "",
+            "product": "nike-p-6000",
             "badge": ""
           }
         },
         "p2": {
           "type": "product",
           "settings": {
-            "product": "",
+            "product": "nike-tn",
             "badge": ""
           }
         },
         "p3": {
           "type": "product",
           "settings": {
-            "product": "",
-            "badge": ""
-          }
-        },
-        "p4": {
-          "type": "product",
-          "settings": {
-            "product": "",
-            "badge": ""
-          }
-        },
-        "p5": {
-          "type": "product",
-          "settings": {
-            "product": "",
-            "badge": ""
-          }
-        },
-        "p6": {
-          "type": "product",
-          "settings": {
-            "product": "",
+            "product": "nike-tn-shoes",
             "badge": ""
           }
         }
@@ -511,10 +480,7 @@
       "block_order": [
         "p1",
         "p2",
-        "p3",
-        "p4",
-        "p5",
-        "p6"
+        "p3"
       ],
       "settings": {
         "eyebrow": "Mix & Save",
@@ -584,6 +550,7 @@
         "ic_1": {
           "type": "image",
           "settings": {
+            "image": "shopify://shop_images/NIKE_P-6000_28GS_29.jpg",
             "label": "Card 1",
             "link": ""
           }
@@ -591,6 +558,7 @@
         "ic_2": {
           "type": "image",
           "settings": {
+            "image": "shopify://shop_images/FZ1689-100_g1_930da2f7-44b0-4fde-ad35-59932d16b428.webp",
             "label": "Card 2",
             "link": ""
           }
@@ -598,6 +566,7 @@
         "ic_3": {
           "type": "image",
           "settings": {
+            "image": "shopify://shop_images/nike.jpg",
             "label": "Card 3",
             "link": ""
           }
@@ -605,6 +574,7 @@
         "ic_4": {
           "type": "image",
           "settings": {
+            "image": "shopify://shop_images/NIKE_P-6000_28GS_29_3.jpg",
             "label": "Card 4",
             "link": ""
           }
@@ -612,6 +582,7 @@
         "ic_5": {
           "type": "image",
           "settings": {
+            "image": "shopify://shop_images/NIKE_P-6000_28GS_29_1.jpg",
             "label": "Card 5",
             "link": ""
           }
