@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "color_primary": "#1a1a1a",
@@ -11,6 +20,75 @@
     "footer_menu_2": "footer",
     "promo_tab_text": "GET 20% OFF",
     "phone_number": "+21 (0) 987654321",
-    "email_address": "hello@domain.com"
+    "email_address": "hello@domain.com",
+    "sections": {
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "blocks": {
+          "announcement_aMTCtQ": {
+            "type": "announcement",
+            "settings": {
+              "text": "Free shipping and returns",
+              "icon": "truck",
+              "link": ""
+            }
+          },
+          "announcement_phCV8L": {
+            "type": "announcement",
+            "settings": {
+              "text": "Free shipping and returns",
+              "icon": "truck",
+              "link": ""
+            }
+          }
+        },
+        "block_order": [
+          "announcement_aMTCtQ",
+          "announcement_phCV8L"
+        ],
+        "settings": {
+          "show_bar": true,
+          "social_position": "left",
+          "autoplay": true,
+          "speed": "4000"
+        }
+      },
+      "header": {
+        "type": "header",
+        "settings": {
+          "menu": "main-menu",
+          "sticky_header": true,
+          "transparent_on_home": false,
+          "compact_on_scroll": true,
+          "scroll_threshold": 80,
+          "compact_max_width": 360,
+          "compact_bg": "#1a1a1a",
+          "compact_text_color": "#ffffff",
+          "show_promo_badge": false,
+          "promo_badge_text": "20% OFF!",
+          "promo_badge_bg": "#fde68a",
+          "promo_badge_color": "#1a1a1a",
+          "show_status_pill": false,
+          "status_pill_text": "Sold Out",
+          "status_pill_bg": "#1a1a1a",
+          "status_pill_color": "#ffffff"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "brand_text": "Premium audio for discerning ears.",
+          "footer_menu": "footer",
+          "footer_menu_2": "",
+          "links_heading": "Quick links",
+          "info_heading": "Information",
+          "newsletter_heading": "Stay in the loop with our weekly newsletter",
+          "newsletter_subtext": "New products, exclusive deals, and editorial stories.",
+          "newsletter_placeholder": "Enter your email",
+          "copyright_text": ""
+        }
+      }
+    },
+    "content_for_index": []
   }
 }
