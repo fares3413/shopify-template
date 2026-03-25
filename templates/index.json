@@ -124,6 +124,48 @@
           "settings": {
             "label": "Limited"
           }
+        },
+        "col_9": {
+          "type": "collection_item",
+          "settings": {
+            "label": "Studio"
+          }
+        },
+        "col_10": {
+          "type": "collection_item",
+          "settings": {
+            "label": "Noise Cancelling"
+          }
+        },
+        "col_11": {
+          "type": "collection_item",
+          "settings": {
+            "label": "Sport"
+          }
+        },
+        "col_12": {
+          "type": "collection_item",
+          "settings": {
+            "label": "Kids"
+          }
+        },
+        "col_13": {
+          "type": "collection_item",
+          "settings": {
+            "label": "Pro Audio"
+          }
+        },
+        "col_14": {
+          "type": "collection_item",
+          "settings": {
+            "label": "Cables"
+          }
+        },
+        "col_15": {
+          "type": "collection_item",
+          "settings": {
+            "label": "Bundles"
+          }
         }
       },
       "block_order": [
@@ -134,12 +176,19 @@
         "col_5",
         "col_6",
         "col_7",
-        "col_8"
+        "col_8",
+        "col_9",
+        "col_10",
+        "col_11",
+        "col_12",
+        "col_13",
+        "col_14",
+        "col_15"
       ],
       "settings": {
         "card_style": "image",
         "image_ratio": "square",
-        "columns_desktop": 4,
+        "columns_desktop": 5,
         "columns_mobile": "2",
         "padding_top": 60,
         "padding_bottom": 60,

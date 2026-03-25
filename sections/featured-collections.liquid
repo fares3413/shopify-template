@@ -23,38 +23,34 @@
       background-color: {{ section.settings.color_background }};
     {%- endunless -%}
   }
-  /* Vertical-scroll grid — cards laid out in horizontal rows, navigated top↕bottom */
+  /* Static grid — 5 columns, max 3 rows, no scroll */
   #FeaturedCollections-{{ section.id }} .cl-carousel__track {
     grid-auto-flow: row;
     grid-template-columns: repeat({{ cols_desktop }}, 1fr);
+    grid-auto-rows: auto;
     grid-auto-columns: unset;
-    overflow-x: hidden;
-    overflow-y: auto;
-    scroll-snap-type: y mandatory;
-    max-height: 720px; /* ~2 rows visible on desktop */
+    overflow: visible;
+    max-height: none;
+    scroll-snap-type: none;
     padding-bottom: 0;
   }
-  /* Up/Down nav buttons */
+  /* Hide any cards beyond row 3 (cols × 3) */
+  {%- assign max_cards = cols_desktop | times: 3 | plus: 1 -%}
+  #FeaturedCollections-{{ section.id }} .cl-card:nth-child(n + {{ max_cards }}) {
+    display: none;
+  }
+  /* No carousel nav buttons needed */
   #FeaturedCollections-{{ section.id }} .cl-carousel__btn {
-    left: 50%;
-    right: auto;
-    transform: translateX(-50%);
+    display: none;
   }
-  #FeaturedCollections-{{ section.id }} .cl-carousel__btn--prev {
-    top: -24px;
-    bottom: auto;
-  }
-  #FeaturedCollections-{{ section.id }} .cl-carousel__btn--next {
-    top: auto;
-    bottom: -24px;
-  }
-  #FeaturedCollections-{{ section.id }} .cl-carousel__btn--prev svg { transform: rotate(90deg); }
-  #FeaturedCollections-{{ section.id }} .cl-carousel__btn--next svg { transform: rotate(90deg); }
   @media (max-width: 768px) {
     #FeaturedCollections-{{ section.id }} .cl-carousel__track {
       grid-template-columns: repeat({{ mob_cols }}, 1fr);
       gap: 0.75rem;
-      max-height: 460px; /* ~2 rows on mobile */
+    }
+    {%- assign max_cards_mob = mob_cols | times: 3 | plus: 1 -%}
+    #FeaturedCollections-{{ section.id }} .cl-card:nth-child(n + {{ max_cards_mob }}) {
+      display: none;
     }
   }
   {%- unless section.settings.color_button_background == 'rgba(0,0,0,0)' or section.settings.color_button_background == blank -%}
