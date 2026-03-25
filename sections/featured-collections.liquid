@@ -23,13 +23,38 @@
       background-color: {{ section.settings.color_background }};
     {%- endunless -%}
   }
+  /* Vertical-scroll grid — cards laid out in horizontal rows, navigated top↕bottom */
   #FeaturedCollections-{{ section.id }} .cl-carousel__track {
-    grid-auto-columns: calc((100% - {{ gap_count }} * 1.25rem) / {{ cols_desktop }});
+    grid-auto-flow: row;
+    grid-template-columns: repeat({{ cols_desktop }}, 1fr);
+    grid-auto-columns: unset;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    max-height: 720px; /* ~2 rows visible on desktop */
+    padding-bottom: 0;
   }
+  /* Up/Down nav buttons */
+  #FeaturedCollections-{{ section.id }} .cl-carousel__btn {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+  }
+  #FeaturedCollections-{{ section.id }} .cl-carousel__btn--prev {
+    top: -24px;
+    bottom: auto;
+  }
+  #FeaturedCollections-{{ section.id }} .cl-carousel__btn--next {
+    top: auto;
+    bottom: -24px;
+  }
+  #FeaturedCollections-{{ section.id }} .cl-carousel__btn--prev svg { transform: rotate(90deg); }
+  #FeaturedCollections-{{ section.id }} .cl-carousel__btn--next svg { transform: rotate(90deg); }
   @media (max-width: 768px) {
     #FeaturedCollections-{{ section.id }} .cl-carousel__track {
-      grid-auto-columns: calc((100% - {{ mob_gap_count }} * 0.75rem) / {{ mob_cols }});
+      grid-template-columns: repeat({{ mob_cols }}, 1fr);
       gap: 0.75rem;
+      max-height: 460px; /* ~2 rows on mobile */
     }
   }
   {%- unless section.settings.color_button_background == 'rgba(0,0,0,0)' or section.settings.color_button_background == blank -%}
@@ -182,21 +207,21 @@
   var next  = document.getElementById('CLNext-{{ section.id }}');
   if (!track) return;
 
-  function cardStride() {
+  function rowStride() {
     var card = track.querySelector('.cl-card');
-    if (!card) return 280;
-    var gap = parseFloat(window.getComputedStyle(track).columnGap) || 20;
-    return card.offsetWidth + gap;
+    if (!card) return 320;
+    var gap = parseFloat(window.getComputedStyle(track).rowGap) || 20;
+    return card.offsetHeight + gap;
   }
 
   function syncBtns() {
     if (!prev || !next) return;
-    prev.disabled = track.scrollLeft <= 1;
-    next.disabled = Math.ceil(track.scrollLeft + track.clientWidth) >= track.scrollWidth - 1;
+    prev.disabled = track.scrollTop <= 1;
+    next.disabled = Math.ceil(track.scrollTop + track.clientHeight) >= track.scrollHeight - 1;
   }
 
-  if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -cardStride(), behavior: 'smooth' }); });
-  if (next) next.addEventListener('click', function () { track.scrollBy({ left:  cardStride(), behavior: 'smooth' }); });
+  if (prev) prev.addEventListener('click', function () { track.scrollBy({ top: -rowStride(), behavior: 'smooth' }); });
+  if (next) next.addEventListener('click', function () { track.scrollBy({ top:  rowStride(), behavior: 'smooth' }); });
   track.addEventListener('scroll', syncBtns, { passive: true });
   window.addEventListener('resize', syncBtns);
   syncBtns();
