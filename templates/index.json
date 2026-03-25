@@ -329,7 +329,7 @@
         "ps_1": {
           "type": "product",
           "settings": {
-            "product": "",
+            "product": "nike-p-6000",
             "show_atc": false,
             "atc_label": "Add to cart"
           }
@@ -337,7 +337,7 @@
         "ps_2": {
           "type": "product",
           "settings": {
-            "product": "",
+            "product": "nike-tn",
             "show_atc": false,
             "atc_label": "Add to cart"
           }
@@ -360,6 +360,7 @@
         "eyebrow": "Premium Speakers",
         "heading": "Bring Quality Sound into Your Home",
         "highlight_word": "Your Home",
+        "image": "shopify://shop_images/image.jpg",
         "autoplay": false,
         "autoplay_speed": "4000"
       }
