@@ -758,46 +758,6 @@
     "logo_list": {
       "type": "logo-list",
       "blocks": {
-        "l1": {
-          "type": "logo",
-          "settings": {
-            "label": "",
-            "alt_text": "LOGO",
-            "link": ""
-          }
-        },
-        "l2": {
-          "type": "logo",
-          "settings": {
-            "label": "",
-            "alt_text": "LOGO",
-            "link": ""
-          }
-        },
-        "l3": {
-          "type": "logo",
-          "settings": {
-            "label": "",
-            "alt_text": "LOGO",
-            "link": ""
-          }
-        },
-        "l4": {
-          "type": "logo",
-          "settings": {
-            "label": "",
-            "alt_text": "LOGO",
-            "link": ""
-          }
-        },
-        "l5": {
-          "type": "logo",
-          "settings": {
-            "label": "",
-            "alt_text": "LOGO",
-            "link": ""
-          }
-        },
         "l6": {
           "type": "logo",
           "settings": {
@@ -807,26 +767,32 @@
             "link": ""
           }
         },
-        "l7": {
+        "logo_BBGM3D": {
           "type": "logo",
           "settings": {
-            "label": "",
-            "alt_text": "LOGO",
+            "image": "shopify://shop_images/image.jpg",
+            "label": "WELCOME TO OUR STORE",
+            "alt_text": "THENker",
+            "link": ""
+          }
+        },
+        "logo_DLUmPn": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/image.jpg",
+            "label": "WELCOME TO OUR STORE",
+            "alt_text": "THENker",
             "link": ""
           }
         }
       },
       "block_order": [
-        "l1",
-        "l2",
-        "l3",
-        "l4",
-        "l5",
         "l6",
-        "l7"
+        "logo_BBGM3D",
+        "logo_DLUmPn"
       ],
       "settings": {
-        "band_color": "#fde68a",
+        "band_color": "#a32418",
         "text_color": "#1a1a1a",
         "band_color_2": "#1a1a1a",
         "text_color_2": "#ffffff",
@@ -834,15 +800,54 @@
         "skew_angle": -4
       }
     },
-    "latest_stories": {
-      "type": "latest-stories",
-      "settings": {
-        "eyebrow": "From the blog",
-        "heading": "Latest Stories",
-        "blog": "",
-        "post_count": 3,
-        "show_view_all": true
-      }
+    "usp_row_GKLRyE": {
+      "type": "usp-row",
+      "blocks": {
+        "usp_RUjXxe": {
+          "type": "usp",
+          "settings": {
+            "icon": "headphone",
+            "heading": "Customer service",
+            "text": "It's not actually free we just price it into the products.",
+            "link": ""
+          }
+        },
+        "usp_gDqMqh": {
+          "type": "usp",
+          "settings": {
+            "icon": "truck",
+            "heading": "Fast Free Shipping",
+            "text": "Get free shipping on orders of $150 or more",
+            "link": ""
+          }
+        },
+        "usp_imAzfe": {
+          "type": "usp",
+          "settings": {
+            "icon": "gift",
+            "heading": "Refer a friend",
+            "text": "Refer a friend and get 15% off each other.",
+            "link": ""
+          }
+        },
+        "usp_CxfqdE": {
+          "type": "usp",
+          "settings": {
+            "icon": "shield",
+            "heading": "Secure payment",
+            "text": "Your payment information is processed securely",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "usp_RUjXxe",
+        "usp_gDqMqh",
+        "usp_imAzfe",
+        "usp_CxfqdE"
+      ],
+      "name": "USP Row",
+      "settings": {}
     }
   },
   "order": [
@@ -865,6 +870,6 @@
     "instagram_feed",
     "promo_banner",
     "logo_list",
-    "latest_stories"
+    "usp_row_GKLRyE"
   ]
 }
