@@ -696,8 +696,9 @@
         "post_2": {
           "type": "post",
           "settings": {
+            "image": "shopify://shop_images/image.jpg",
             "link": "",
-            "product_1": "",
+            "product_1": "nike-p-6000",
             "product_2": ""
           }
         },
@@ -743,6 +744,7 @@
     "promo_banner": {
       "type": "promo-banner",
       "settings": {
+        "image": "shopify://shop_images/nike-just-do-it.jpg",
         "background_color": "#888888",
         "overlay_opacity": 30,
         "subheading": "Get up to 50% off",
