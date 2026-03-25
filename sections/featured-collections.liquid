@@ -1,12 +1,15 @@
 {%- liquid
-  assign cols_desktop  = section.settings.columns_desktop | default: 4
-  assign cols_mobile   = section.settings.columns_mobile | default: '2'
-  assign card_style    = section.settings.card_style | default: 'card'
-  assign image_ratio   = section.settings.image_ratio | default: 'square'
-  assign heading_tag   = section.settings.heading_tag | default: 'h2'
-  assign heading_size  = section.settings.heading_size | default: 'md'
-  assign heading_align = section.settings.heading_alignment | default: 'left'
-  assign hl_style      = section.settings.heading_highlight_style | default: 'none'
+  assign cols_desktop   = section.settings.columns_desktop | default: 4
+  assign cols_mobile    = section.settings.columns_mobile | default: '2'
+  assign card_style     = section.settings.card_style | default: 'card'
+  assign image_ratio    = section.settings.image_ratio | default: 'square'
+  assign heading_tag    = section.settings.heading_tag | default: 'h2'
+  assign heading_size   = section.settings.heading_size | default: 'md'
+  assign heading_align  = section.settings.heading_alignment | default: 'left'
+  assign hl_style       = section.settings.heading_highlight_style | default: 'none'
+  assign gap_count      = cols_desktop | minus: 1
+  assign mob_cols       = cols_mobile | times: 1
+  assign mob_gap_count  = mob_cols | minus: 1
 -%}
 
 <style>
@@ -20,29 +23,15 @@
       background-color: {{ section.settings.color_background }};
     {%- endunless -%}
   }
-
-  /* Clipping wrapper — height is set by JS to exactly 3 rows */
-  #FeaturedCollections-{{ section.id }} .cl-vscroll-wrapper {
-    overflow: hidden;
-    position: relative;
-  }
-
-  /* ── Grid: 4 columns, wrapped rows, no horizontal overflow ── */
   #FeaturedCollections-{{ section.id }} .cl-carousel__track {
-    display: grid !important;
-    grid-template-columns: repeat({{ cols_desktop }}, 1fr) !important;
-    grid-auto-flow: row !important;
-    grid-auto-rows: auto !important;
-    gap: 1.25rem !important;
-    overflow: visible !important;
-    max-height: none !important;
-    scroll-snap-type: none !important;
-    will-change: transform;
+    grid-auto-columns: calc((100% - {{ gap_count }} * 1.25rem) / {{ cols_desktop }});
   }
-
-  /* Hide the nav arrow buttons — not needed for this layout */
-  #FeaturedCollections-{{ section.id }} .cl-carousel__btn { display: none !important; }
-
+  @media (max-width: 768px) {
+    #FeaturedCollections-{{ section.id }} .cl-carousel__track {
+      grid-auto-columns: calc((100% - {{ mob_gap_count }} * 0.75rem) / {{ mob_cols }});
+      gap: 0.75rem;
+    }
+  }
   {%- unless section.settings.color_button_background == 'rgba(0,0,0,0)' or section.settings.color_button_background == blank -%}
     #FeaturedCollections-{{ section.id }} .cl-section__view-all {
       background: {{ section.settings.color_button_background }};
@@ -57,20 +46,6 @@
   {%- if section.settings.custom_css != blank -%}
     #FeaturedCollections-{{ section.id }} { {{ section.settings.custom_css }} }
   {%- endif -%}
-
-  /* Tablet: 2 columns */
-  @media (max-width: 1024px) {
-    #FeaturedCollections-{{ section.id }} .cl-carousel__track {
-      grid-template-columns: repeat(2, 1fr) !important;
-    }
-  }
-  /* Mobile: set by columns_mobile setting */
-  @media (max-width: 640px) {
-    #FeaturedCollections-{{ section.id }} .cl-carousel__track {
-      grid-template-columns: repeat({{ cols_mobile }}, 1fr) !important;
-      gap: 0.75rem !important;
-    }
-  }
 </style>
 
 <section
@@ -96,15 +71,16 @@
       </div>
     {%- endif -%}
 
-    <!-- Scroll wrapper clips to 3 rows; JS adds clones + animates when needed -->
-    <div class="cl-vscroll-wrapper" id="CLWrapper-{{ section.id }}">
+    <!-- Carousel -->
+    <div class="cl-carousel" id="CLCarousel-{{ section.id }}">
       <div class="cl-carousel__track" id="CLTrack-{{ section.id }}">
 
         {%- for block in section.blocks -%}
           {%- assign collection = collections[block.settings.collection] -%}
-          {%- assign col_title  = collection.title | default: block.settings.label | default: 'Collection' -%}
-          {%- assign col_href   = collection.url | default: block.settings.custom_link | default: '#' -%}
+          {%- assign col_title = collection.title | default: block.settings.label | default: 'Collection' -%}
+          {%- assign col_href = collection.url | default: block.settings.custom_link | default: '#' -%}
 
+          {%- comment -%} Choose image source {%- endcomment -%}
           {%- liquid
             assign src_img = nil
             if block.settings.image != blank
@@ -124,6 +100,7 @@
           <div class="cl-card cl-card--{{ card_style }} cl-card--{{ image_ratio }}" {{ block.shopify_attributes }}>
             <a href="{{ col_href }}" class="cl-card__inner">
 
+              <!-- Image -->
               <div class="cl-card__media">
                 {%- if src_img != nil -%}
                   <img
@@ -156,6 +133,7 @@
                 {%- endif -%}
               </div>
 
+              <!-- Card-style info row -->
               {%- if card_style == 'card' -%}
                 <div class="cl-card__info">
                   <div class="cl-card__info-text">
@@ -175,8 +153,19 @@
         {%- endfor -%}
 
       </div><!-- /.cl-carousel__track -->
-    </div><!-- /.cl-vscroll-wrapper -->
 
+      <!-- Prev / Next buttons -->
+      {%- if section.settings.enable_carousel -%}
+        <button class="cl-carousel__btn cl-carousel__btn--prev" id="CLPrev-{{ section.id }}" aria-label="Previous" disabled>
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M13 4 7 10l6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="cl-carousel__btn cl-carousel__btn--next" id="CLNext-{{ section.id }}" aria-label="Next">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      {%- endif -%}
+    </div><!-- /.cl-carousel -->
+
+    <!-- View all -->
     {%- if section.settings.show_view_all -%}
       <div class="cl-section__footer">
         <a href="/collections" class="btn btn--outline cl-section__view-all">View all collections</a>
@@ -188,119 +177,29 @@
 
 <script>
 (function () {
-  var VISIBLE_ROWS = 3;
-  var SPEED        = 0.5; // px per frame  ≈ 30 px/s at 60 fps
+  var track = document.getElementById('CLTrack-{{ section.id }}');
+  var prev  = document.getElementById('CLPrev-{{ section.id }}');
+  var next  = document.getElementById('CLNext-{{ section.id }}');
+  if (!track) return;
 
-  var wrapper = document.getElementById('CLWrapper-{{ section.id }}');
-  var track   = document.getElementById('CLTrack-{{ section.id }}');
-  if (!wrapper || !track) return;
-
-  /* Original card elements (Liquid-rendered, never clones) */
-  var origCards  = Array.from(track.children);
-  var totalCards = origCards.length;
-
-  /* ── Detect actual rendered column count from DOM layout ── */
-  function getRenderedCols() {
-    if (origCards.length < 2) return 1;
-    var top0 = origCards[0].getBoundingClientRect().top;
-    var n = 0;
-    for (var i = 0; i < origCards.length; i++) {
-      if (Math.abs(origCards[i].getBoundingClientRect().top - top0) < 5) { n++; } else { break; }
-    }
-    return n || 1;
+  function cardStride() {
+    var card = track.querySelector('.cl-card');
+    if (!card) return 280;
+    var gap = parseFloat(window.getComputedStyle(track).columnGap) || 20;
+    return card.offsetWidth + gap;
   }
 
-  /* ── Animation state ── */
-  var scrollY   = 0;
-  var origScrollH = 0;
-  var rafId     = null;
-  var paused    = false;
-  var running   = false;
-
-  /* ── Pause on hover/focus so users can read cards ── */
-  wrapper.addEventListener('mouseenter', function () { paused = true;  });
-  wrapper.addEventListener('mouseleave', function () { paused = false; });
-  wrapper.addEventListener('focusin',    function () { paused = true;  });
-  wrapper.addEventListener('focusout',   function () { paused = false; });
-
-  /* ── Remove any previously injected clones ── */
-  function removeClones() {
-    track.querySelectorAll('[data-vclone]').forEach(function (el) { el.remove(); });
+  function syncBtns() {
+    if (!prev || !next) return;
+    prev.disabled = track.scrollLeft <= 1;
+    next.disabled = Math.ceil(track.scrollLeft + track.clientWidth) >= track.scrollWidth - 1;
   }
 
-  /* ── Core setup: measure, clone, animate ── */
-  function setup() {
-    removeClones();
-    if (rafId) { cancelAnimationFrame(rafId); rafId = null; running = false; }
-    scrollY = 0;
-    track.style.transform = '';
-    wrapper.style.height  = '';
-
-    /* Wait one tick so the grid has laid out after clone removal */
-    requestAnimationFrame(function () {
-      var cols     = getRenderedCols();
-      var totalRows = Math.ceil(totalCards / cols);
-
-      /* Nothing to scroll — show a plain static grid */
-      if (totalRows <= VISIBLE_ROWS) return;
-
-      /* ── Clone every original card for seamless looping ── */
-      origCards.forEach(function (card) {
-        var clone = card.cloneNode(true);
-        clone.setAttribute('data-vclone', '1');
-        clone.setAttribute('aria-hidden', 'true');
-        /* Strip Shopify editor hooks so the editor doesn't double-count blocks */
-        clone.removeAttribute('data-shopify-editor-block');
-        clone.querySelectorAll('[data-shopify-editor-block]').forEach(function (el) {
-          el.removeAttribute('data-shopify-editor-block');
-        });
-        track.appendChild(clone);
-      });
-
-      /* ── Measure after clones are in the DOM ── */
-      requestAnimationFrame(function () {
-        var style  = window.getComputedStyle(track);
-        var gap    = parseFloat(style.rowGap) || parseFloat(style.gap) || 20;
-        var cardH  = origCards[0].offsetHeight;
-
-        /*
-          origScrollH = height of ONE full set of original cards inside the grid.
-          After scrolling this far, the clone set starts — visually identical → seamless.
-        */
-        origScrollH = totalRows * (cardH + gap);
-
-        /* Clip the wrapper to show exactly VISIBLE_ROWS rows */
-        wrapper.style.height = (VISIBLE_ROWS * (cardH + gap) - gap) + 'px';
-
-        /* Kick off the RAF loop */
-        running = true;
-        rafId   = requestAnimationFrame(tick);
-      });
-    });
-  }
-
-  function tick() {
-    if (!paused && origScrollH > 0) {
-      scrollY += SPEED;
-      if (scrollY >= origScrollH) { scrollY -= origScrollH; }
-      track.style.transform = 'translateY(-' + scrollY + 'px)';
-    }
-    if (running) { rafId = requestAnimationFrame(tick); }
-  }
-
-  /* ── Init after layout is ready ── */
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', setup);
-  } else {
-    setup();
-  }
-
-  /* ── Re-initialise on resize (columns change on mobile) ── */
-  var resizeTimer;
-  window.addEventListener('resize', function () {
-    clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(function () { scrollY = 0; setup(); }, 250);
-  });
+  if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -cardStride(), behavior: 'smooth' }); });
+  if (next) next.addEventListener('click', function () { track.scrollBy({ left:  cardStride(), behavior: 'smooth' }); });
+  track.addEventListener('scroll', syncBtns, { passive: true });
+  window.addEventListener('resize', syncBtns);
+  syncBtns();
 }());
 </script>
 
@@ -446,10 +345,10 @@
       "id": "image_ratio",
       "label": "Image ratio",
       "options": [
-        { "value": "square",    "label": "Square" },
-        { "value": "portrait",  "label": "Portrait" },
-        { "value": "landscape", "label": "Landscape" },
-        { "value": "adapt",     "label": "Adapt to image" }
+        { "value": "square",   "label": "Square" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "landscape","label": "Landscape" },
+        { "value": "adapt",    "label": "Adapt to image" }
       ],
       "default": "square"
     },
