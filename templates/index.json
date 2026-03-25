@@ -801,8 +801,9 @@
         "l6": {
           "type": "logo",
           "settings": {
-            "label": "",
-            "alt_text": "LOGO",
+            "image": "shopify://shop_images/image.jpg",
+            "label": "WELCOME TO OUR STORE",
+            "alt_text": "THENker",
             "link": ""
           }
         },
