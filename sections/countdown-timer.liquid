@@ -1,0 +1,526 @@
+{%- liquid
+  assign section_id = 'Countdown-' | append: section.id
+  assign overlay_opacity = section.settings.video_overlay | divided_by: 100.0
+  assign img_width = section.settings.image_width | append: '%'
+-%}
+
+<style>
+  /* ── Section shell ── */
+  #{{ section_id }} {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 480px;
+    overflow: hidden;
+    border-radius: {{ section.settings.border_radius }}px;
+  }
+
+  /* ── Background image/video ── */
+  #{{ section_id }} .cd-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  #{{ section_id }} .cd-bg__img {
+    width: {{ img_width }};
+    height: 100%;
+    margin: 0 auto;
+    object-fit: {%- if section.settings.image_aspect_ratio == 'square' %} contain {%- else %} cover {%- endif %};
+    display: block;
+  }
+  #{{ section_id }} .cd-bg__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  /* ── Overlay ── */
+  #{{ section_id }} .cd-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: {{ section.settings.overlay_color }};
+    opacity: {{ overlay_opacity }};
+    pointer-events: none;
+  }
+
+  /* ── Content card ── */
+  #{{ section_id }} .cd-content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2.5rem 3rem;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(6px);
+    border-radius: {{ section.settings.border_radius }}px;
+    max-width: 700px;
+    width: 90%;
+    text-align: center;
+  }
+
+  /* ── Heading ── */
+  #{{ section_id }} .cd-heading {
+    font-family: var(--font-heading-family);
+    font-size: clamp(1.25rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-primary, #1a1a1a);
+    line-height: 1.2;
+  }
+
+  /* ── Timer row ── */
+  #{{ section_id }} .cd-timer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  /* ── Each unit (box + label) ── */
+  #{{ section_id }} .cd-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  /* ── Orange number box ── */
+  #{{ section_id }} .cd-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(60px, 10vw, 90px);
+    height: clamp(60px, 10vw, 90px);
+    background: #f59e5b;
+    border-radius: 14px;
+    font-family: var(--font-heading-family);
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-weight: 800;
+    color: #1a1a1a;
+    line-height: 1;
+    box-shadow: 0 4px 16px rgba(245, 158, 91, 0.35);
+  }
+
+  /* ── Unit label ── */
+  #{{ section_id }} .cd-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text, #1a1a1a);
+  }
+
+  /* ── Colon separator ── */
+  #{{ section_id }} .cd-sep {
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-weight: 800;
+    color: #f59e5b;
+    line-height: 1;
+    padding-top: clamp(10px, 1.5vw, 18px);
+    user-select: none;
+  }
+
+  /* ── Button ── */
+  #{{ section_id }} .cd-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 2.25rem;
+    background: #f59e5b;
+    color: #1a1a1a;
+    font-family: var(--font-body-family);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    border-radius: var(--radius-full, 9999px);
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 14px rgba(245, 158, 91, 0.4);
+  }
+  #{{ section_id }} .cd-btn:hover {
+    background: #e88c3e;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(245, 158, 91, 0.5);
+  }
+
+  /* ── Optional side images ── */
+  #{{ section_id }} .cd-right-img {
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%){%- if section.settings.rotate_image %} rotate(8deg){% endif %};
+    z-index: 3;
+    width: clamp(80px, 12%, 160px);
+    border-radius: var(--radius-md, 8px);
+    pointer-events: none;
+  }
+  #{{ section_id }} .cd-promo-img {
+    position: absolute;
+    bottom: 1.25rem;
+    right: 1.5rem;
+    z-index: 3;
+    width: clamp(70px, 10%, 130px);
+    border-radius: var(--radius-md, 8px);
+    pointer-events: none;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    #{{ section_id }} .cd-content {
+      padding: 2rem 1.25rem;
+      gap: 1.25rem;
+    }
+    #{{ section_id }} .cd-timer {
+      gap: 0.35rem;
+    }
+    #{{ section_id }} .cd-right-img,
+    #{{ section_id }} .cd-promo-img {
+      display: none;
+    }
+  }
+</style>
+
+<section id="{{ section_id }}" class="countdown-timer">
+
+  <!-- Background -->
+  <div class="cd-bg">
+    {%- if section.settings.show_column_image -%}
+      {%- if section.settings.video_url != blank -%}
+        <video
+          class="cd-bg__video"
+          src="{{ section.settings.video_url }}"
+          autoplay
+          muted
+          loop
+          playsinline
+        ></video>
+      {%- elsif section.settings.bg_image != blank -%}
+        <img
+          class="cd-bg__img"
+          src="{{ section.settings.bg_image | image_url: width: 1920 }}"
+          alt=""
+          loading="lazy"
+          width="{{ section.settings.bg_image.width }}"
+          height="{{ section.settings.bg_image.height }}"
+        >
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+
+  <!-- Overlay -->
+  <div class="cd-overlay" aria-hidden="true"></div>
+
+  <!-- Main content card -->
+  <div class="cd-content">
+
+    {%- for block in section.blocks -%}
+
+      {%- case block.type -%}
+
+        {%- when 'heading' -%}
+          <h2 class="cd-heading" {{ block.shopify_attributes }}>
+            {{ block.settings.text | default: 'COUNT-DOWN TIMER' }}
+          </h2>
+
+        {%- when 'countdown' -%}
+          <div
+            class="cd-timer"
+            id="cd-timer-{{ section.id }}"
+            data-target="{{ block.settings.target_date }}"
+            {{ block.shopify_attributes }}
+          >
+            <div class="cd-unit">
+              <div class="cd-box" id="cd-days-{{ section.id }}">00</div>
+              <span class="cd-label">Days</span>
+            </div>
+            <span class="cd-sep" aria-hidden="true">:</span>
+            <div class="cd-unit">
+              <div class="cd-box" id="cd-hours-{{ section.id }}">00</div>
+              <span class="cd-label">Hours</span>
+            </div>
+            <span class="cd-sep" aria-hidden="true">:</span>
+            <div class="cd-unit">
+              <div class="cd-box" id="cd-minutes-{{ section.id }}">00</div>
+              <span class="cd-label">Minutes</span>
+            </div>
+            <span class="cd-sep" aria-hidden="true">:</span>
+            <div class="cd-unit">
+              <div class="cd-box" id="cd-seconds-{{ section.id }}">00</div>
+              <span class="cd-label">Seconds</span>
+            </div>
+          </div>
+
+        {%- when 'button' -%}
+          {%- if block.settings.button_label != blank -%}
+            <a
+              href="{{ block.settings.button_link | default: '#' }}"
+              class="cd-btn"
+              {{ block.shopify_attributes }}
+            >
+              {{ block.settings.button_label }}
+            </a>
+          {%- endif -%}
+
+      {%- endcase -%}
+
+    {%- endfor -%}
+
+  </div>
+
+  <!-- Optional right image -->
+  {%- if section.settings.right_image != blank -%}
+    <img
+      class="cd-right-img"
+      src="{{ section.settings.right_image | image_url: width: 300 }}"
+      alt=""
+      loading="lazy"
+      aria-hidden="true"
+    >
+  {%- endif -%}
+
+  <!-- Optional promo image -->
+  {%- if section.settings.promo_image != blank -%}
+    <img
+      class="cd-promo-img"
+      src="{{ section.settings.promo_image | image_url: width: 260 }}"
+      alt=""
+      loading="lazy"
+      aria-hidden="true"
+    >
+  {%- endif -%}
+
+</section>
+
+<script>
+(function () {
+  /* ── Helper: pad single digits with leading zero ── */
+  function pad(n) {
+    return String(Math.max(0, n)).padStart(2, '0');
+  }
+
+  /* ── Grab elements for this specific section ── */
+  var sectionId = '{{ section.id }}';
+  var timerEl   = document.getElementById('cd-timer-' + sectionId);
+  if (!timerEl) return;
+
+  var targetRaw = timerEl.getAttribute('data-target');
+  if (!targetRaw) return;
+
+  /* ── Parse target date (format: YYYY-MM-DD HH:MM) ── */
+  var targetDate = new Date(targetRaw.trim());
+  if (isNaN(targetDate.getTime())) {
+    console.warn('[Countdown] Invalid target_date:', targetRaw);
+    return;
+  }
+
+  /* ── DOM references ── */
+  var daysEl    = document.getElementById('cd-days-'    + sectionId);
+  var hoursEl   = document.getElementById('cd-hours-'   + sectionId);
+  var minutesEl = document.getElementById('cd-minutes-' + sectionId);
+  var secondsEl = document.getElementById('cd-seconds-' + sectionId);
+
+  /* ── Tick function ── */
+  function tick() {
+    var now  = Date.now();
+    var diff = targetDate.getTime() - now;
+
+    if (diff <= 0) {
+      /* Countdown finished — show zeroes and stop */
+      daysEl.textContent    = '00';
+      hoursEl.textContent   = '00';
+      minutesEl.textContent = '00';
+      secondsEl.textContent = '00';
+      clearInterval(timer);
+      return;
+    }
+
+    var totalSeconds = Math.floor(diff / 1000);
+    var days    = Math.floor(totalSeconds / 86400);
+    var hours   = Math.floor((totalSeconds % 86400) / 3600);
+    var minutes = Math.floor((totalSeconds % 3600)  / 60);
+    var seconds = totalSeconds % 60;
+
+    daysEl.textContent    = pad(days);
+    hoursEl.textContent   = pad(hours);
+    minutesEl.textContent = pad(minutes);
+    secondsEl.textContent = pad(seconds);
+  }
+
+  /* ── Run immediately then every second ── */
+  tick();
+  var timer = setInterval(tick, 1000);
+}());
+</script>
+
+{% schema %}
+{
+  "name": "Countdown Timer",
+  "tag": "div",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Container"
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Section border radius",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_column_image",
+      "label": "Show column image",
+      "info": "Display background image/video as a column image",
+      "default": true
+    },
+    {
+      "type": "url",
+      "id": "video_url",
+      "label": "Video"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Image",
+      "info": "Recommended dimensions: 1920x800 px"
+    },
+    {
+      "type": "range",
+      "id": "image_width",
+      "min": 20,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Image width",
+      "default": 85
+    },
+    {
+      "type": "select",
+      "id": "image_aspect_ratio",
+      "label": "Image aspect ratio",
+      "options": [
+        { "value": "auto",   "label": "Auto"   },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "auto"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "range",
+      "id": "video_overlay",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Video overlay",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Additional images"
+    },
+    {
+      "type": "image_picker",
+      "id": "right_image",
+      "label": "Right image"
+    },
+    {
+      "type": "checkbox",
+      "id": "rotate_image",
+      "label": "Rotate image",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "promo_image",
+      "label": "Promo image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Heading",
+          "default": "COUNT-DOWN TIMER"
+        }
+      ]
+    },
+    {
+      "type": "countdown",
+      "name": "Countdown",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "target_date",
+          "label": "Target date",
+          "info": "Format: YYYY-MM-DD HH:MM",
+          "default": "2025-12-31 23:59"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Countdown Timer",
+      "blocks": [
+        { "type": "heading" },
+        { "type": "countdown" },
+        { "type": "button" }
+      ]
+    }
+  ]
+}
+{% endschema %}

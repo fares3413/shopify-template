@@ -1,0 +1,451 @@
+{%- liquid
+  assign section_id     = 'ImageWithText-' | append: section.id
+  assign img_align      = section.settings.image_alignment | default: 'left'
+  assign v_align        = section.settings.vertical_alignment | default: 'center'
+  assign h_align        = section.settings.horizontal_alignment | default: 'left'
+  assign scheme         = section.settings.color_scheme | default: 'scheme-1'
+-%}
+
+<style>
+  /* ── Color schemes ── */
+  #{{ section_id }}.iwt-scheme-scheme-1 { --iwt-bg: #ffffff;          --iwt-text: #1a1a1a; --iwt-sub: #888888; }
+  #{{ section_id }}.iwt-scheme-scheme-2 { --iwt-bg: var(--color-bg-soft, #f5f5f3); --iwt-text: #1a1a1a; --iwt-sub: #888888; }
+  #{{ section_id }}.iwt-scheme-scheme-3 { --iwt-bg: #1a1a1a;          --iwt-text: #ffffff; --iwt-sub: rgba(255,255,255,0.6); }
+  #{{ section_id }}.iwt-scheme-scheme-4 { --iwt-bg: var(--color-accent, #c9a96e); --iwt-text: #1a1a1a; --iwt-sub: rgba(26,26,26,0.65); }
+
+  /* ── Section wrapper ── */
+  #{{ section_id }} {
+    padding-top:    {{ section.settings.padding_top | default: 40 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | default: 40 }}px;
+  }
+
+  /* ── Card container ── */
+  #{{ section_id }} .iwt-card {
+    background:    var(--iwt-bg, #ffffff);
+    border-radius: {{ section.settings.section_border_radius | default: 10 }}px;
+    overflow:      hidden;
+    display:       grid;
+    grid-template-columns: 1fr 1fr;
+    min-height:    480px;
+  }
+
+  /* ── Flip columns when image is on the right ── */
+  {%- if img_align == 'right' -%}
+  #{{ section_id }} .iwt-media  { order: 2; }
+  #{{ section_id }} .iwt-text   { order: 1; }
+  {%- else -%}
+  #{{ section_id }} .iwt-media  { order: 1; }
+  #{{ section_id }} .iwt-text   { order: 2; }
+  {%- endif -%}
+
+  /* ── Media column ── */
+  #{{ section_id }} .iwt-media {
+    position: relative;
+    overflow: hidden;
+    background: var(--color-bg-soft, #f5f5f3);
+  }
+  #{{ section_id }} .iwt-media img,
+  #{{ section_id }} .iwt-media video {
+    width:      100%;
+    height:     100%;
+    object-fit: cover;
+    display:    block;
+  }
+
+  /* ── Placeholder SVG when no media ── */
+  #{{ section_id }} .iwt-media .iwt-placeholder {
+    width:      100%;
+    height:     100%;
+    display:    flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-soft, #f5f5f3);
+  }
+  #{{ section_id }} .iwt-media .iwt-placeholder svg {
+    width:   60%;
+    height:  60%;
+    opacity: 0.25;
+  }
+
+  /* ── Text column ── */
+  #{{ section_id }} .iwt-text {
+    display:         flex;
+    flex-direction:  column;
+    justify-content: {%- if v_align == 'top' %} flex-start {%- elsif v_align == 'bottom' %} flex-end {%- else %} center {%- endif %};
+    align-items: {%- if h_align == 'center' %} center {%- elsif h_align == 'right' %} flex-end {%- else %} flex-start {%- endif %};
+    text-align:      {{ h_align }};
+    padding:         {{ section.settings.top_inner_spacing | default: 0 | plus: 40 }}px 3.5rem {{ section.settings.bottom_inner_spacing | default: 0 | plus: 40 }}px;
+    color:           var(--iwt-text, #1a1a1a);
+    gap:             1.25rem;
+  }
+
+  /* ── Subheading ── */
+  #{{ section_id }} .iwt-subheading {
+    font-size:      0.85rem;
+    font-weight:    500;
+    letter-spacing: 0.06em;
+    color:          var(--iwt-sub, #888888);
+    line-height:    1.4;
+  }
+
+  /* ── Heading ── */
+  #{{ section_id }} .iwt-heading {
+    font-family:    var(--font-heading-family);
+    font-size:      clamp(1.6rem, 3vw, 2.5rem);
+    font-weight:    800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    line-height:    1.1;
+    color:          var(--iwt-text, #1a1a1a);
+  }
+
+  /* ── Body text ── */
+  #{{ section_id }} .iwt-body {
+    font-size:   0.95rem;
+    line-height: 1.75;
+    color:       var(--iwt-text, #1a1a1a);
+    opacity:     0.85;
+    max-width:   50ch;
+  }
+  #{{ section_id }} .iwt-body p  { margin: 0; }
+  #{{ section_id }} .iwt-body a  { text-decoration: underline; }
+  #{{ section_id }} .iwt-body ul { padding-left: 1.25em; list-style: disc; }
+
+  /* ── Button ── */
+  #{{ section_id }} .iwt-btn {
+    display:         inline-flex;
+    align-items:     center;
+    justify-content: center;
+    padding:         0.75rem 2rem;
+    background:      #f59e5b;
+    color:           #1a1a1a;
+    font-family:     var(--font-body-family);
+    font-size:       0.9rem;
+    font-weight:     700;
+    letter-spacing:  0.03em;
+    text-decoration: none;
+    border-radius:   var(--radius-full, 9999px);
+    border:          none;
+    cursor:          pointer;
+    transition:      background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+    box-shadow:      0 4px 14px rgba(245, 158, 91, 0.35);
+    margin-top:      0.25rem;
+    white-space:     nowrap;
+  }
+  #{{ section_id }} .iwt-btn:hover {
+    background:  #e88c3e;
+    transform:   translateY(-1px);
+    box-shadow:  0 6px 20px rgba(245, 158, 91, 0.5);
+  }
+
+  /* ── Responsive: stack on mobile ── */
+  @media (max-width: 768px) {
+    #{{ section_id }} {
+      padding-top:    {{ section.settings.mobile_padding_top | default: 30 }}px;
+      padding-bottom: {{ section.settings.mobile_padding_bottom | default: 30 }}px;
+    }
+    #{{ section_id }} .iwt-card {
+      grid-template-columns: 1fr;
+      min-height: unset;
+    }
+    #{{ section_id }} .iwt-media { order: 1 !important; min-height: 260px; }
+    #{{ section_id }} .iwt-text  { order: 2 !important; padding: 2rem 1.5rem; align-items: flex-start; text-align: left; }
+  }
+</style>
+
+<div
+  id="{{ section_id }}"
+  class="iwt-section iwt-scheme-{{ scheme }}"
+>
+  <div class="page-width">
+    <div class="iwt-card">
+
+      <!-- ── Media column ── -->
+      <div class="iwt-media">
+        {%- if section.settings.video != blank -%}
+          {{
+            section.settings.video
+            | video_tag:
+              autoplay: true,
+              loop: true,
+              muted: true,
+              playsinline: true,
+              class: 'iwt-video'
+          }}
+        {%- elsif section.settings.image != blank -%}
+          <img
+            src="{{ section.settings.image | image_url: width: 1200 }}"
+            alt="{{ section.settings.image.alt | escape }}"
+            loading="lazy"
+            width="{{ section.settings.image.width }}"
+            height="{{ section.settings.image.height }}"
+          >
+        {%- else -%}
+          <div class="iwt-placeholder">
+            {{ 'product-3' | placeholder_svg_tag }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <!-- ── Text column ── -->
+      <div class="iwt-text">
+        {%- for block in section.blocks -%}
+          {%- case block.type -%}
+
+            {%- when 'subheading' -%}
+              {%- if block.settings.text != blank -%}
+                <p class="iwt-subheading" {{ block.shopify_attributes }}>
+                  {{ block.settings.text }}
+                </p>
+              {%- endif -%}
+
+            {%- when 'heading' -%}
+              {%- if block.settings.heading != blank -%}
+                <h2 class="iwt-heading" {{ block.shopify_attributes }}>
+                  {{ block.settings.heading }}
+                </h2>
+              {%- endif -%}
+
+            {%- when 'text' -%}
+              {%- if block.settings.text != blank -%}
+                <div class="iwt-body rte" {{ block.shopify_attributes }}>
+                  {{ block.settings.text }}
+                </div>
+              {%- endif -%}
+
+            {%- when 'button' -%}
+              {%- if block.settings.button_label != blank -%}
+                <a
+                  href="{{ block.settings.button_link | default: '#' }}"
+                  class="iwt-btn"
+                  {{ block.shopify_attributes }}
+                >
+                  {{ block.settings.button_label }}
+                </a>
+              {%- endif -%}
+
+          {%- endcase -%}
+        {%- endfor -%}
+      </div>
+
+    </div><!-- /.iwt-card -->
+  </div><!-- /.page-width -->
+</div>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "options": [
+        { "value": "scheme-1", "label": "Scheme 1 — White" },
+        { "value": "scheme-2", "label": "Scheme 2 — Soft grey" },
+        { "value": "scheme-3", "label": "Scheme 3 — Dark" },
+        { "value": "scheme-4", "label": "Scheme 4 — Accent" }
+      ],
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "section_border_radius",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Section border radius",
+      "default": 10
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Select video"
+    },
+    {
+      "type": "select",
+      "id": "image_alignment",
+      "label": "Image alignment",
+      "options": [
+        { "value": "left",  "label": "Left"  },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Text"
+    },
+    {
+      "type": "select",
+      "id": "vertical_alignment",
+      "label": "Vertical alignment",
+      "options": [
+        { "value": "top",    "label": "Top"    },
+        { "value": "center", "label": "Center" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "select",
+      "id": "horizontal_alignment",
+      "label": "Horizontal alignment",
+      "options": [
+        { "value": "left",   "label": "Left"   },
+        { "value": "center", "label": "Center" },
+        { "value": "right",  "label": "Right"  }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "header",
+      "content": "Desktop spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "top_inner_spacing",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Top inner spacing",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "bottom_inner_spacing",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Bottom inner spacing",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Mobile spacing"
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 30
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 30
+    }
+  ],
+  "blocks": [
+    {
+      "type": "subheading",
+      "name": "Subheading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Subheading",
+          "default": "Sub Heading"
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "name": "Heading",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Image with text"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Description",
+          "default": "<p>This section allows you to highlight key content with a featured image and supporting text. Use it to showcase a product, collection, promotion, or brand story. The image and text can be customized to match your store's style and layout preferences</p>"
+        }
+      ]
+    },
+    {
+      "type": "button",
+      "name": "Button",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Button Label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with text",
+      "blocks": [
+        { "type": "subheading" },
+        { "type": "heading" },
+        { "type": "text" },
+        { "type": "button" }
+      ]
+    }
+  ]
+}
+{% endschema %}
