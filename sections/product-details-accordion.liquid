@@ -100,15 +100,16 @@
   <div class="page-width">
 
     {%- if section.settings.heading != blank -%}
-      <h2 class="pda-heading">{{ section.settings.heading }}</h2>
+      <h2 class="pda-heading" data-reveal>{{ section.settings.heading }}</h2>
     {%- endif -%}
 
-    <div class="pda-list" role="list">
+    <div class="pda-list" role="list" data-reveal-stagger data-stagger-delay="80">
       {%- for block in section.blocks -%}
         {%- assign is_open = forloop.first -%}
         <div
           class="pda-item{% if is_open %} pda-item--open{% endif %}"
           role="listitem"
+          data-reveal-item
           {{ block.shopify_attributes }}
         >
           <button

@@ -312,31 +312,104 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ============================================
-  // SMOOTH FADE IN on scroll
+  // PRO SCROLL-REVEAL SYSTEM
   // ============================================
   if ('IntersectionObserver' in window) {
-    const style = document.createElement('style');
-    style.textContent = `
-      .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-      .fade-in.visible { opacity: 1; transform: none; }
-    `;
-    document.head.appendChild(style);
 
-    const observer = new IntersectionObserver((entries) => {
+    // ── Inject base animation styles (only applies when JS runs) ──
+    const revealCSS = document.createElement('style');
+    revealCSS.id = 'luxe-reveal-styles';
+    revealCSS.textContent = `
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(22px);
+        transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1),
+                    transform 0.65s cubic-bezier(0.4,0,0.2,1);
+        will-change: opacity, transform;
+      }
+      [data-reveal].is-revealed {
+        opacity: 1;
+        transform: translateY(0);
+        will-change: auto;
+      }
+      [data-reveal-item] {
+        opacity: 0;
+        transform: translateY(22px);
+        transition: opacity 0.55s cubic-bezier(0.4,0,0.2,1),
+                    transform 0.55s cubic-bezier(0.4,0,0.2,1);
+        will-change: opacity, transform;
+      }
+      [data-reveal-item].is-revealed {
+        opacity: 1;
+        transform: translateY(0);
+        will-change: auto;
+      }
+      .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1),
+                    transform 0.6s cubic-bezier(0.4,0,0.2,1);
+      }
+      .fade-in.visible { opacity: 1; transform: translateY(0); }
+      @media (prefers-reduced-motion: reduce) {
+        [data-reveal], [data-reveal-item], .fade-in {
+          transition: none !important;
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      }
+    `;
+    document.head.appendChild(revealCSS);
+
+    // ── Single-element reveal ──────────────────────────────────────
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const delay = parseInt(entry.target.dataset.revealDelay || '0', 10);
+        if (delay) {
+          setTimeout(() => entry.target.classList.add('is-revealed'), delay);
+        } else {
+          entry.target.classList.add('is-revealed');
+        }
+        revealObs.unobserve(entry.target);
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('[data-reveal]').forEach(el => revealObs.observe(el));
+
+    // ── Stagger container reveal ───────────────────────────────────
+    // Parent: data-reveal-stagger (optional data-stagger-delay="100")
+    // Children: data-reveal-item
+    const staggerObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const items = entry.target.querySelectorAll('[data-reveal-item]');
+        const stepMs = parseInt(entry.target.dataset.staggerDelay || '100', 10);
+        items.forEach((item, i) => {
+          setTimeout(() => item.classList.add('is-revealed'), i * stepMs);
+        });
+        staggerObs.unobserve(entry.target);
+      });
+    }, { threshold: 0.06, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('[data-reveal-stagger]').forEach(el => staggerObs.observe(el));
+
+    // ── Legacy .fade-in (product cards, story cards, etc.) ────────
+    const legacyObs = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
+          legacyObs.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll(
       '.product-card, .featured-collections__item, .story-card, .instagram-feed__item, .footer__trust-item'
     ).forEach((el, i) => {
       el.classList.add('fade-in');
-      el.style.transitionDelay = `${(i % 4) * 80}ms`;
-      observer.observe(el);
+      el.style.transitionDelay = `${(i % 5) * 90}ms`;
+      legacyObs.observe(el);
     });
   }
 

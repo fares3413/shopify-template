@@ -4189,3 +4189,160 @@
     width: calc(100vw - 2rem);
   }
 }
+
+/* ============================================
+   PRO MICRO-INTERACTION & ANIMATION LAYER
+   ============================================ */
+
+/* ── Upgraded button lift & shadow ── */
+.btn:hover,
+a.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+}
+.btn--primary:hover {
+  box-shadow: 0 8px 24px rgba(26, 26, 26, 0.20);
+}
+.btn:active,
+a.btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+/* Transition includes box-shadow for silky lift */
+.btn {
+  transition: background var(--transition),
+              color var(--transition),
+              border-color var(--transition),
+              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ── Product card: lift on hover ── */
+.product-card {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: var(--radius-md);
+}
+.product-card:hover {
+  transform: translateY(-4px);
+}
+/* Silky image zoom (upgraded from scale(1.04)) */
+.product-card__image {
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.product-card__image-link:hover .product-card__image {
+  transform: scale(1.06);
+}
+
+/* ── Collection cards: matching lift ── */
+.cl-card__inner {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.cl-card__inner:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Story cards: lift ── */
+.story-card {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.story-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Featured product image: subtle lift ── */
+.fp-image {
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.fp-image:hover {
+  transform: scale(1.015);
+}
+
+/* ── Scroll collage tiles: upgrade zoom ── */
+.sc-tile__img {
+  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.sc-tile:hover .sc-tile__img {
+  transform: scale(1.06) !important;
+}
+
+/* ── Accordion toggle: arrow/icon smooth spin ── */
+.pda-icon {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease !important;
+}
+.pda-item--open .pda-icon {
+  transform: rotate(45deg);
+}
+
+/* ── Section heading entrance (used with data-reveal) ── */
+.sc-text__heading,
+.pda-heading,
+.fp-title,
+.cd-heading {
+  letter-spacing: -0.03em;
+}
+
+/* ── Smooth inter-section vertical rhythm ── */
+.pvs-slide__heading,
+.pvs-slide__eyebrow {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* ── Quick-add button — hidden until card hovered ── */
+.product-card__quick-add {
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.product-card:hover .product-card__quick-add {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Dot indicators: pill expand on active ── */
+.pvs-dot,
+.hero-slider__dot {
+  transition: background 0.25s ease,
+              transform 0.25s ease,
+              width 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+/* ── Footer trust items: lift ── */
+.footer__trust-item {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.footer__trust-item:hover {
+  transform: translateY(-2px);
+}
+
+/* ── Consistent section spacing ── */
+.countdown-timer,
+.featured-product-section,
+.product-details-accordion,
+.scroll-collage {
+  --section-padding: 5.5rem;
+}
+
+/* ── Global: smoother focus ring ── */
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Reduced motion: respect system preference ── */
+@media (prefers-reduced-motion: reduce) {
+  .product-card,
+  .cl-card__inner,
+  .story-card,
+  .fp-image,
+  .btn,
+  a.btn {
+    transition: none !important;
+    transform: none !important;
+  }
+}
