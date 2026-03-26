@@ -44,11 +44,21 @@
     <meta name="twitter:description" content="{{ page_description | escape }}">
   {%- endif -%}
 
-  <!-- Font preconnect -->
+  <!-- Preconnect hints -->
   <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <!--
+    Async font load — 3 weights only (400 body / 600 semi-bold / 800 headings).
+    Uses media="print" trick: browser fetches non-blocking, then switches to 'all'
+    on load. <noscript> fallback ensures fonts still load without JS.
+  -->
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  </noscript>
 
   <!-- Shopify required hook -->
   {{ content_for_header }}
@@ -61,8 +71,26 @@
     }
   </style>
 
-  <!-- Theme styles -->
-  <link rel="stylesheet" href="{{ 'base.css' | asset_url }}">
+  <!--
+    base.css inlined — eliminates one render-blocking HTTP request.
+    (47-line reset; safe to inline since it never changes per-page)
+  -->
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{font-size:16px;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+    body{font-family:var(--font-body-family);font-style:var(--font-body-style);font-weight:var(--font-body-weight);color:var(--color-text);background:var(--color-bg);line-height:1.6;overflow-x:hidden}
+    img,video{max-width:100%;height:auto;display:block}
+    a{color:inherit;text-decoration:none}
+    button{cursor:pointer;border:none;background:none;font:inherit}
+    input,textarea,select{font:inherit}
+    ul,ol{list-style:none}
+    .visually-hidden{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+    .rte h1,.rte h2,.rte h3,.rte h4{margin:1.5em 0 0.5em}
+    .rte p{margin-bottom:1em}
+    .rte ul,.rte ol{padding-left:1.5em;margin-bottom:1em}
+    .rte a{text-decoration:underline}
+  </style>
+  <!-- Theme stylesheet (single request) -->
   <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}">
 
   <script>

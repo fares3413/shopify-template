@@ -31,6 +31,7 @@
         id="tab-panel-{{ block.id }}"
         role="tabpanel"
         aria-label="{{ block.settings.tab_label }}"
+        {% unless forloop.first %}hidden{% endunless %}
         {{ block.shopify_attributes }}
       >
         <div class="best-sellers__grid" style="--col-count: {{ section.settings.products_per_row }};">

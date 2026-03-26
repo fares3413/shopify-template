@@ -188,7 +188,9 @@
   }
 </style>
 
-<section id="{{ section_id }}" class="pvs-section">
+<section id="{{ section_id }}" class="pvs-section"
+  data-total-slides="{{ section.blocks.size }}"
+  data-speed="{{ section.settings.autoplay_speed | default: 4000 }}">
 
   <!-- ── Static background ── -->
   <div class="pvs-bg">
@@ -275,84 +277,7 @@
 
 </section>
 
-<script>
-(function () {
-  var sectionId   = '{{ section.id }}';
-  var totalSlides = {{ section.blocks.size }};
-  if (totalSlides < 2) return;
-
-  var track    = document.getElementById('pvs-track-'  + sectionId);
-  var dotsWrap = document.getElementById('pvs-dots-'   + sectionId);
-  var prevBtn  = document.getElementById('pvs-prev-'   + sectionId);
-  var nextBtn  = document.getElementById('pvs-next-'   + sectionId);
-  var pauseBtn = document.getElementById('pvs-pause-'  + sectionId);
-  if (!track) return;
-
-  var slides   = Array.from(track.querySelectorAll('.pvs-slide'));
-  var dots     = dotsWrap ? Array.from(dotsWrap.querySelectorAll('.pvs-dot')) : [];
-  var current  = 0;
-  var isPlaying = true;
-  var speed    = {{ section.settings.autoplay_speed | default: 4000 }};
-  var timer;
-
-  /* ── Apply classes to all slides based on current index ── */
-  function updateSlides(newIndex) {
-    var prev = current;
-    current  = (newIndex + totalSlides) % totalSlides;
-
-    slides.forEach(function (slide, i) {
-      slide.classList.remove('pvs-slide--active', 'pvs-slide--next', 'pvs-slide--exiting');
-      if (i === current) {
-        slide.classList.add('pvs-slide--active');
-      } else if (i === (current + 1) % totalSlides) {
-        slide.classList.add('pvs-slide--next');
-      } else if (i === prev) {
-        slide.classList.add('pvs-slide--exiting');
-        /* Remove exiting class after transition */
-        setTimeout(function () { slide.classList.remove('pvs-slide--exiting'); }, 700);
-      }
-    });
-
-    dots.forEach(function (d, i) {
-      d.classList.toggle('pvs-dot--active', i === current);
-    });
-  }
-
-  /* ── Auto-advance ── */
-  function startTimer() {
-    clearInterval(timer);
-    if (isPlaying) timer = setInterval(function () { updateSlides(current + 1); }, speed);
-  }
-
-  /* ── Controls ── */
-  if (nextBtn) nextBtn.addEventListener('click', function () { updateSlides(current + 1); startTimer(); });
-  if (prevBtn) prevBtn.addEventListener('click', function () { updateSlides(current - 1); startTimer(); });
-
-  dots.forEach(function (dot, i) {
-    dot.addEventListener('click', function () { updateSlides(i); startTimer(); });
-  });
-
-  if (pauseBtn) {
-    pauseBtn.addEventListener('click', function () {
-      isPlaying = !isPlaying;
-      pauseBtn.setAttribute('aria-label', isPlaying ? 'Pause slideshow' : 'Play slideshow');
-      pauseBtn.dataset.playing = isPlaying;
-      pauseBtn.querySelector('.pvs-icon-pause').style.display = isPlaying ? '' : 'none';
-      pauseBtn.querySelector('.pvs-icon-play').style.display  = isPlaying ? 'none' : '';
-      startTimer();
-    });
-  }
-
-  /* ── Keyboard navigation ── */
-  document.getElementById('PVS-' + sectionId)?.addEventListener('keydown', function (e) {
-    if (e.key === 'ArrowLeft')  { updateSlides(current - 1); startTimer(); }
-    if (e.key === 'ArrowRight') { updateSlides(current + 1); startTimer(); }
-  });
-
-  /* ── Start ── */
-  startTimer();
-}());
-</script>
+{{- '<!-- slider logic: theme.js .pvs-section[data-total-slides] handler -->' -}}
 
 {% schema %}
 {

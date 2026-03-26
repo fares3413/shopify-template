@@ -301,66 +301,7 @@
 
 </section>
 
-<script>
-(function () {
-  /* ── Helper: pad single digits with leading zero ── */
-  function pad(n) {
-    return String(Math.max(0, n)).padStart(2, '0');
-  }
-
-  /* ── Grab elements for this specific section ── */
-  var sectionId = '{{ section.id }}';
-  var timerEl   = document.getElementById('cd-timer-' + sectionId);
-  if (!timerEl) return;
-
-  var targetRaw = timerEl.getAttribute('data-target');
-  if (!targetRaw) return;
-
-  /* ── Parse target date (format: YYYY-MM-DD HH:MM) ── */
-  var targetDate = new Date(targetRaw.trim());
-  if (isNaN(targetDate.getTime())) {
-    console.warn('[Countdown] Invalid target_date:', targetRaw);
-    return;
-  }
-
-  /* ── DOM references ── */
-  var daysEl    = document.getElementById('cd-days-'    + sectionId);
-  var hoursEl   = document.getElementById('cd-hours-'   + sectionId);
-  var minutesEl = document.getElementById('cd-minutes-' + sectionId);
-  var secondsEl = document.getElementById('cd-seconds-' + sectionId);
-
-  /* ── Tick function ── */
-  function tick() {
-    var now  = Date.now();
-    var diff = targetDate.getTime() - now;
-
-    if (diff <= 0) {
-      /* Countdown finished — show zeroes and stop */
-      daysEl.textContent    = '00';
-      hoursEl.textContent   = '00';
-      minutesEl.textContent = '00';
-      secondsEl.textContent = '00';
-      clearInterval(timer);
-      return;
-    }
-
-    var totalSeconds = Math.floor(diff / 1000);
-    var days    = Math.floor(totalSeconds / 86400);
-    var hours   = Math.floor((totalSeconds % 86400) / 3600);
-    var minutes = Math.floor((totalSeconds % 3600)  / 60);
-    var seconds = totalSeconds % 60;
-
-    daysEl.textContent    = pad(days);
-    hoursEl.textContent   = pad(hours);
-    minutesEl.textContent = pad(minutes);
-    secondsEl.textContent = pad(seconds);
-  }
-
-  /* ── Run immediately then every second ── */
-  tick();
-  var timer = setInterval(tick, 1000);
-}());
-</script>
+{{- '<!-- countdown logic: theme.js .cd-timer[data-target] handler -->' -}}
 
 {% schema %}
 {

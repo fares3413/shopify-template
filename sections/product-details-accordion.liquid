@@ -140,35 +140,7 @@
   </div>
 </section>
 
-<script>
-(function () {
-  var list = document.querySelector('#PDA-{{ section.id }} .pda-list');
-  if (!list) return;
-
-  list.addEventListener('click', function (e) {
-    var btn = e.target.closest('.pda-toggle');
-    if (!btn) return;
-
-    var item    = btn.closest('.pda-item');
-    var isOpen  = item.classList.contains('pda-item--open');
-
-    /* Close every item */
-    list.querySelectorAll('.pda-item').forEach(function (el) {
-      el.classList.remove('pda-item--open');
-      var b = el.querySelector('.pda-toggle');
-      b.setAttribute('aria-expanded', 'false');
-      b.querySelector('.pda-icon').innerHTML = '+';
-    });
-
-    /* Re-open if it was closed */
-    if (!isOpen) {
-      item.classList.add('pda-item--open');
-      btn.setAttribute('aria-expanded', 'true');
-      btn.querySelector('.pda-icon').innerHTML = '&times;';
-    }
-  });
-}());
-</script>
+{{- '<!-- accordion logic: theme.js .pda-list handler -->' -}}
 
 {% schema %}
 {

@@ -153,6 +153,145 @@ document.addEventListener('DOMContentLoaded', function () {
   // Hero Slider — handled by inline script in sections/hero-slider.liquid
 
   // ============================================
+  // PRODUCT DETAILS ACCORDION
+  // Moved from inline script in product-details-accordion.liquid
+  // Uses class selectors so it works for every section instance on a page
+  // ============================================
+  document.querySelectorAll('.pda-list').forEach(function (list) {
+    list.addEventListener('click', function (e) {
+      var btn = e.target.closest('.pda-toggle');
+      if (!btn) return;
+      var item   = btn.closest('.pda-item');
+      var isOpen = item.classList.contains('pda-item--open');
+      list.querySelectorAll('.pda-item').forEach(function (el) {
+        el.classList.remove('pda-item--open');
+        var b = el.querySelector('.pda-toggle');
+        b.setAttribute('aria-expanded', 'false');
+        b.querySelector('.pda-icon').textContent = '+';
+      });
+      if (!isOpen) {
+        item.classList.add('pda-item--open');
+        btn.setAttribute('aria-expanded', 'true');
+        btn.querySelector('.pda-icon').innerHTML = '&times;';
+      }
+    });
+  });
+
+  // ============================================
+  // COUNTDOWN TIMER
+  // Moved from inline script in countdown-timer.liquid
+  // Reads target date from data-target on .cd-timer element
+  // ============================================
+  document.querySelectorAll('.cd-timer[data-target]').forEach(function (timerEl) {
+    function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
+    var targetRaw = timerEl.getAttribute('data-target');
+    if (!targetRaw) return;
+    var targetDate = new Date(targetRaw.trim());
+    if (isNaN(targetDate.getTime())) { console.warn('[Countdown] Invalid date:', targetRaw); return; }
+    var wrap      = timerEl.closest('.countdown-timer');
+    if (!wrap) return;
+    var daysEl    = wrap.querySelector('[id^="cd-days-"]');
+    var hoursEl   = wrap.querySelector('[id^="cd-hours-"]');
+    var minutesEl = wrap.querySelector('[id^="cd-minutes-"]');
+    var secondsEl = wrap.querySelector('[id^="cd-seconds-"]');
+    if (!daysEl || !hoursEl || !minutesEl || !secondsEl) return;
+    function tick() {
+      var diff = targetDate.getTime() - Date.now();
+      if (diff <= 0) {
+        daysEl.textContent = hoursEl.textContent = minutesEl.textContent = secondsEl.textContent = '00';
+        clearInterval(cdTimer);
+        return;
+      }
+      var t = Math.floor(diff / 1000);
+      daysEl.textContent    = pad(Math.floor(t / 86400));
+      hoursEl.textContent   = pad(Math.floor((t % 86400) / 3600));
+      minutesEl.textContent = pad(Math.floor((t % 3600) / 60));
+      secondsEl.textContent = pad(t % 60);
+    }
+    tick();
+    var cdTimer = setInterval(tick, 1000);
+  });
+
+  // ============================================
+  // PROGRESSIVE VIDEO SLIDER
+  // Moved from inline script in progressive-video-slider.liquid
+  // Section HTML must have: data-total-slides="N" data-speed="MS"
+  // ============================================
+  document.querySelectorAll('.pvs-section[data-total-slides]').forEach(function (pvs) {
+    var totalSlides = parseInt(pvs.dataset.totalSlides, 10);
+    if (totalSlides < 2) return;
+    var track    = pvs.querySelector('.pvs-track');
+    var dotsWrap = pvs.querySelector('.pvs-dots');
+    var prevBtn  = pvs.querySelector('.pvs-nav--prev');
+    var nextBtn  = pvs.querySelector('.pvs-nav--next');
+    var pauseBtn = pvs.querySelector('.pvs-pause');
+    if (!track) return;
+    var slides    = Array.from(track.querySelectorAll('.pvs-slide'));
+    var dots      = dotsWrap ? Array.from(dotsWrap.querySelectorAll('.pvs-dot')) : [];
+    var current   = 0;
+    var isPlaying = true;
+    var speed     = parseInt(pvs.dataset.speed || '4000', 10);
+    var pvsTimer;
+    function updateSlides(newIndex) {
+      var prev = current;
+      current  = (newIndex + totalSlides) % totalSlides;
+      slides.forEach(function (slide, i) {
+        slide.classList.remove('pvs-slide--active', 'pvs-slide--next', 'pvs-slide--exiting');
+        if (i === current) {
+          slide.classList.add('pvs-slide--active');
+        } else if (i === (current + 1) % totalSlides) {
+          slide.classList.add('pvs-slide--next');
+        } else if (i === prev) {
+          slide.classList.add('pvs-slide--exiting');
+          setTimeout(function () { slide.classList.remove('pvs-slide--exiting'); }, 700);
+        }
+      });
+      dots.forEach(function (d, i) { d.classList.toggle('pvs-dot--active', i === current); });
+    }
+    function startPvsTimer() {
+      clearInterval(pvsTimer);
+      if (isPlaying) pvsTimer = setInterval(function () { updateSlides(current + 1); }, speed);
+    }
+    if (nextBtn) nextBtn.addEventListener('click', function () { updateSlides(current + 1); startPvsTimer(); });
+    if (prevBtn) prevBtn.addEventListener('click', function () { updateSlides(current - 1); startPvsTimer(); });
+    dots.forEach(function (dot, i) {
+      dot.addEventListener('click', function () { updateSlides(i); startPvsTimer(); });
+    });
+    if (pauseBtn) {
+      pauseBtn.addEventListener('click', function () {
+        isPlaying = !isPlaying;
+        pauseBtn.setAttribute('aria-label', isPlaying ? 'Pause slideshow' : 'Play slideshow');
+        pauseBtn.dataset.playing = isPlaying;
+        pauseBtn.querySelector('.pvs-icon-pause').style.display = isPlaying ? '' : 'none';
+        pauseBtn.querySelector('.pvs-icon-play').style.display  = isPlaying ? 'none' : '';
+        startPvsTimer();
+      });
+    }
+    pvs.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft')  { updateSlides(current - 1); startPvsTimer(); }
+      if (e.key === 'ArrowRight') { updateSlides(current + 1); startPvsTimer(); }
+    });
+    startPvsTimer();
+  });
+
+  // ============================================
+  // SCROLL COLLAGE — tile entrance reveal
+  // Moved from inline script in scroll-collage.liquid
+  // Targets all .sc-tile elements on the page
+  // ============================================
+  if ('IntersectionObserver' in window) {
+    var collageObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          collageObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.sc-tile').forEach(function (tile) { collageObs.observe(tile); });
+  }
+
+  // ============================================
   // TESTIMONIALS SLIDER
   // ============================================
   document.querySelectorAll('[id^="TestimonialsSlider"]').forEach(slider => {
@@ -194,10 +333,15 @@ document.addEventListener('DOMContentLoaded', function () {
         t.classList.remove('active');
         t.setAttribute('aria-selected', 'false');
       });
-      container.querySelectorAll('.best-sellers__panel').forEach(p => p.classList.remove('active'));
+      // Hide all panels (hidden attribute = zero layout cost)
+      container.querySelectorAll('.best-sellers__panel').forEach(p => {
+        p.classList.remove('active');
+        p.hidden = true;
+      });
       tab.classList.add('active');
       tab.setAttribute('aria-selected', 'true');
-      container.querySelector(`#tab-panel-${tab.dataset.tab}`)?.classList.add('active');
+      const panel = container.querySelector(`#tab-panel-${tab.dataset.tab}`);
+      if (panel) { panel.classList.add('active'); panel.hidden = false; }
     });
   });
 
