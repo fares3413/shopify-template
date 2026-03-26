@@ -11,9 +11,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 480px;
+    min-height: 420px;
     overflow: hidden;
     border-radius: {{ section.settings.border_radius }}px;
+    background: var(--color-bg-soft, #f5f5f3);
   }
 
   /* ── Background image/video ── */
@@ -48,32 +49,30 @@
     pointer-events: none;
   }
 
-  /* ── Content card ── */
+  /* ── Content — no card, floats directly over background ── */
   #{{ section_id }} .cd-content {
     position: relative;
     z-index: 3;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
-    padding: 2.5rem 3rem;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(6px);
-    border-radius: {{ section.settings.border_radius }}px;
-    max-width: 700px;
-    width: 90%;
+    gap: 1.25rem;
+    padding: 2.5rem 2rem;
+    background: transparent;
+    width: 100%;
     text-align: center;
   }
 
   /* ── Heading ── */
   #{{ section_id }} .cd-heading {
     font-family: var(--font-heading-family);
-    font-size: clamp(1.25rem, 3vw, 2rem);
-    font-weight: 800;
-    letter-spacing: 0.12em;
+    font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+    font-weight: 900;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--color-primary, #1a1a1a);
     line-height: 1.2;
+    margin-bottom: 0.25rem;
   }
 
   /* ── Timer row ── */
@@ -112,11 +111,11 @@
 
   /* ── Unit label ── */
   #{{ section_id }} .cd-label {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: var(--color-text, #1a1a1a);
+    color: var(--color-primary, #1a1a1a);
   }
 
   /* ── Colon separator ── */

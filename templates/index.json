@@ -818,11 +818,11 @@
       },
       "block_order": ["ct_heading", "ct_countdown", "ct_button"],
       "settings": {
-        "border_radius": 20,
-        "show_column_image": true,
-        "image_width": 85,
+        "border_radius": 0,
+        "show_column_image": false,
+        "image_width": 100,
         "image_aspect_ratio": "auto",
-        "video_overlay": 20,
+        "video_overlay": 0,
         "overlay_color": "#000000",
         "rotate_image": false
       }
