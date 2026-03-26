@@ -1,1 +1,185 @@
-[]
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Luxe Store",
+    "theme_version": "1.0.0",
+    "theme_author": "Luxe Store",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Newsletter Popup",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Newsletter Popup"
+      },
+      {
+        "type": "checkbox",
+        "id": "popup_enabled",
+        "label": "Enable newsletter popup",
+        "default": true
+      },
+      {
+        "type": "range",
+        "id": "popup_delay",
+        "min": 0,
+        "max": 30,
+        "step": 1,
+        "unit": "s",
+        "label": "Delay before showing popup",
+        "default": 4
+      },
+      {
+        "type": "checkbox",
+        "id": "popup_show_once",
+        "label": "Show only once per session",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "popup_kicker",
+        "label": "Kicker label",
+        "default": "First timer?"
+      },
+      {
+        "type": "richtext",
+        "id": "popup_heading",
+        "label": "Heading",
+        "default": "<p>Sign up and get <em>20% off</em> your first order</p>"
+      },
+      {
+        "type": "text",
+        "id": "popup_placeholder",
+        "label": "Email placeholder",
+        "default": "Enter your email"
+      },
+      {
+        "type": "text",
+        "id": "popup_success",
+        "label": "Success message",
+        "default": "You're in! Check your inbox for your discount code."
+      },
+      {
+        "type": "text",
+        "id": "popup_disclaimer",
+        "label": "Disclaimer text",
+        "info": "Optional. Leave blank to hide."
+      },
+      {
+        "type": "text",
+        "id": "popup_dismiss_label",
+        "label": "Dismiss link text",
+        "default": "No thanks, I prefer full price"
+      }
+    ]
+  },
+  {
+    "name": "Cookie Consent",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Cookie Consent Banner"
+      },
+      {
+        "type": "checkbox",
+        "id": "cookie_enabled",
+        "label": "Enable cookie consent banner",
+        "default": true
+      },
+      {
+        "type": "textarea",
+        "id": "cookie_message",
+        "label": "Cookie message",
+        "default": "We use cookies to enhance your experience, analyze site traffic, and personalize content. By continuing to use this site, you agree to our use of cookies."
+      },
+      {
+        "type": "text",
+        "id": "cookie_accept_label",
+        "label": "Accept button label",
+        "default": "Accept all"
+      },
+      {
+        "type": "text",
+        "id": "cookie_decline_label",
+        "label": "Decline button label",
+        "default": "Decline"
+      },
+      {
+        "type": "url",
+        "id": "cookie_policy_link",
+        "label": "Cookie policy page link"
+      },
+      {
+        "type": "text",
+        "id": "cookie_policy_label",
+        "label": "Cookie policy link text",
+        "default": "Learn more"
+      }
+    ]
+  },
+  {
+    "name": "Social Media",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Social Media Links"
+      },
+      {
+        "type": "url",
+        "id": "social_facebook_link",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "url",
+        "id": "social_twitter_link",
+        "label": "X (Twitter) URL"
+      },
+      {
+        "type": "url",
+        "id": "social_instagram_link",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "url",
+        "id": "social_youtube_link",
+        "label": "YouTube URL"
+      },
+      {
+        "type": "url",
+        "id": "social_tiktok_link",
+        "label": "TikTok URL"
+      }
+    ]
+  },
+  {
+    "name": "Sidebar & Promo",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Sidebar Social Icons"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_sidebar_social",
+        "label": "Show floating sidebar social icons",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Promo Tab"
+      },
+      {
+        "type": "text",
+        "id": "promo_tab_text",
+        "label": "Promo tab label",
+        "info": "Leave blank to hide the promo tab"
+      },
+      {
+        "type": "url",
+        "id": "promo_tab_link",
+        "label": "Promo tab link"
+      }
+    ]
+  }
+]

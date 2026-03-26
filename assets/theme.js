@@ -456,19 +456,27 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // ============================================
-  // PRO SCROLL-REVEAL SYSTEM
+  // LUXE SCROLL-REVEAL — Power4.out easing
+  // cubic-bezier(0.16, 1, 0.3, 1) ≈ Power4.out
+  // 30px Y-translate, 0.72s duration
   // ============================================
   if ('IntersectionObserver' in window) {
 
-    // ── Inject base animation styles (only applies when JS runs) ──
+    // ── Inject reveal styles — only active when JS runs ──
+    // Elements are fully visible without JS (no flash of hidden content)
     const revealCSS = document.createElement('style');
     revealCSS.id = 'luxe-reveal-styles';
     revealCSS.textContent = `
+      /* Power4.out — the gold standard luxury easing */
+      :root { --ease-p4: cubic-bezier(0.16, 1, 0.3, 1); }
+
+      /* ── Section / block reveal ── */
       [data-reveal] {
         opacity: 0;
-        transform: translateY(22px);
-        transition: opacity 0.65s cubic-bezier(0.4,0,0.2,1),
-                    transform 0.65s cubic-bezier(0.4,0,0.2,1);
+        transform: translateY(30px);
+        transition:
+          opacity  0.72s var(--ease-p4),
+          transform 0.72s var(--ease-p4);
         will-change: opacity, transform;
       }
       [data-reveal].is-revealed {
@@ -476,11 +484,14 @@ document.addEventListener('DOMContentLoaded', function () {
         transform: translateY(0);
         will-change: auto;
       }
+
+      /* ── Stagger children ── */
       [data-reveal-item] {
         opacity: 0;
-        transform: translateY(22px);
-        transition: opacity 0.55s cubic-bezier(0.4,0,0.2,1),
-                    transform 0.55s cubic-bezier(0.4,0,0.2,1);
+        transform: translateY(24px);
+        transition:
+          opacity  0.65s var(--ease-p4),
+          transform 0.65s var(--ease-p4);
         will-change: opacity, transform;
       }
       [data-reveal-item].is-revealed {
@@ -488,13 +499,21 @@ document.addEventListener('DOMContentLoaded', function () {
         transform: translateY(0);
         will-change: auto;
       }
+
+      /* ── Legacy fade-in (product cards via JS class injection) ── */
       .fade-in {
         opacity: 0;
-        transform: translateY(20px);
-        transition: opacity 0.6s cubic-bezier(0.4,0,0.2,1),
-                    transform 0.6s cubic-bezier(0.4,0,0.2,1);
+        transform: translateY(24px);
+        transition:
+          opacity  0.65s var(--ease-p4),
+          transform 0.65s var(--ease-p4);
       }
-      .fade-in.visible { opacity: 1; transform: translateY(0); }
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ── Respect user preference ── */
       @media (prefers-reduced-motion: reduce) {
         [data-reveal], [data-reveal-item], .fade-in {
           transition: none !important;
@@ -505,7 +524,7 @@ document.addEventListener('DOMContentLoaded', function () {
     `;
     document.head.appendChild(revealCSS);
 
-    // ── Single-element reveal ──────────────────────────────────────
+    // ── Single-element reveal ──
     const revealObs = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (!entry.isIntersecting) return;
@@ -517,12 +536,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         revealObs.unobserve(entry.target);
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll('[data-reveal]').forEach(el => revealObs.observe(el));
 
-    // ── Stagger container reveal ───────────────────────────────────
-    // Parent: data-reveal-stagger (optional data-stagger-delay="100")
+    // ── Stagger container — 0.1s between children ──
+    // Parent: data-reveal-stagger  (optional: data-stagger-delay="80")
     // Children: data-reveal-item
     const staggerObs = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -534,11 +553,37 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         staggerObs.unobserve(entry.target);
       });
-    }, { threshold: 0.06, rootMargin: '0px 0px -60px 0px' });
+    }, { threshold: 0.05, rootMargin: '0px 0px -48px 0px' });
 
     document.querySelectorAll('[data-reveal-stagger]').forEach(el => staggerObs.observe(el));
 
-    // ── Legacy .fade-in (product cards, story cards, etc.) ────────
+    // ── Auto-stagger product grids without Liquid attributes ──
+    // Targets best-sellers grid, collection grid, product recs — any grid of .product-card
+    document.querySelectorAll('.best-sellers__grid, .collection-grid, #RecommendationsGrid').forEach(grid => {
+      if (grid.dataset.staggerInit) return;
+      grid.dataset.staggerInit = '1';
+      const cards = Array.from(grid.querySelectorAll('.product-card'));
+      const gridObs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          cards.forEach((card, i) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(28px)';
+            card.style.transition = `opacity 0.65s cubic-bezier(0.16,1,0.3,1) ${i * 90}ms, transform 0.65s cubic-bezier(0.16,1,0.3,1) ${i * 90}ms`;
+            requestAnimationFrame(() => {
+              setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+              }, 30);
+            });
+          });
+          gridObs.unobserve(entry.target);
+        });
+      }, { threshold: 0.04, rootMargin: '0px 0px -32px 0px' });
+      gridObs.observe(grid);
+    });
+
+    // ── Legacy .fade-in for remaining cards ──
     const legacyObs = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -546,15 +591,35 @@ document.addEventListener('DOMContentLoaded', function () {
           legacyObs.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    }, { threshold: 0.06, rootMargin: '0px 0px -32px 0px' });
 
     document.querySelectorAll(
-      '.product-card, .featured-collections__item, .story-card, .instagram-feed__item, .footer__trust-item'
+      '.featured-collections__item, .story-card, .instagram-feed__item, .footer__trust-item'
     ).forEach((el, i) => {
       el.classList.add('fade-in');
-      el.style.transitionDelay = `${(i % 5) * 90}ms`;
+      el.style.transitionDelay = `${(i % 6) * 80}ms`;
       legacyObs.observe(el);
     });
   }
 
+  // ============================================
+  // MAGNETIC HOVER — subtle cursor-tracking lift
+  // Applied to .btn elements for premium feel
+  // ============================================
+  document.querySelectorAll('.btn, .product-card__quick-add').forEach(el => {
+    el.addEventListener('mousemove', function (e) {
+      const rect = this.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width  / 2;
+      const y = e.clientY - rect.top  - rect.height / 2;
+      // Dampen the effect — max 4px drift
+      const dx = (x / rect.width)  * 6;
+      const dy = (y / rect.height) * 3;
+      this.style.transform = `translateY(-2px) translate(${dx}px, ${dy}px)`;
+    });
+    el.addEventListener('mouseleave', function () {
+      this.style.transform = '';
+    });
+  });
+
 });
+

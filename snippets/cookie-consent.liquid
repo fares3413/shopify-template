@@ -1,0 +1,80 @@
+<!-- Cookie Consent Banner -->
+<div
+  class="ck-banner"
+  id="CookieBanner"
+  role="region"
+  aria-label="Cookie consent"
+  aria-hidden="true"
+>
+  <div class="ck-banner__inner">
+
+    <div class="ck-banner__text">
+      <p>{{ settings.cookie_message | default: 'We use cookies to enhance your experience, analyze site traffic, and personalize content. By continuing to use this site, you agree to our use of cookies.' }}</p>
+      {%- if settings.cookie_policy_link != blank -%}
+        <a href="{{ settings.cookie_policy_link }}" class="ck-banner__policy-link" target="_blank" rel="noopener">
+          {{ settings.cookie_policy_label | default: 'Learn more' }}
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="ck-banner__actions">
+      {%- if settings.cookie_decline_label != blank -%}
+        <button type="button" class="ck-banner__btn ck-banner__btn--decline" id="CookieDecline">
+          {{ settings.cookie_decline_label | default: 'Decline' }}
+        </button>
+      {%- endif -%}
+      <button type="button" class="ck-banner__btn ck-banner__btn--accept" id="CookieAccept">
+        {{ settings.cookie_accept_label | default: 'Accept all' }}
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(function () {
+  var banner  = document.getElementById('CookieBanner');
+  var accept  = document.getElementById('CookieAccept');
+  var decline = document.getElementById('CookieDecline');
+  if (!banner) return;
+
+  var STORAGE_KEY = 'ck_consent';
+
+  function setCookie(name, value, days) {
+    var d = new Date();
+    d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = name + '=' + value + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+  function getCookie(name) {
+    var match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+  }
+
+  function hideBanner() {
+    banner.classList.remove('is-visible');
+    banner.setAttribute('aria-hidden', 'true');
+  }
+
+  function showBanner() {
+    banner.setAttribute('aria-hidden', 'false');
+    banner.classList.add('is-visible');
+  }
+
+  /* Already answered? Skip. */
+  if (getCookie(STORAGE_KEY)) return;
+
+  /* Show after short delay so page paints first */
+  setTimeout(showBanner, 800);
+
+  accept && accept.addEventListener('click', function () {
+    setCookie(STORAGE_KEY, 'accepted', 365);
+    hideBanner();
+  });
+
+  decline && decline.addEventListener('click', function () {
+    setCookie(STORAGE_KEY, 'declined', 30);
+    hideBanner();
+  });
+}());
+</script>

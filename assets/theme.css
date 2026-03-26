@@ -4,41 +4,83 @@
 
 /* --- CSS Variables --- */
 :root {
-  --color-primary:   #1a1a1a;
-  --color-accent:    #c9a96e;
-  --color-bg:        #ffffff;
-  --color-bg-soft:   #f5f5f3;
-  --color-bg-muted:  #ebebeb;
-  --color-text:      #1a1a1a;
-  --color-text-muted:#888888;
-  --color-border:    #e8e8e8;
-  --color-white:     #ffffff;
-  --color-black:     #1a1a1a;
-  --color-footer-bg: #1a1a1a;
-  --color-footer-text: #ffffff;
+  /* ── Colour palette ── */
+  --color-primary:      #1a1a1a;
+  --color-primary-hover:#2e2e2e;
+  --color-accent:       #c9a96e;
+  --color-accent-hover: #b8924f;
+  --color-bg:           #ffffff;
+  --color-bg-soft:      #f6f6f4;
+  --color-bg-muted:     #ebebeb;
+  --color-text:         #1a1a1a;
+  --color-text-muted:   #888888;
+  --color-border:       #e8e8e8;
+  --color-white:        #ffffff;
+  --color-black:        #1a1a1a;
+  --color-footer-bg:    #1a1a1a;
+  --color-footer-text:  #ffffff;
 
-  --font-body-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /* ── Status colours ── */
+  --color-success:      #1f6b44;
+  --color-success-bg:   #e7f5ec;
+  --color-success-border:#a8d5b5;
+  --color-error:        #b91c1c;
+  --color-error-bg:     #fdf0f0;
+  --color-error-border: #f5c6c6;
+
+  /* ── Typography ── */
+  --font-body-family:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-heading-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-body-style: normal;
-  --font-body-weight: 400;
+  --font-body-style:     normal;
+  --font-body-weight:    400;
 
+  /* Type scale (4-step modular) */
+  --text-xs:   0.75rem;    /* 12px */
+  --text-sm:   0.875rem;   /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg:   1.125rem;   /* 18px */
+  --text-xl:   1.25rem;    /* 20px */
+
+  /* Weight scale */
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+  --fw-black:    800;
+
+  /* ── Radius ── */
   --radius-sm:   4px;
   --radius-md:   8px;
   --radius-lg:   16px;
   --radius-full: 9999px;
 
-  --shadow-sm:  0 1px 3px rgba(0,0,0,0.08);
-  --shadow-md:  0 4px 16px rgba(0,0,0,0.10);
-  --shadow-lg:  0 8px 32px rgba(0,0,0,0.14);
+  /* ── Elevation — subtle, not dramatic ── */
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.06);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.08);
+  --shadow-lg:  0 12px 40px rgba(0,0,0,0.10);
+  --shadow-float: 0 8px 32px rgba(0,0,0,0.14), 0 2px 8px rgba(0,0,0,0.08);
 
-  --transition: 0.25s ease;
-  --transition-slow: 0.4s ease;
+  /* ── Motion — three-tier easing hierarchy ── */
+  /* Micro: button presses, icon spins (<150ms) */
+  --ease-micro:     0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Component: card lifts, drawer slides, tab switches */
+  --ease-component: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Reveal: scroll-triggered entrances — Power4.out equivalent */
+  --ease-reveal:    0.72s cubic-bezier(0.16, 1, 0.3, 1);
+  /* Spring: pill pop-ins, badge entrances */
+  --ease-spring:    0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 
-  --header-height: 70px;
-  --announce-height: 44px;
-  --page-width: 1320px;
-  --page-width-narrow: 780px;
-  --gutter: 2rem;
+  /* Legacy aliases kept for backwards compat */
+  --transition:      0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Layout ── */
+  --header-height:    70px;
+  --announce-height:  44px;
+  --page-width:       1320px;
+  --page-width-narrow:780px;
+  --gutter:           2rem;
+  --section-pad:      5.5rem;
 }
 
 /* --- Layout --- */
@@ -52,8 +94,8 @@
   margin: 0 auto;
   padding: 0 var(--gutter);
 }
-.section-padding { padding: 5rem 0; }
-.section-spacing  { margin: 3rem 0; }
+.section-padding { padding: var(--section-pad) 0; }
+.section-spacing  { margin: 4rem 0; }
 
 /* ============================================
    BUTTONS
@@ -63,18 +105,30 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.85rem 2rem;
-  font-size: 0.875rem;
-  font-weight: 600;
+  padding: 0.875rem 2rem;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
   letter-spacing: 0.02em;
   border-radius: var(--radius-full);
-  transition: background var(--transition), color var(--transition), border-color var(--transition), transform 0.15s;
+  transition:
+    background var(--ease-micro),
+    color var(--ease-micro),
+    border-color var(--ease-micro),
+    transform var(--ease-micro),
+    box-shadow var(--ease-micro);
   white-space: nowrap;
   cursor: pointer;
   border: 2px solid transparent;
+  position: relative;
 }
-.btn:hover { transform: translateY(-1px); }
-.btn:active { transform: translateY(0); }
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+.btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
 
 .btn--primary {
   background: var(--color-primary);
@@ -82,8 +136,8 @@
   border-color: var(--color-primary);
 }
 .btn--primary:hover {
-  background: #333;
-  border-color: #333;
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
 }
 .btn--outline {
   background: transparent;
@@ -106,15 +160,15 @@
 .btn--ghost-white {
   background: transparent;
   color: var(--color-white);
-  border-color: rgba(255,255,255,0.5);
+  border-color: rgba(255,255,255,0.45);
 }
 .btn--ghost-white:hover {
-  background: rgba(255,255,255,0.15);
-  border-color: var(--color-white);
+  background: rgba(255,255,255,0.12);
+  border-color: rgba(255,255,255,0.8);
 }
 .btn--rounded { border-radius: var(--radius-full); }
 .btn--full { width: 100%; }
-.btn--sm { padding: 0.5rem 1.25rem; font-size: 0.8rem; }
+.btn--sm { padding: 0.5rem 1.25rem; font-size: var(--text-xs); }
 
 /* ============================================
    ANNOUNCEMENT BAR
@@ -2273,16 +2327,16 @@
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  background: #e7f5ec;
-  border: 1px solid #a8d5b5;
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
   border-radius: var(--radius-sm);
   padding: 1rem 1.25rem;
   margin-bottom: 1.5rem;
-  color: #1f6b44;
-  font-size: 0.9375rem;
+  color: var(--color-success);
+  font-size: var(--text-sm);
 }
 .contact-page__success p { margin: 0; line-height: 1.55; }
-.contact-page__error { background: #fdf0f0; border: 1px solid #f5c6c6; border-radius: var(--radius-sm); padding: 1rem 1.25rem; margin-bottom: 1.5rem; color: #b91c1c; font-size: 0.9375rem; }
+.contact-page__error { background: var(--color-error-bg); border: 1px solid var(--color-error-border); border-radius: var(--radius-sm); padding: 1rem 1.25rem; margin-bottom: 1.5rem; color: var(--color-error); font-size: var(--text-sm); }
 
 /* Info column */
 .contact-page__info-col { padding-top: 0.25rem; }
@@ -3074,7 +3128,7 @@
 
 @media (max-width: 640px) {
   :root { --header-height: 60px; }
-  .section-padding { padding: 3rem 0; }
+  /* --section-pad is overridden per breakpoint in Phase 4 block */
   .hero-slider__media { aspect-ratio: 4/5; }
   .hero-slider__content { padding: 1.5rem; }
   .best-sellers__grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
@@ -3528,20 +3582,20 @@
   flex-shrink: 0;
   transition: background var(--transition), transform 0.15s ease;
 }
-.nl-popup__submit:hover { background: #333; transform: scale(1.05); }
+.nl-popup__submit:hover { background: var(--color-primary-hover); transform: scale(1.05); }
 
 /* Messages */
 .nl-popup__success {
-  font-size: 0.875rem;
-  color: #1f6b44;
-  background: #e7f5ec;
+  font-size: var(--text-sm);
+  color: var(--color-success);
+  background: var(--color-success-bg);
   border-radius: var(--radius-sm);
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
 }
 .nl-popup__error {
-  font-size: 0.875rem;
-  color: #b91c1c;
+  font-size: var(--text-sm);
+  color: var(--color-error);
   margin-bottom: 1rem;
 }
 
@@ -3591,11 +3645,11 @@
 
 /* ─── Announcement Bar Refinements ─── */
 .announcement-bar {
-  background: #1F1F1F;
+  background: var(--color-primary);
 }
 .announcement-bar__message {
-  font-size: 0.8125rem;
-  letter-spacing: 0.01em;
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
 }
 .announcement-bar__message-link {
   text-decoration-color: rgba(255,255,255,0.4);
@@ -3603,15 +3657,15 @@
 
 /* ─── Header Refinements ─── */
 .header {
-  background: #ffffff;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
 }
 .header__bar {
-  padding: 0 2rem;
+  padding: 0 var(--gutter);
 }
 .header__logo-text {
-  font-size: 1.125rem;
-  font-weight: 700;
+  font-size: var(--text-lg);
+  font-weight: var(--fw-bold);
   letter-spacing: -0.02em;
 }
 
@@ -3670,7 +3724,7 @@
   width: 56px;
   height: 3px;
   margin-top: 1rem;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   background: var(--color-accent);
   opacity: 1;
 }
@@ -3972,7 +4026,7 @@
 }
 
 /* ─── Global refinements ─── */
-.section-padding { padding: 5.5rem 0; }
+/* .section-padding canonical value lives in :root --section-pad and line ~55 */
 
 @media (max-width: 900px) {
   .product-showcase__body { grid-template-columns: 1fr; }
@@ -4190,159 +4244,325 @@
   }
 }
 
+/* Motion system consolidated → see Phase 3 block at end of file */
+
 /* ============================================
-   PRO MICRO-INTERACTION & ANIMATION LAYER
+   COOKIE CONSENT BANNER
+   ============================================ */
+.ck-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 8900;
+  padding: 1rem 1.5rem;
+  background: var(--color-primary, #1a1a1a);
+  color: var(--color-white, #fff);
+  transform: translateY(110%);
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.15);
+}
+.ck-banner.is-visible {
+  transform: translateY(0);
+}
+.ck-banner__inner {
+  max-width: var(--page-width, 1280px);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.ck-banner__text {
+  flex: 1;
+  min-width: 220px;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.ck-banner__text p { margin: 0; }
+.ck-banner__policy-link {
+  color: var(--color-accent, #c9a96e);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  white-space: nowrap;
+  font-weight: 600;
+  transition: opacity 0.2s ease;
+}
+.ck-banner__policy-link:hover { opacity: 0.75; }
+.ck-banner__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+.ck-banner__btn {
+  padding: 0.6rem 1.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  border-radius: var(--radius-full, 9999px);
+  letter-spacing: 0.02em;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.15s ease;
+  white-space: nowrap;
+}
+.ck-banner__btn--accept {
+  background: var(--color-accent, #c9a96e);
+  color: var(--color-primary, #1a1a1a);
+  border: 2px solid transparent;
+}
+.ck-banner__btn--accept:hover {
+  background: var(--color-accent-hover);
+  transform: translateY(-1px);
+}
+.ck-banner__btn--decline {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+.ck-banner__btn--decline:hover {
+  border-color: rgba(255, 255, 255, 0.55);
+  color: #fff;
+}
+@media (max-width: 600px) {
+  .ck-banner__inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .ck-banner__actions { width: 100%; }
+  .ck-banner__btn { flex: 1; text-align: center; }
+}
+
+/* ============================================
+   PHASE 3 — LIQUID MOTION DESIGN SYSTEM
+   Power4.out scroll reveals, magnetic hovers,
+   staggered grids, page-entrance transition
    ============================================ */
 
-/* ── Upgraded button lift & shadow ── */
-.btn:hover,
-a.btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10);
+/* ── Page entrance — body fades in on load ── */
+@keyframes luxe-page-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
-.btn--primary:hover {
-  box-shadow: 0 8px 24px rgba(26, 26, 26, 0.20);
-}
-.btn:active,
-a.btn:active {
-  transform: translateY(0);
-  box-shadow: none;
-}
-/* Transition includes box-shadow for silky lift */
-.btn {
-  transition: background var(--transition),
-              color var(--transition),
-              border-color var(--transition),
-              transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+body {
+  animation: luxe-page-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
-/* ── Product card: lift on hover ── */
+/* ── Magnetic product card ── */
 .product-card {
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: var(--radius-md);
+  transition:
+    transform var(--ease-component),
+    box-shadow var(--ease-component);
+  will-change: transform;
 }
 .product-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-md);
 }
-/* Silky image zoom (upgraded from scale(1.04)) */
+.product-card:hover .product-card__image {
+  transform: scale(1.05);
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
 .product-card__image {
-  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.product-card__image-link:hover .product-card__image {
-  transform: scale(1.06);
-}
-
-/* ── Collection cards: matching lift ── */
-.cl-card__inner {
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.cl-card__inner:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-}
-
-/* ── Story cards: lift ── */
-.story-card {
-  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.story-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-md);
-}
-
-/* ── Featured product image: subtle lift ── */
-.fp-image {
   transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* ── Collection card magnetic lift ── */
+.cl-card__inner {
+  transition:
+    transform var(--ease-component),
+    box-shadow var(--ease-component);
+  will-change: transform;
+}
+.cl-card__inner:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Story card lift ── */
+.story-card {
+  transition:
+    transform var(--ease-component),
+    box-shadow var(--ease-component);
+  will-change: transform;
+}
+.story-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Instagram grid item ── */
+.instagram-feed__item {
+  transition:
+    transform var(--ease-component),
+    box-shadow var(--ease-component);
+}
+.instagram-feed__item:hover {
+  transform: scale(1.03);
+  box-shadow: var(--shadow-md);
+  z-index: 1;
+  position: relative;
+}
+
+/* ── Featured product gallery image ── */
+.fp-image {
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
 .fp-image:hover {
-  transform: scale(1.015);
+  transform: scale(1.03);
 }
 
-/* ── Scroll collage tiles: upgrade zoom ── */
-.sc-tile__img {
-  transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-.sc-tile:hover .sc-tile__img {
-  transform: scale(1.06) !important;
-}
-
-/* ── Accordion toggle: arrow/icon smooth spin ── */
+/* ── Accordion toggle spring ── */
 .pda-icon {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.3s ease !important;
+  display: inline-block;
+  transition: transform var(--ease-spring);
 }
 .pda-item--open .pda-icon {
   transform: rotate(45deg);
 }
 
-/* ── Section heading entrance (used with data-reveal) ── */
-.sc-text__heading,
-.pda-heading,
-.fp-title,
-.cd-heading {
-  letter-spacing: -0.03em;
+/* ── Dot indicators: pill expand ── */
+.pvs-dot,
+.hero-slider__dot,
+.testimonials__dot {
+  transition:
+    background var(--ease-component),
+    transform var(--ease-component),
+    width var(--ease-component);
 }
 
-/* ── Smooth inter-section vertical rhythm ── */
-.pvs-slide__heading,
-.pvs-slide__eyebrow {
-  transition: opacity 0.5s ease, transform 0.5s ease;
+/* ── Footer trust items ── */
+.footer__trust-item {
+  transition: transform var(--ease-component);
+}
+.footer__trust-item:hover {
+  transform: translateY(-2px);
 }
 
-/* ── Quick-add button — hidden until card hovered ── */
+/* ── Quick-add button reveal ── */
 .product-card__quick-add {
   opacity: 0;
-  transform: translateY(6px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
+  transform: translateY(8px);
+  transition:
+    opacity var(--ease-component),
+    transform var(--ease-component);
 }
 .product-card:hover .product-card__quick-add {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* ── Dot indicators: pill expand on active ── */
-.pvs-dot,
-.hero-slider__dot {
-  transition: background 0.25s ease,
-              transform 0.25s ease,
-              width 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+/* ── Best sellers tab click feedback ── */
+.best-sellers__tab {
+  transition:
+    background var(--ease-micro),
+    color var(--ease-micro),
+    border-color var(--ease-micro);
 }
 
-/* ── Footer trust items: lift ── */
-.footer__trust-item {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.footer__trust-item:hover {
-  transform: translateY(-2px);
-}
-
-/* ── Consistent section spacing ── */
-.countdown-timer,
-.featured-product-section,
-.product-details-accordion,
-.scroll-collage {
-  --section-padding: 5.5rem;
-}
-
-/* ── Global: smoother focus ring ── */
+/* ── Smooth focus ring globally ── */
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 3px;
   border-radius: var(--radius-sm);
+  transition: outline-offset var(--ease-micro);
 }
 
-/* ── Reduced motion: respect system preference ── */
+/* ============================================
+   PHASE 4 — STRUCTURAL UNIFORMITY
+   Consistent section padding, shadow cleanup,
+   visual rhythm
+   ============================================ */
+
+/* ── Sections that were previously inconsistent ── */
+.countdown-timer,
+.product-details-accordion,
+.scroll-collage,
+.progressive-video-slider {
+  /* section-padding handles vertical rhythm; these override nothing */
+}
+
+/* ── Remove heavy card shadows — use bg-shift instead ── */
+.product-card {
+  background: var(--color-bg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* ── Ultra-thin 1px dividers replace heavy borders ── */
+.best-sellers,
+.latest-stories,
+.product-details-accordion {
+  border-top: 1px solid var(--color-border);
+}
+
+/* ── Ensure all section headers use the rhythm ── */
+.best-sellers__header,
+.latest-stories__header,
+.instagram-feed__header {
+  margin-bottom: 2.5rem;
+}
+
+/* ── Pill / floating header shadow — use token ── */
+.header__pill {
+  box-shadow: var(--shadow-float);
+  border-radius: var(--radius-full);
+}
+
+/* ── Reduce modal shadow to token ── */
+.nl-popup__panel {
+  box-shadow: var(--shadow-lg);
+}
+
+/* ── Bundle card — thin border over shadow ── */
+.bundle-card {
+  border: 1px solid var(--color-border);
+  box-shadow: none;
+  transition: border-color var(--ease-component), transform var(--ease-component);
+}
+.bundle-card:hover {
+  border-color: var(--color-primary);
+  transform: translateY(-2px);
+  box-shadow: none;
+}
+
+/* ── Consistent section inner max-width ── */
+.scroll-collage > .page-width,
+.product-details-accordion > .page-width {
+  max-width: var(--page-width);
+}
+
+/* ── Mobile: tighten section padding, keep rhythm ── */
+@media (max-width: 768px) {
+  :root { --section-pad: 3.5rem; }
+  .hero-slider__content { padding: 2rem 1.5rem; }
+}
+@media (max-width: 480px) {
+  :root { --section-pad: 2.5rem; }
+}
+
+/* ── Reduced motion: zero transforms, keep opacity ── */
 @media (prefers-reduced-motion: reduce) {
-  .product-card,
-  .cl-card__inner,
-  .story-card,
-  .fp-image,
-  .btn,
-  a.btn {
-    transition: none !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  body { animation: none; }
+  .product-card:hover,
+  .cl-card__inner:hover,
+  .story-card:hover,
+  .fp-image:hover,
+  .btn:hover,
+  a.btn:hover {
     transform: none !important;
+    box-shadow: none !important;
   }
 }
