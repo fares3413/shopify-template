@@ -254,7 +254,8 @@
 
         <!-- Add to cart -->
         {%- if fp != blank -%}
-          {%- form 'product', fp, id: 'FPForm-' | append: section.id, novalidate: 'novalidate' -%}
+          {%- assign fp_form_id = 'FPForm-' | append: section.id -%}
+          {%- form 'product', fp, id: fp_form_id, novalidate: 'novalidate' -%}
             <input type="hidden" name="id" value="{{ fp.selected_or_first_available_variant.id }}">
             <button
               type="submit"
