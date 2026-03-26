@@ -1,0 +1,455 @@
+{%- liquid
+  assign section_id      = 'PVS-' | append: section.id
+  assign overlay_opacity = section.settings.overlay_opacity | divided_by: 100.0
+-%}
+
+<style>
+  /* ── Section shell ── */
+  #{{ section_id }} {
+    position: relative;
+    height: {{ section.settings.section_height | default: 520 }}px;
+    overflow: hidden;
+    background: var(--color-primary, #1a1a1a);
+    user-select: none;
+  }
+
+  /* ── Static background image/video ── */
+  #{{ section_id }} .pvs-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  #{{ section_id }} .pvs-bg img,
+  #{{ section_id }} .pvs-bg video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── Overlay ── */
+  #{{ section_id }} .pvs-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: {{ section.settings.overlay_color | default: '#1a1a1a' }};
+    opacity: {{ overlay_opacity }};
+    pointer-events: none;
+  }
+
+  /* ── Slides track ── */
+  #{{ section_id }} .pvs-track {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+  }
+
+  /* ── Individual slide ── */
+  #{{ section_id }} .pvs-slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 3rem 5rem;
+
+    /* Initial state: hidden below */
+    transform: translateY(100%);
+    opacity: 0;
+    transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.65s ease;
+    z-index: 1;
+  }
+
+  /* Active slide: fully visible, highest z-index */
+  #{{ section_id }} .pvs-slide--active {
+    transform: translateY(0);
+    opacity: 1;
+    z-index: 3;
+  }
+
+  /* Next slide: peeks from bottom, sits behind active */
+  #{{ section_id }} .pvs-slide--next {
+    transform: translateY(55%);
+    opacity: 0.85;
+    z-index: 2;
+  }
+
+  /* Exiting slide: moves up and off screen */
+  #{{ section_id }} .pvs-slide--exiting {
+    transform: translateY(-20%);
+    opacity: 0;
+    z-index: 1;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.4s ease;
+  }
+
+  /* ── Slide content ── */
+  #{{ section_id }} .pvs-slide__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  #{{ section_id }} .pvs-slide__eyebrow {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent, #c9a96e);
+  }
+  #{{ section_id }} .pvs-slide__heading {
+    font-family: var(--font-heading-family);
+    font-size: clamp(2rem, 5vw, 3.75rem);
+    font-weight: 800;
+    color: var(--color-white, #fff);
+    line-height: 1.1;
+    margin: 0;
+    max-width: 16ch;
+  }
+
+  /* ── Navigation arrows ── */
+  #{{ section_id }} .pvs-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.4);
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background var(--transition, 0.25s ease),
+                border-color var(--transition, 0.25s ease);
+  }
+  #{{ section_id }} .pvs-nav:hover {
+    background: rgba(255,255,255,0.25);
+    border-color: rgba(255,255,255,0.7);
+  }
+  #{{ section_id }} .pvs-nav--prev { left: 1.5rem; }
+  #{{ section_id }} .pvs-nav--next { right: 1.5rem; }
+
+  /* ── Dot indicators ── */
+  #{{ section_id }} .pvs-dots {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  #{{ section_id }} .pvs-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.35);
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: background var(--transition, 0.25s ease),
+                transform var(--transition, 0.25s ease);
+  }
+  #{{ section_id }} .pvs-dot--active {
+    background: #fff;
+    transform: scale(1.25);
+  }
+
+  /* ── Pause/play button ── */
+  #{{ section_id }} .pvs-pause {
+    position: absolute;
+    bottom: 1.25rem;
+    right: 1.5rem;
+    z-index: 10;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    border: none;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background var(--transition, 0.25s ease);
+  }
+  #{{ section_id }} .pvs-pause:hover { background: rgba(0,0,0,0.75); }
+
+  /* ── Responsive ── */
+  @media (max-width: 768px) {
+    #{{ section_id }} { height: {{ section.settings.section_height | default: 520 | times: 0.7 | round }}px; }
+    #{{ section_id }} .pvs-slide { padding: 2rem 1.5rem; }
+    #{{ section_id }} .pvs-nav { display: none; }
+  }
+</style>
+
+<section id="{{ section_id }}" class="pvs-section">
+
+  <!-- ── Static background ── -->
+  <div class="pvs-bg">
+    {%- if section.settings.bg_video != blank -%}
+      {{
+        section.settings.bg_video
+        | video_tag:
+          autoplay: true,
+          loop: true,
+          muted: true,
+          playsinline: true
+      }}
+    {%- elsif section.settings.bg_image != blank -%}
+      <img
+        src="{{ section.settings.bg_image | image_url: width: 1920 }}"
+        alt=""
+        loading="lazy"
+        width="{{ section.settings.bg_image.width }}"
+        height="{{ section.settings.bg_image.height }}"
+      >
+    {%- else -%}
+      <div style="width:100%;height:100%;background:var(--color-bg-muted,#ebebeb);">
+        {{ 'collection-5' | placeholder_svg_tag }}
+      </div>
+    {%- endif -%}
+  </div>
+
+  <!-- ── Overlay ── -->
+  <div class="pvs-overlay" aria-hidden="true"></div>
+
+  <!-- ── Slides ── -->
+  <div class="pvs-track" id="pvs-track-{{ section.id }}">
+    {%- for block in section.blocks -%}
+      <div
+        class="pvs-slide{% if forloop.first %} pvs-slide--active{% elsif forloop.index == 2 %} pvs-slide--next{% endif %}"
+        data-index="{{ forloop.index0 }}"
+        {{ block.shopify_attributes }}
+      >
+        <div class="pvs-slide__content">
+          {%- if block.settings.eyebrow != blank -%}
+            <span class="pvs-slide__eyebrow">{{ block.settings.eyebrow }}</span>
+          {%- endif -%}
+          {%- if block.settings.heading != blank -%}
+            <h2 class="pvs-slide__heading">{{ block.settings.heading }}</h2>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <!-- ── Previous arrow ── -->
+  <button class="pvs-nav pvs-nav--prev" id="pvs-prev-{{ section.id }}" aria-label="Previous slide">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <!-- ── Next arrow ── -->
+  <button class="pvs-nav pvs-nav--next" id="pvs-next-{{ section.id }}" aria-label="Next slide">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+  <!-- ── Dot indicators ── -->
+  <div class="pvs-dots" id="pvs-dots-{{ section.id }}" aria-hidden="true">
+    {%- for block in section.blocks -%}
+      <button class="pvs-dot{% if forloop.first %} pvs-dot--active{% endif %}" data-dot="{{ forloop.index0 }}"></button>
+    {%- endfor -%}
+  </div>
+
+  <!-- ── Pause/play ── -->
+  <button class="pvs-pause" id="pvs-pause-{{ section.id }}" aria-label="Pause slideshow" data-playing="true">
+    <!-- Pause icon -->
+    <svg class="pvs-icon-pause" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+      <rect x="3" y="2" width="4" height="12" rx="1"/>
+      <rect x="9" y="2" width="4" height="12" rx="1"/>
+    </svg>
+    <!-- Play icon (hidden by default) -->
+    <svg class="pvs-icon-play" width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true" style="display:none">
+      <path d="M4 2l10 6-10 6V2z"/>
+    </svg>
+  </button>
+
+</section>
+
+<script>
+(function () {
+  var sectionId   = '{{ section.id }}';
+  var totalSlides = {{ section.blocks.size }};
+  if (totalSlides < 2) return;
+
+  var track    = document.getElementById('pvs-track-'  + sectionId);
+  var dotsWrap = document.getElementById('pvs-dots-'   + sectionId);
+  var prevBtn  = document.getElementById('pvs-prev-'   + sectionId);
+  var nextBtn  = document.getElementById('pvs-next-'   + sectionId);
+  var pauseBtn = document.getElementById('pvs-pause-'  + sectionId);
+  if (!track) return;
+
+  var slides   = Array.from(track.querySelectorAll('.pvs-slide'));
+  var dots     = dotsWrap ? Array.from(dotsWrap.querySelectorAll('.pvs-dot')) : [];
+  var current  = 0;
+  var isPlaying = true;
+  var speed    = {{ section.settings.autoplay_speed | default: 4000 }};
+  var timer;
+
+  /* ── Apply classes to all slides based on current index ── */
+  function updateSlides(newIndex) {
+    var prev = current;
+    current  = (newIndex + totalSlides) % totalSlides;
+
+    slides.forEach(function (slide, i) {
+      slide.classList.remove('pvs-slide--active', 'pvs-slide--next', 'pvs-slide--exiting');
+      if (i === current) {
+        slide.classList.add('pvs-slide--active');
+      } else if (i === (current + 1) % totalSlides) {
+        slide.classList.add('pvs-slide--next');
+      } else if (i === prev) {
+        slide.classList.add('pvs-slide--exiting');
+        /* Remove exiting class after transition */
+        setTimeout(function () { slide.classList.remove('pvs-slide--exiting'); }, 700);
+      }
+    });
+
+    dots.forEach(function (d, i) {
+      d.classList.toggle('pvs-dot--active', i === current);
+    });
+  }
+
+  /* ── Auto-advance ── */
+  function startTimer() {
+    clearInterval(timer);
+    if (isPlaying) timer = setInterval(function () { updateSlides(current + 1); }, speed);
+  }
+
+  /* ── Controls ── */
+  if (nextBtn) nextBtn.addEventListener('click', function () { updateSlides(current + 1); startTimer(); });
+  if (prevBtn) prevBtn.addEventListener('click', function () { updateSlides(current - 1); startTimer(); });
+
+  dots.forEach(function (dot, i) {
+    dot.addEventListener('click', function () { updateSlides(i); startTimer(); });
+  });
+
+  if (pauseBtn) {
+    pauseBtn.addEventListener('click', function () {
+      isPlaying = !isPlaying;
+      pauseBtn.setAttribute('aria-label', isPlaying ? 'Pause slideshow' : 'Play slideshow');
+      pauseBtn.dataset.playing = isPlaying;
+      pauseBtn.querySelector('.pvs-icon-pause').style.display = isPlaying ? '' : 'none';
+      pauseBtn.querySelector('.pvs-icon-play').style.display  = isPlaying ? 'none' : '';
+      startTimer();
+    });
+  }
+
+  /* ── Keyboard navigation ── */
+  document.getElementById('PVS-' + sectionId)?.addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowLeft')  { updateSlides(current - 1); startTimer(); }
+    if (e.key === 'ArrowRight') { updateSlides(current + 1); startTimer(); }
+  });
+
+  /* ── Start ── */
+  startTimer();
+}());
+</script>
+
+{% schema %}
+{
+  "name": "Video slider",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "bg_image",
+      "label": "Background image"
+    },
+    {
+      "type": "video",
+      "id": "bg_video",
+      "label": "Background video",
+      "info": "Overrides image when set"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "min": 0, "max": 90, "step": 5, "unit": "%",
+      "label": "Overlay opacity",
+      "default": 60
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "section_height",
+      "min": 300, "max": 900, "step": 20, "unit": "px",
+      "label": "Section height",
+      "default": 520
+    },
+    {
+      "type": "header",
+      "content": "Autoplay"
+    },
+    {
+      "type": "checkbox",
+      "id": "autoplay",
+      "label": "Autoplay",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "autoplay_speed",
+      "label": "Autoplay speed",
+      "options": [
+        { "value": "3000",  "label": "3 seconds" },
+        { "value": "4000",  "label": "4 seconds" },
+        { "value": "5000",  "label": "5 seconds" },
+        { "value": "7000",  "label": "7 seconds" },
+        { "value": "10000", "label": "10 seconds" }
+      ],
+      "default": "4000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow label"
+        },
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Video slide"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Video slider",
+      "blocks": [
+        { "type": "slide", "settings": { "heading": "Video slide 1" } },
+        { "type": "slide", "settings": { "heading": "Video slide 2" } },
+        { "type": "slide", "settings": { "heading": "Video slide 3" } },
+        { "type": "slide", "settings": { "heading": "Video slide 4" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
