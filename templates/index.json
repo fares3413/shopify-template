@@ -800,6 +800,89 @@
         "skew_angle": -4
       }
     },
+    "countdown_timer": {
+      "type": "countdown-timer",
+      "blocks": {
+        "ct_heading": {
+          "type": "heading",
+          "settings": { "text": "COUNT-DOWN TIMER" }
+        },
+        "ct_countdown": {
+          "type": "countdown",
+          "settings": { "target_date": "2026-12-31 23:59" }
+        },
+        "ct_button": {
+          "type": "button",
+          "settings": { "button_label": "Shop Now", "button_link": "" }
+        }
+      },
+      "block_order": ["ct_heading", "ct_countdown", "ct_button"],
+      "settings": {
+        "border_radius": 20,
+        "show_column_image": true,
+        "image_width": 85,
+        "image_aspect_ratio": "auto",
+        "video_overlay": 20,
+        "overlay_color": "#000000",
+        "rotate_image": false
+      }
+    },
+    "image_with_text": {
+      "type": "custom-image-with-text",
+      "blocks": {
+        "iwt_sub": {
+          "type": "subheading",
+          "settings": { "text": "Sub Heading" }
+        },
+        "iwt_heading": {
+          "type": "heading",
+          "settings": { "heading": "Image with text" }
+        },
+        "iwt_text": {
+          "type": "text",
+          "settings": { "text": "<p>This section allows you to highlight key content with a featured image and supporting text. Use it to showcase a product, collection, promotion, or brand story. The image and text can be customized to match your store\u2019s style and layout preferences</p>" }
+        },
+        "iwt_button": {
+          "type": "button",
+          "settings": { "button_label": "Button Label", "button_link": "" }
+        }
+      },
+      "block_order": ["iwt_sub", "iwt_heading", "iwt_text", "iwt_button"],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "section_border_radius": 10,
+        "image_alignment": "left",
+        "vertical_alignment": "center",
+        "horizontal_alignment": "left",
+        "padding_top": 40,
+        "padding_bottom": 40,
+        "top_inner_spacing": 0,
+        "bottom_inner_spacing": 0,
+        "mobile_padding_top": 30,
+        "mobile_padding_bottom": 30
+      }
+    },
+    "product_marquee": {
+      "type": "product-marquee",
+      "blocks": {
+        "pm_1": { "type": "product_card", "settings": { "custom_title": "Product Title", "custom_price": "$19.99" } },
+        "pm_2": { "type": "product_card", "settings": { "custom_title": "Product Title", "custom_price": "$19.99" } },
+        "pm_3": { "type": "product_card", "settings": { "custom_title": "Product Title", "custom_price": "$19.99" } },
+        "pm_4": { "type": "product_card", "settings": { "custom_title": "Product Title", "custom_price": "$19.99" } },
+        "pm_5": { "type": "product_card", "settings": { "custom_title": "Product Title", "custom_price": "$19.99" } }
+      },
+      "block_order": ["pm_1", "pm_2", "pm_3", "pm_4", "pm_5"],
+      "settings": {
+        "color_subheading": "#000000",
+        "color_heading": "#000000",
+        "marquee_bg": "#ffffff",
+        "marquee_text": "#000000",
+        "marquee_price": "#000000",
+        "subheading_text": "<p>Who we are</p>",
+        "max_width": 100,
+        "heading_text": "Premium Quality for Your Furry Friends"
+      }
+    },
     "usp_row_GKLRyE": {
       "type": "usp-row",
       "blocks": {
@@ -870,6 +953,9 @@
     "instagram_feed",
     "promo_banner",
     "logo_list",
-    "usp_row_GKLRyE"
+    "usp_row_GKLRyE",
+    "countdown_timer",
+    "image_with_text",
+    "product_marquee"
   ]
 }

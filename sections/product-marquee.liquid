@@ -1,0 +1,567 @@
+{%- liquid
+  assign section_id = 'ProductMarquee-' | append: section.id
+  assign max_w      = section.settings.max_width | default: 100
+-%}
+
+<style>
+  /* ── CSS variables from schema ── */
+  #{{ section_id }} {
+    --pm-sub-color:     {{ section.settings.color_subheading | default: '#000000' }};
+    --pm-head-color:    {{ section.settings.color_heading    | default: '#000000' }};
+    --pm-mqbg:          {{ section.settings.marquee_bg       | default: '#ffffff' }};
+    --pm-mqtext:        {{ section.settings.marquee_text     | default: '#000000' }};
+    --pm-mqprice:       {{ section.settings.marquee_price    | default: '#000000' }};
+  }
+
+  /* ── Section shell ── */
+  #{{ section_id }} {
+    width: 100%;
+    max-width: {{ max_w }}%;
+    margin: 0 auto;
+    overflow: hidden;
+  }
+
+  /* ── Optional header ── */
+  #{{ section_id }} .pm-header {
+    padding: 2.5rem var(--gutter, 2rem) 1.5rem;
+    text-align: center;
+  }
+  #{{ section_id }} .pm-subheading {
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pm-sub-color);
+    margin-bottom: 0.5rem;
+  }
+  #{{ section_id }} .pm-heading {
+    font-family: var(--font-heading-family);
+    font-size: clamp(1.6rem, 3.5vw, 2.8rem);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--pm-head-color);
+  }
+  #{{ section_id }} .pm-heading-svg {
+    max-height: 72px;
+    width: auto;
+    display: block;
+    margin: 0 auto 0.5rem;
+  }
+
+  /* ════════════════════════════════════════
+     COLLAGE
+  ════════════════════════════════════════ */
+  #{{ section_id }} .pm-collage {
+    position: relative;
+    width: 100%;
+    min-height: 560px;
+    background: #f5f5f3;
+    overflow: hidden;
+  }
+
+  /* ── Decorative circles layer ── */
+  #{{ section_id }} .pm-decor {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── Base frame rules ── */
+  #{{ section_id }} .pm-frame {
+    position: absolute;
+    z-index: 1;
+  }
+  #{{ section_id }} .pm-frame__clip {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Shopify placeholder SVGs fill the frame */
+  #{{ section_id }} .pm-frame .placeholder-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  /* SVG outline overlay sits on top of the clip */
+  #{{ section_id }} .pm-frame__outline {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* ── Frame 1 : Diamond — left, tall ── */
+  #{{ section_id }} .pm-frame--dl {
+    width: 23%;
+    aspect-ratio: 1;
+    left: 1%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+  #{{ section_id }} .pm-frame--dl .pm-frame__clip {
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    background: #e8e5df;
+  }
+
+  /* ── Frame 2 : Square — top center ── */
+  #{{ section_id }} .pm-frame--stc {
+    width: 17%;
+    aspect-ratio: 1;
+    left: 28.5%;
+    top: -1%;
+    z-index: 4;
+  }
+  #{{ section_id }} .pm-frame--stc .pm-frame__clip {
+    outline: 2px solid #1a1a1a;
+    background: #f5f5f3;
+  }
+
+  /* ── Frame 3 : Diamond — center, large ── */
+  #{{ section_id }} .pm-frame--dc {
+    width: 29%;
+    aspect-ratio: 1;
+    left: 43%;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+  #{{ section_id }} .pm-frame--dc .pm-frame__clip {
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    background: #e0dcd6;
+  }
+
+  /* ── Frame 4 : Triangle — top right ── */
+  #{{ section_id }} .pm-frame--tr {
+    width: 22%;
+    aspect-ratio: 1;
+    right: 4%;
+    top: 0;
+    z-index: 3;
+  }
+  #{{ section_id }} .pm-frame--tr .pm-frame__clip {
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    background: #ebe8e2;
+  }
+
+  /* ── Frame 5 : Square — bottom right, small ── */
+  #{{ section_id }} .pm-frame--sbr {
+    width: 13%;
+    aspect-ratio: 1;
+    right: 4%;
+    bottom: 7%;
+    z-index: 3;
+  }
+  #{{ section_id }} .pm-frame--sbr .pm-frame__clip {
+    outline: 2px solid #1a1a1a;
+    background: #f5f5f3;
+  }
+
+  /* ════════════════════════════════════════
+     MARQUEE
+  ════════════════════════════════════════ */
+  #{{ section_id }} .pm-marquee-wrap {
+    background: var(--pm-mqbg);
+    padding: 1.25rem 0;
+    overflow: hidden;
+  }
+  #{{ section_id }} .pm-marquee-track {
+    display: flex;
+    width: max-content;
+    gap: 0.75rem;
+    padding: 0 0.375rem;
+    animation: pm-ticker-{{ section.id }} 28s linear infinite;
+  }
+  #{{ section_id }} .pm-marquee-wrap:hover .pm-marquee-track {
+    animation-play-state: paused;
+  }
+  @keyframes pm-ticker-{{ section.id }} {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ── Product card ── */
+  #{{ section_id }} .pm-card {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 1rem 1.5rem;
+    min-width: 230px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+    transition: box-shadow 0.2s ease;
+  }
+  #{{ section_id }} .pm-card:hover { box-shadow: 0 4px 18px rgba(0,0,0,0.11); }
+  #{{ section_id }} .pm-card__icon {
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  #{{ section_id }} .pm-card__icon svg,
+  #{{ section_id }} .pm-card__icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+  #{{ section_id }} .pm-card__info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+  #{{ section_id }} .pm-card__title {
+    font-family: var(--font-heading-family);
+    font-size: 0.875rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--pm-mqtext);
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  #{{ section_id }} .pm-card__price {
+    font-size: 0.825rem;
+    font-weight: 500;
+    color: var(--pm-mqprice);
+    white-space: nowrap;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    #{{ section_id }} .pm-collage { min-height: 380px; }
+    #{{ section_id }} .pm-frame--stc,
+    #{{ section_id }} .pm-frame--sbr { display: none; }
+    #{{ section_id }} .pm-frame--dl  { width: 36%; left: 0; }
+    #{{ section_id }} .pm-frame--dc  { width: 40%; left: 32%; }
+    #{{ section_id }} .pm-frame--tr  { width: 30%; right: 0; }
+  }
+  @media (max-width: 600px) {
+    #{{ section_id }} .pm-collage { min-height: 260px; }
+    #{{ section_id }} .pm-frame--dl  { width: 44%; left: 0; }
+    #{{ section_id }} .pm-frame--dc  { width: 48%; left: 46%; }
+    #{{ section_id }} .pm-frame--tr  { display: none; }
+    #{{ section_id }} .pm-card { min-width: 180px; padding: 0.75rem 1rem; }
+    #{{ section_id }} .pm-card__icon { width: 36px; height: 36px; }
+  }
+</style>
+
+<section id="{{ section_id }}" class="pm-section">
+
+  {%- comment -%} ── Optional header ── {%- endcomment -%}
+  {%- if section.settings.subheading_text != blank
+      or section.settings.heading_text    != blank
+      or section.settings.heading_svg     != blank -%}
+    <div class="pm-header">
+      {%- if section.settings.subheading_text != blank -%}
+        <p class="pm-subheading">{{ section.settings.subheading_text }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading_svg != blank -%}
+        <img
+          class="pm-heading-svg"
+          src="{{ section.settings.heading_svg | image_url: width: 800 }}"
+          alt="{{ section.settings.heading_text | escape }}"
+          loading="lazy"
+        >
+      {%- endif -%}
+      {%- if section.settings.heading_text != blank -%}
+        <h2 class="pm-heading">{{ section.settings.heading_text }}</h2>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ════════════════════════════════════════
+    COLLAGE
+  ════════════════════════════════════════ {%- endcomment -%}
+  <div class="pm-collage">
+
+    {%- comment -%} Decorative floating circles {%- endcomment -%}
+    <svg class="pm-decor" viewBox="0 0 1400 560" xmlns="http://www.w3.org/2000/svg"
+         aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+      <!-- Left cluster -->
+      <circle cx="58"   cy="82"  r="36" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      <circle cx="104"  cy="202" r="17" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      <circle cx="42"   cy="338" r="22" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      <circle cx="90"   cy="452" r="13" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      <!-- Top center scatter -->
+      <circle cx="418"  cy="40"  r="7"  fill="#1a1a1a"/>
+      <circle cx="443"  cy="24"  r="4"  fill="#1a1a1a"/>
+      <circle cx="458"  cy="58"  r="5"  fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+      <!-- Between left diamond and center square -->
+      <circle cx="382"  cy="388" r="30" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      <circle cx="418"  cy="476" r="13" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      <!-- Between square and center diamond -->
+      <circle cx="790"  cy="58"  r="9"  fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+      <circle cx="812"  cy="88"  r="5"  fill="#1a1a1a"/>
+      <circle cx="770"  cy="114" r="6"  fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+      <!-- Center-right area -->
+      <circle cx="1028" cy="390" r="26" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      <circle cx="1068" cy="454" r="11" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      <circle cx="1002" cy="476" r="7"  fill="#1a1a1a"/>
+      <!-- Far right -->
+      <circle cx="1272" cy="358" r="9"  fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+      <circle cx="1302" cy="394" r="5"  fill="#1a1a1a"/>
+      <circle cx="1348" cy="428" r="15" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      <circle cx="1378" cy="78"  r="19" fill="none" stroke="#1a1a1a" stroke-width="2"/>
+      <circle cx="1338" cy="180" r="8"  fill="none" stroke="#1a1a1a" stroke-width="1.5"/>
+    </svg>
+
+    {%- comment -%} Frame 1 — Diamond left {%- endcomment -%}
+    <div class="pm-frame pm-frame--dl">
+      <div class="pm-frame__clip">
+        {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+      <svg class="pm-frame__outline" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="50,1 99,50 50,99 1,50" fill="none" stroke="#1a1a1a" stroke-width="1.6"/>
+      </svg>
+    </div>
+
+    {%- comment -%} Frame 2 — Square top center {%- endcomment -%}
+    <div class="pm-frame pm-frame--stc">
+      <div class="pm-frame__clip">
+        {{ 'collection-2' | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+    </div>
+
+    {%- comment -%} Frame 3 — Diamond center (large) {%- endcomment -%}
+    <div class="pm-frame pm-frame--dc">
+      <div class="pm-frame__clip">
+        {{ 'collection-3' | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+      <svg class="pm-frame__outline" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="50,1 99,50 50,99 1,50" fill="none" stroke="#1a1a1a" stroke-width="1.6"/>
+      </svg>
+    </div>
+
+    {%- comment -%} Frame 4 — Triangle top right {%- endcomment -%}
+    <div class="pm-frame pm-frame--tr">
+      <div class="pm-frame__clip">
+        {{ 'collection-4' | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+      <svg class="pm-frame__outline" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <polygon points="50,1 99,99 1,99" fill="none" stroke="#1a1a1a" stroke-width="1.6"/>
+      </svg>
+    </div>
+
+    {%- comment -%} Frame 5 — Square bottom right {%- endcomment -%}
+    <div class="pm-frame pm-frame--sbr">
+      <div class="pm-frame__clip">
+        {{ 'collection-6' | placeholder_svg_tag: 'placeholder-svg' }}
+      </div>
+    </div>
+
+  </div><!-- /.pm-collage -->
+
+  {%- comment -%} ════════════════════════════════════════
+    MARQUEE STRIP
+  ════════════════════════════════════════ {%- endcomment -%}
+  <div class="pm-marquee-wrap">
+    <div class="pm-marquee-track" id="pm-track-{{ section.id }}">
+
+      {%- liquid
+        if section.blocks.size > 0
+          assign render_blocks = section.blocks
+        else
+          assign render_blocks = nil
+        endif
+      -%}
+
+      {%- comment -%} First pass (real or placeholder) {%- endcomment -%}
+      {%- if render_blocks != nil -%}
+        {%- for block in section.blocks -%}
+          {%- assign product      = all_products[block.settings.product] -%}
+          {%- assign card_title   = block.settings.custom_title | default: product.title | default: 'Product Title' -%}
+          {%- assign icon_index   = forloop.index0 | modulo: 5 | plus: 1 -%}
+          {%- if product != blank -%}
+            {%- assign card_price = product.price | money -%}
+          {%- else -%}
+            {%- assign card_price = block.settings.custom_price | default: '$19.99' -%}
+          {%- endif -%}
+          <div class="pm-card" {{ block.shopify_attributes }}>
+            <div class="pm-card__icon">
+              {%- if product.featured_image != blank -%}
+                <img src="{{ product.featured_image | image_url: width: 96 }}" alt="{{ product.title | escape }}" loading="lazy">
+              {%- else -%}
+                {{ 'product-' | append: icon_index | placeholder_svg_tag }}
+              {%- endif -%}
+            </div>
+            <div class="pm-card__info">
+              <span class="pm-card__title">{{ card_title | upcase }}</span>
+              <span class="pm-card__price">{{ card_price }}</span>
+            </div>
+          </div>
+        {%- endfor -%}
+        {%- comment -%} Second pass (duplicate for seamless loop) {%- endcomment -%}
+        {%- for block in section.blocks -%}
+          {%- assign product      = all_products[block.settings.product] -%}
+          {%- assign card_title   = block.settings.custom_title | default: product.title | default: 'Product Title' -%}
+          {%- assign icon_index   = forloop.index0 | modulo: 5 | plus: 1 -%}
+          {%- if product != blank -%}
+            {%- assign card_price = product.price | money -%}
+          {%- else -%}
+            {%- assign card_price = block.settings.custom_price | default: '$19.99' -%}
+          {%- endif -%}
+          <div class="pm-card" aria-hidden="true">
+            <div class="pm-card__icon">
+              {%- if product.featured_image != blank -%}
+                <img src="{{ product.featured_image | image_url: width: 96 }}" alt="" loading="lazy">
+              {%- else -%}
+                {{ 'product-' | append: icon_index | placeholder_svg_tag }}
+              {%- endif -%}
+            </div>
+            <div class="pm-card__info">
+              <span class="pm-card__title">{{ card_title | upcase }}</span>
+              <span class="pm-card__price">{{ card_price }}</span>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- else -%}
+        {%- comment -%} Placeholder cards — shown in editor when no blocks are added {%- endcomment -%}
+        {%- for i in (1..5) -%}
+          <div class="pm-card">
+            <div class="pm-card__icon">{{ 'product-' | append: i | placeholder_svg_tag }}</div>
+            <div class="pm-card__info">
+              <span class="pm-card__title">PRODUCT TITLE</span>
+              <span class="pm-card__price">$19.99</span>
+            </div>
+          </div>
+        {%- endfor -%}
+        {%- for i in (1..5) -%}
+          <div class="pm-card" aria-hidden="true">
+            <div class="pm-card__icon">{{ 'product-' | append: i | placeholder_svg_tag }}</div>
+            <div class="pm-card__info">
+              <span class="pm-card__title">PRODUCT TITLE</span>
+              <span class="pm-card__price">$19.99</span>
+            </div>
+          </div>
+        {%- endfor -%}
+      {%- endif -%}
+
+    </div><!-- /.pm-marquee-track -->
+  </div><!-- /.pm-marquee-wrap -->
+
+</section>
+
+{% schema %}
+{
+  "name": "Product marquee",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section colors"
+    },
+    {
+      "type": "color",
+      "id": "color_subheading",
+      "label": "Subheading color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "color_heading",
+      "label": "Heading color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Marquee colors"
+    },
+    {
+      "type": "color",
+      "id": "marquee_bg",
+      "label": "Marquee background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "marquee_text",
+      "label": "Marquee text color",
+      "default": "#000000"
+    },
+    {
+      "type": "color",
+      "id": "marquee_price",
+      "label": "Marquee price color",
+      "default": "#000000"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading_text",
+      "label": "Subheading text",
+      "default": "<p>Who we are</p>"
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "label": "Max width",
+      "default": 100
+    },
+    {
+      "type": "textarea",
+      "id": "heading_text",
+      "label": "Heading text",
+      "default": "Premium Quality for Your Furry Friends"
+    },
+    {
+      "type": "image_picker",
+      "id": "heading_svg",
+      "label": "Heading SVG image"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product_card",
+      "name": "Product card",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "custom_title",
+          "label": "Custom title",
+          "info": "Overrides product title"
+        },
+        {
+          "type": "text",
+          "id": "custom_price",
+          "label": "Custom price",
+          "info": "Overrides product price (e.g. $19.99)",
+          "default": "$19.99"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product marquee",
+      "blocks": [
+        { "type": "product_card" },
+        { "type": "product_card" },
+        { "type": "product_card" },
+        { "type": "product_card" },
+        { "type": "product_card" }
+      ]
+    }
+  ]
+}
+{% endschema %}
