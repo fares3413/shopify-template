@@ -15,41 +15,54 @@
         "slide_1": {
           "type": "slide",
           "settings": {
+            "image": "shopify://shop_images/nike-just-do-it.jpg",
+            "video_url": "",
             "overlay_opacity": 50,
             "content_position": "bottom-left",
             "eyebrow": "New Collection",
             "heading": "EXPERIENCE UNPARALLELED AUDIO ELEGANCE",
-            "button_label": "Shop Headphones"
-          }
-        },
-        "slide_2": {
-          "type": "slide",
-          "settings": {
-            "overlay_opacity": 45,
-            "content_position": "bottom-left",
-            "eyebrow": "Discover More",
-            "heading": "UNIQUELY CRAFTED FOR YOUR STYLE",
-            "button_label": "Shop Now"
-          }
-        },
-        "slide_3": {
-          "type": "slide",
-          "settings": {
-            "overlay_opacity": 45,
-            "content_position": "bottom-left",
-            "eyebrow": "New Arrivals",
-            "heading": "DUST AND WATERPROOF",
-            "button_label": "Shop Speakers"
+            "subheading": "",
+            "button_label": "Shop Headphones",
+            "button_link": "",
+            "button_2_label": "",
+            "button_2_link": ""
           }
         }
       },
       "block_order": [
-        "slide_1",
-        "slide_2",
+        "slide_1"
+      ],
+      "settings": {
+        "height": 85,
+        "autoplay": true,
+        "autoplay_speed": "5000"
+      }
+    },
+    "hero_editorial": {
+      "type": "hero-editorial",
+      "blocks": {
+        "slide_3": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/nike-just-do-it.jpg",
+            "overlay_opacity": 0,
+            "heading": "SOUND\nCRAFTED",
+            "card_image": "shopify://shop_images/NIKE_P-6000_28GS_29_4.jpg",
+            "card_bg": "#f3f5f9",
+            "button_label": "Discover",
+            "button_link": ""
+          }
+        }
+      },
+      "block_order": [
         "slide_3"
       ],
       "settings": {
         "height": 85,
+        "hero_bg": "#f5f4f0",
+        "hero_text_color": "#1a1a1a",
+        "show_hero_bar": true,
+        "bar_store_name": "",
         "autoplay": true,
         "autoplay_speed": "5000"
       }
@@ -60,6 +73,7 @@
         "eyebrow": "Limited time",
         "heading": "Get up to 50% off on selected items — Today only",
         "button_label": "Shop the sale",
+        "button_link": "",
         "bg_color": "#1a1a1a",
         "text_color": "#ffffff"
       }
@@ -71,7 +85,8 @@
         "show_underline": true,
         "text_1": "<p><strong>Harmony Sound</strong> is more than just an audio equipment retailer. We represent the grandeur of sound in its finest manifestations. Our mission is to cater to audiophiles and those who simply appreciate quality sound.</p>",
         "text_2": "<p>We offer everything from the warm sound of vinyl records to the clarity and crispness of modern wireless headphones, ensuring every note sounds impeccable.</p>",
-        "button_label": "Our Story"
+        "button_label": "Our Story",
+        "button_link": ""
       }
     },
     "featured_collections": {
@@ -80,49 +95,65 @@
         "col_1": {
           "type": "collection_item",
           "settings": {
-            "label": "All products"
+            "collection": "",
+            "label": "All products",
+            "custom_link": ""
           }
         },
         "col_2": {
           "type": "collection_item",
           "settings": {
-            "label": "Headphones"
+            "collection": "",
+            "label": "Headphones",
+            "custom_link": ""
           }
         },
         "col_3": {
           "type": "collection_item",
           "settings": {
-            "label": "Earphones"
+            "collection": "",
+            "label": "Earphones",
+            "custom_link": ""
           }
         },
         "col_4": {
           "type": "collection_item",
           "settings": {
-            "label": "Speakers"
+            "collection": "",
+            "label": "Speakers",
+            "custom_link": ""
           }
         },
         "col_5": {
           "type": "collection_item",
           "settings": {
-            "label": "Accessories"
+            "collection": "",
+            "label": "Accessories",
+            "custom_link": ""
           }
         },
         "col_6": {
           "type": "collection_item",
           "settings": {
-            "label": "Wireless"
+            "collection": "",
+            "label": "Wireless",
+            "custom_link": ""
           }
         },
         "col_7": {
           "type": "collection_item",
           "settings": {
-            "label": "Gaming"
+            "collection": "",
+            "label": "Gaming",
+            "custom_link": ""
           }
         },
         "col_8": {
           "type": "collection_item",
           "settings": {
-            "label": "Limited"
+            "collection": "",
+            "label": "Limited",
+            "custom_link": ""
           }
         }
       },
@@ -137,24 +168,45 @@
         "col_8"
       ],
       "settings": {
+        "heading": "",
+        "heading_size": "md",
+        "heading_alignment": "left",
+        "heading_tag": "h2",
+        "subheading": "",
+        "description": "",
+        "heading_highlight_style": "none",
+        "color_text": "",
+        "color_background": "",
+        "color_highlight": "",
+        "color_button_text": "",
+        "color_button_background": "",
         "card_style": "image",
+        "image_source": "collection",
         "image_ratio": "square",
+        "show_product_count": true,
+        "show_view_all": false,
         "columns_desktop": 4,
+        "enable_carousel": true,
         "columns_mobile": "2",
+        "enable_swipe": true,
         "padding_top": 60,
         "padding_bottom": 60,
         "show_divider": false,
-        "rounded": true
+        "full_width": false,
+        "rounded": true,
+        "custom_css": ""
       }
     },
     "image_banner": {
       "type": "image-banner",
       "settings": {
+        "image": "shopify://shop_images/image.jpg",
         "height": 75,
         "overlay_opacity": 35,
         "heading": "Sound. Sculpted.",
         "subheading": "A speaker that excites the eye and ear from every angle.",
         "button_label": "Shop Echo Elegance",
+        "button_link": "",
         "autoplay": true
       }
     },
@@ -164,24 +216,28 @@
         "feat_1": {
           "type": "feature",
           "settings": {
+            "icon": "shield",
             "text": "In stock! Ships within 1-2 business days."
           }
         },
         "feat_2": {
           "type": "feature",
           "settings": {
+            "icon": "shield",
             "text": "90-day risk-free trial"
           }
         },
         "feat_3": {
           "type": "feature",
           "settings": {
+            "icon": "shield",
             "text": "2-Year Warranty"
           }
         },
         "feat_4": {
           "type": "feature",
           "settings": {
+            "icon": "shield",
             "text": "Complimentary shipping & returns"
           }
         }
@@ -192,7 +248,9 @@
         "feat_3",
         "feat_4"
       ],
-      "settings": {}
+      "settings": {
+        "product": "nike-p-6000"
+      }
     },
     "image_comparison": {
       "type": "image-comparison",
@@ -205,8 +263,13 @@
         "heading_alignment": "center",
         "heading_tag": "h2",
         "subheading": "Sound in Spectrum",
+        "description": "",
+        "button_label": "",
+        "button_link": "",
+        "image_before": "shopify://shop_images/NIKE_P-6000_28GS_29_1.jpg",
         "sublabel_before": "Flow Harmony",
         "label_before": "Gold Tone",
+        "image_after": "shopify://shop_images/NIKE_P-6000__GS___1_-removebg-preview_1_1.png",
         "sublabel_after": "Flow Harmony",
         "label_after": "Crimson Shadow",
         "start_position": "50"
@@ -218,25 +281,33 @@
         "tab_1": {
           "type": "tab",
           "settings": {
-            "tab_label": "Headphones"
+            "tab_label": "Headphones",
+            "collection": "",
+            "show_view_all": true
           }
         },
         "tab_2": {
           "type": "tab",
           "settings": {
-            "tab_label": "Earphones"
+            "tab_label": "Earphones",
+            "collection": "",
+            "show_view_all": true
           }
         },
         "tab_3": {
           "type": "tab",
           "settings": {
-            "tab_label": "Speakers"
+            "tab_label": "Speakers",
+            "collection": "",
+            "show_view_all": true
           }
         },
         "tab_4": {
           "type": "tab",
           "settings": {
-            "tab_label": "Accessories"
+            "tab_label": "Accessories",
+            "collection": "",
+            "show_view_all": true
           }
         }
       },
@@ -248,7 +319,7 @@
       ],
       "settings": {
         "heading": "Best Sellers",
-        "products_per_row": 6,
+        "products_per_row": 5,
         "show_vendor": true
       }
     },
@@ -258,19 +329,25 @@
         "ps_1": {
           "type": "product",
           "settings": {
-            "show_atc": false
+            "product": "nike-p-6000",
+            "show_atc": false,
+            "atc_label": "Add to cart"
           }
         },
         "ps_2": {
           "type": "product",
           "settings": {
-            "show_atc": false
+            "product": "nike-tn",
+            "show_atc": false,
+            "atc_label": "Add to cart"
           }
         },
         "ps_3": {
           "type": "product",
           "settings": {
-            "show_atc": false
+            "product": "",
+            "show_atc": false,
+            "atc_label": "Add to cart"
           }
         }
       },
@@ -283,7 +360,9 @@
         "eyebrow": "Premium Speakers",
         "heading": "Bring Quality Sound into Your Home",
         "highlight_word": "Your Home",
-        "autoplay": false
+        "image": "shopify://shop_images/image.jpg",
+        "autoplay": false,
+        "autoplay_speed": "4000"
       }
     },
     "product_hotspots": {
@@ -292,22 +371,28 @@
         "hs_1": {
           "type": "hotspot",
           "settings": {
-            "pos_x": 28,
-            "pos_y": 38
+            "product": "nike-tn-shoes",
+            "pos_x": 3,
+            "pos_y": 91,
+            "label": ""
           }
         },
         "hs_2": {
           "type": "hotspot",
           "settings": {
+            "product": "nike-p-6000",
             "pos_x": 60,
-            "pos_y": 52
+            "pos_y": 80,
+            "label": ""
           }
         },
         "hs_3": {
           "type": "hotspot",
           "settings": {
-            "pos_x": 43,
-            "pos_y": 72
+            "product": "nike-tn",
+            "pos_x": 97,
+            "pos_y": 81,
+            "label": ""
           }
         }
       },
@@ -319,6 +404,7 @@
       "settings": {
         "heading": "Shop the Look",
         "subheading": "Premium Speakers",
+        "lifestyle_image": "shopify://shop_images/nike-just-do-it_1.jpg",
         "section_bg": "#ffffff",
         "card_bg": "#f5f5f3",
         "text_color": "#1a1a1a",
@@ -334,6 +420,7 @@
         "quote_1": {
           "type": "quote",
           "settings": {
+            "rating": 5,
             "quote": "Harmony Sound's meticulous curation of premium audio tech truly stands out. Their offerings, from headphones to expansive home theaters, consistently raise the bar.",
             "author": "Nathan Wright, Rolling Stone"
           }
@@ -341,6 +428,7 @@
         "quote_2": {
           "type": "quote",
           "settings": {
+            "rating": 5,
             "quote": "If there's one name that consistently delivers excellence in audio, it's Harmony Sound. A true audiophile's paradise.",
             "author": "Sarah K., The Audiophile Review"
           }
@@ -348,6 +436,7 @@
         "quote_3": {
           "type": "quote",
           "settings": {
+            "rating": 5,
             "quote": "Harmony Sound doesn't just sell products — they deliver experiences. Every purchase feels like an investment in pure sonic bliss.",
             "author": "James L., Sound & Vision"
           }
@@ -358,49 +447,49 @@
         "quote_2",
         "quote_3"
       ],
-      "settings": {}
+      "settings": {
+        "eyebrow": "What customers say",
+        "heading": "Loved by audiophiles worldwide"
+      }
     },
     "bundle_builder": {
       "type": "bundle-builder",
       "blocks": {
         "p1": {
           "type": "product",
-          "settings": {}
+          "settings": {
+            "product": "nike-p-6000",
+            "badge": ""
+          }
         },
         "p2": {
           "type": "product",
-          "settings": {}
+          "settings": {
+            "product": "nike-tn",
+            "badge": ""
+          }
         },
         "p3": {
           "type": "product",
-          "settings": {}
-        },
-        "p4": {
-          "type": "product",
-          "settings": {}
-        },
-        "p5": {
-          "type": "product",
-          "settings": {}
-        },
-        "p6": {
-          "type": "product",
-          "settings": {}
+          "settings": {
+            "product": "nike-tn-shoes",
+            "badge": ""
+          }
         }
       },
       "block_order": [
         "p1",
         "p2",
-        "p3",
-        "p4",
-        "p5",
-        "p6"
+        "p3"
       ],
       "settings": {
+        "eyebrow": "Mix & Save",
         "heading": "Your bundle",
         "subtext": "Add at least 3 products to proceed and Save 30%",
         "min_items": 3,
-        "discount": 30
+        "max_items": 0,
+        "discount": 30,
+        "disclaimer": "Free shipping on all bundles"
       }
     },
     "marquee": {
@@ -410,7 +499,7 @@
           "type": "item",
           "settings": {
             "text": "Day-long comfort",
-            "icon": "dot"
+            "icon": "star"
           }
         },
         "m2": {
@@ -438,7 +527,7 @@
           "type": "item",
           "settings": {
             "text": "2-year warranty",
-            "icon": "dot"
+            "icon": "star"
           }
         }
       },
@@ -450,156 +539,66 @@
         "m5"
       ],
       "settings": {
-        "style": "light",
+        "style": "dark",
         "direction": "ltr",
         "speed": 20
-      }
-    },
-    "instagram_feed": {
-      "type": "instagram-feed",
-      "blocks": {
-        "post_1": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_2": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_3": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_4": {
-          "type": "post",
-          "settings": {}
-        },
-        "post_5": {
-          "type": "post",
-          "settings": {}
-        }
-      },
-      "block_order": [
-        "post_1",
-        "post_2",
-        "post_3",
-        "post_4",
-        "post_5"
-      ],
-      "settings": {
-        "heading": "Shop the Feed",
-        "subheading": "Discover premium audio from our Instagram and shop now.",
-        "handle": "Harmony"
-      }
-    },
-    "promo_banner": {
-      "type": "promo-banner",
-      "settings": {
-        "overlay_opacity": 30,
-        "subheading": "Get up to 50% off",
-        "heading": "on waterproof speakers",
-        "button_label": "Discover sales"
-      }
-    },
-    "logo_list": {
-      "type": "logo-list",
-      "blocks": {
-        "l1": {
-          "type": "logo",
-          "settings": {
-            "alt_text": "LOGO"
-          }
-        },
-        "l2": {
-          "type": "logo",
-          "settings": {
-            "alt_text": "LOGO"
-          }
-        },
-        "l3": {
-          "type": "logo",
-          "settings": {
-            "alt_text": "LOGO"
-          }
-        },
-        "l4": {
-          "type": "logo",
-          "settings": {
-            "alt_text": "LOGO"
-          }
-        },
-        "l5": {
-          "type": "logo",
-          "settings": {
-            "alt_text": "LOGO"
-          }
-        },
-        "l6": {
-          "type": "logo",
-          "settings": {
-            "alt_text": "LOGO"
-          }
-        },
-        "l7": {
-          "type": "logo",
-          "settings": {
-            "alt_text": "LOGO"
-          }
-        }
-      },
-      "block_order": [
-        "l1",
-        "l2",
-        "l3",
-        "l4",
-        "l5",
-        "l6",
-        "l7"
-      ],
-      "settings": {
-        "band_color": "#FDE68A",
-        "text_color": "#1a1a1a",
-        "speed": "14s",
-        "skew_angle": -4
-      }
-    },
-    "hero_editorial": {
-      "type": "hero-editorial",
-      "blocks": {
-        "slide_1": { "type": "slide", "settings": { "heading": "SLIDE\nTITLE", "button_label": "Shop Now", "overlay_opacity": 0 } },
-        "slide_2": { "type": "slide", "settings": { "heading": "NEW\nDROP", "button_label": "Explore", "overlay_opacity": 0 } },
-        "slide_3": { "type": "slide", "settings": { "heading": "SOUND\nCRAFTED", "button_label": "Discover", "overlay_opacity": 0 } }
-      },
-      "block_order": ["slide_1", "slide_2", "slide_3"],
-      "settings": {
-        "height": 85,
-        "hero_bg": "#f5f4f0",
-        "hero_text_color": "#1a1a1a",
-        "show_hero_bar": true,
-        "autoplay": true,
-        "autoplay_speed": "5000"
-      }
-    },
-    "latest_stories": {
-      "type": "latest-stories",
-      "settings": {
-        "heading": "Latest Stories",
-        "post_count": 3
       }
     },
     "image_carousel": {
       "type": "image-carousel",
       "blocks": {
-        "ic_1": { "type": "image", "settings": { "label": "Card 1" } },
-        "ic_2": { "type": "image", "settings": { "label": "Card 2" } },
-        "ic_3": { "type": "image", "settings": { "label": "Card 3" } },
-        "ic_4": { "type": "image", "settings": { "label": "Card 4" } },
-        "ic_5": { "type": "image", "settings": { "label": "Card 5" } }
+        "ic_1": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/NIKE_P-6000_28GS_29.jpg",
+            "label": "Card 1",
+            "link": ""
+          }
+        },
+        "ic_2": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/FZ1689-100_g1_930da2f7-44b0-4fde-ad35-59932d16b428.webp",
+            "label": "Card 2",
+            "link": ""
+          }
+        },
+        "ic_3": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/nike.jpg",
+            "label": "Card 3",
+            "link": ""
+          }
+        },
+        "ic_4": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/NIKE_P-6000_28GS_29_3.jpg",
+            "label": "Card 4",
+            "link": ""
+          }
+        },
+        "ic_5": {
+          "type": "image",
+          "settings": {
+            "image": "shopify://shop_images/NIKE_P-6000_28GS_29_1.jpg",
+            "label": "Card 5",
+            "link": ""
+          }
+        }
       },
-      "block_order": ["ic_1", "ic_2", "ic_3", "ic_4", "ic_5"],
+      "block_order": [
+        "ic_1",
+        "ic_2",
+        "ic_3",
+        "ic_4",
+        "ic_5"
+      ],
       "settings": {
         "eyebrow": "New Arrivals",
         "heading": "Popular Products",
+        "description": "",
         "card_width": 300,
         "card_gap": 20,
         "image_ratio": "portrait",
@@ -612,28 +611,243 @@
     "scroll_carousel": {
       "type": "scroll-carousel",
       "blocks": {
-        "sc_1": { "type": "card", "settings": { "label": "Card 1" } },
-        "sc_2": { "type": "card", "settings": { "label": "Card 2" } },
-        "sc_3": { "type": "card", "settings": { "label": "Card 3" } },
-        "sc_4": { "type": "card", "settings": { "label": "Card 4" } },
-        "sc_5": { "type": "card", "settings": { "label": "Card 5" } },
-        "sc_6": { "type": "card", "settings": { "label": "Card 6" } }
+        "sc_1": {
+          "type": "card",
+          "settings": {
+            "label": "Card 1",
+            "sublabel": "",
+            "link": ""
+          }
+        },
+        "sc_2": {
+          "type": "card",
+          "settings": {
+            "label": "Card 2",
+            "sublabel": "",
+            "link": ""
+          }
+        },
+        "sc_3": {
+          "type": "card",
+          "settings": {
+            "label": "Card 3",
+            "sublabel": "",
+            "link": ""
+          }
+        },
+        "sc_4": {
+          "type": "card",
+          "settings": {
+            "label": "Card 4",
+            "sublabel": "",
+            "link": ""
+          }
+        },
+        "sc_5": {
+          "type": "card",
+          "settings": {
+            "label": "Card 5",
+            "sublabel": "",
+            "link": ""
+          }
+        },
+        "sc_6": {
+          "type": "card",
+          "settings": {
+            "label": "Card 6",
+            "sublabel": "",
+            "link": ""
+          }
+        }
       },
-      "block_order": ["sc_1", "sc_2", "sc_3", "sc_4", "sc_5", "sc_6"],
+      "block_order": [
+        "sc_1",
+        "sc_2",
+        "sc_3",
+        "sc_4",
+        "sc_5",
+        "sc_6"
+      ],
       "settings": {
         "eyebrow": "Featured",
         "heading": "Explore the Collection",
+        "description": "",
+        "columns": 3,
+        "visible_rows": 2,
         "card_width": 320,
+        "card_height": 340,
         "card_gap": 24,
-        "image_ratio": "portrait",
-        "scroll_height": 250,
-        "viewport_height": 80,
-        "intensity": 10,
-        "smoothing": 8,
-        "direction": "ltr",
+        "scroll_speed": 60,
         "bg_color": "#1a1a1a",
         "text_color": "#ffffff"
       }
+    },
+    "instagram_feed": {
+      "type": "instagram-feed",
+      "blocks": {
+        "post_1": {
+          "type": "post",
+          "settings": {
+            "link": "",
+            "product_1": "",
+            "product_2": ""
+          }
+        },
+        "post_2": {
+          "type": "post",
+          "settings": {
+            "image": "shopify://shop_images/image.jpg",
+            "link": "",
+            "product_1": "nike-p-6000",
+            "product_2": ""
+          }
+        },
+        "post_3": {
+          "type": "post",
+          "settings": {
+            "link": "",
+            "product_1": "",
+            "product_2": ""
+          }
+        },
+        "post_4": {
+          "type": "post",
+          "settings": {
+            "link": "",
+            "product_1": "",
+            "product_2": ""
+          }
+        },
+        "post_5": {
+          "type": "post",
+          "settings": {
+            "link": "",
+            "product_1": "",
+            "product_2": ""
+          }
+        }
+      },
+      "block_order": [
+        "post_1",
+        "post_2",
+        "post_3",
+        "post_4",
+        "post_5"
+      ],
+      "settings": {
+        "heading": "Shop the Feed",
+        "subheading": "Discover premium audio from our Instagram and shop now.",
+        "handle": "Harmony",
+        "heading_highlight": ""
+      }
+    },
+    "promo_banner": {
+      "type": "promo-banner",
+      "settings": {
+        "image": "shopify://shop_images/nike-just-do-it.jpg",
+        "background_color": "#888888",
+        "overlay_opacity": 30,
+        "subheading": "Get up to 50% off",
+        "heading": "on waterproof speakers",
+        "show_countdown": false,
+        "countdown_end": "2025-12-31T23:59:59",
+        "button_label": "Discover sales",
+        "button_link": ""
+      }
+    },
+    "logo_list": {
+      "type": "logo-list",
+      "blocks": {
+        "l6": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/image.jpg",
+            "label": "WELCOME TO OUR STORE",
+            "alt_text": "THENker",
+            "link": ""
+          }
+        },
+        "logo_BBGM3D": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/image.jpg",
+            "label": "WELCOME TO OUR STORE",
+            "alt_text": "THENker",
+            "link": ""
+          }
+        },
+        "logo_DLUmPn": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify://shop_images/image.jpg",
+            "label": "WELCOME TO OUR STORE",
+            "alt_text": "THENker",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "l6",
+        "logo_BBGM3D",
+        "logo_DLUmPn"
+      ],
+      "settings": {
+        "band_color": "#a32418",
+        "text_color": "#1a1a1a",
+        "band_color_2": "#1a1a1a",
+        "text_color_2": "#ffffff",
+        "speed": "14s",
+        "skew_angle": -4
+      }
+    },
+    "usp_row_GKLRyE": {
+      "type": "usp-row",
+      "blocks": {
+        "usp_RUjXxe": {
+          "type": "usp",
+          "settings": {
+            "icon": "headphone",
+            "heading": "Customer service",
+            "text": "It's not actually free we just price it into the products.",
+            "link": ""
+          }
+        },
+        "usp_gDqMqh": {
+          "type": "usp",
+          "settings": {
+            "icon": "truck",
+            "heading": "Fast Free Shipping",
+            "text": "Get free shipping on orders of $150 or more",
+            "link": ""
+          }
+        },
+        "usp_imAzfe": {
+          "type": "usp",
+          "settings": {
+            "icon": "gift",
+            "heading": "Refer a friend",
+            "text": "Refer a friend and get 15% off each other.",
+            "link": ""
+          }
+        },
+        "usp_CxfqdE": {
+          "type": "usp",
+          "settings": {
+            "icon": "shield",
+            "heading": "Secure payment",
+            "text": "Your payment information is processed securely",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "usp_RUjXxe",
+        "usp_gDqMqh",
+        "usp_imAzfe",
+        "usp_CxfqdE"
+      ],
+      "name": "USP Row",
+      "settings": {}
     }
   },
   "order": [
@@ -656,6 +870,6 @@
     "instagram_feed",
     "promo_banner",
     "logo_list",
-    "latest_stories"
+    "usp_row_GKLRyE"
   ]
 }
