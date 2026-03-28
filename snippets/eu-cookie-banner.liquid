@@ -1,48 +1,44 @@
 {%- liquid
-  assign s = section.settings if section.settings
-  assign bg     = s.banner_bg     | default: settings.cookie_banner_bg     | default: 'rgba(255,255,255,0.85)'
-  assign txt    = s.banner_text   | default: settings.cookie_banner_text   | default: '#1a1a1a'
-  assign accent = s.banner_accent | default: settings.cookie_banner_accent | default: '#c9a96e'
-  assign msg    = s.cookie_message | default: settings.cookie_message      | default: 'We use cookies to personalise content, analyse traffic, and improve your experience. You can choose which cookies you allow.'
-  assign lbl_accept  = s.accept_label  | default: settings.cookie_accept_label  | default: 'Accept all'
-  assign lbl_decline = s.decline_label | default: settings.cookie_decline_label | default: 'Decline'
-  assign lbl_policy  = s.policy_label  | default: settings.cookie_policy_label  | default: 'Privacy Policy'
-  assign policy_url  = s.policy_url    | default: settings.cookie_policy_link   | default: '/policies/privacy-policy'
+  assign msg        = settings.cookie_message       | default: 'We use cookies to personalise content, analyse traffic, and improve your experience.'
+  assign lbl_accept = settings.cookie_accept_label  | default: 'Accept all'
+  assign lbl_decline= settings.cookie_decline_label | default: 'Decline'
+  assign lbl_policy = settings.cookie_policy_label  | default: 'Privacy Policy'
+  assign policy_url = settings.cookie_policy_link   | default: '/policies/privacy-policy'
+  assign banner_bg  = settings.cookie_banner_bg     | default: 'rgba(255,255,255,0.92)'
+  assign banner_txt = settings.cookie_banner_text   | default: '#1a1a1a'
+  assign banner_acc = settings.cookie_banner_accent | default: '#c9a96e'
 -%}
 
 <style>
 /* ════════════════════════════════════════════════════
    EU Cookie Banner — GDPR Compliant, Premium UI
    ════════════════════════════════════════════════════ */
-
 #EuCookieBanner {
-  --ck-bg:     {{ bg }};
-  --ck-text:   {{ txt }};
-  --ck-accent: {{ accent }};
+  --ck-bg:     {{ banner_bg }};
+  --ck-text:   {{ banner_txt }};
+  --ck-accent: {{ banner_acc }};
 
   position: fixed;
   bottom: 2rem;
   left: 50%;
-  transform: translateX(-50%) translateY(calc(100% + 3rem));
-  width: min(680px, calc(100vw - 2rem));
+  transform: translateX(-50%) translateY(calc(100% + 4rem));
+  width: min(660px, calc(100vw - 2rem));
   z-index: 10000;
 
-  /* Glassmorphism card */
   background: var(--ck-bg);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.5);
   border-radius: 20px;
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.10),
-    0 2px 8px  rgba(0, 0, 0, 0.06),
-    0 0  0 1px rgba(255, 255, 255, 0.20) inset;
+    0 8px 32px rgba(0,0,0,0.10),
+    0 2px 8px  rgba(0,0,0,0.06),
+    0 0  0 1px rgba(255,255,255,0.25) inset;
 
-  /* Spring entrance — starts off-screen */
   opacity: 0;
   pointer-events: none;
   transition:
-    transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.65s cubic-bezier(0.34,1.56,0.64,1),
     opacity   0.4s ease;
   will-change: transform, opacity;
 }
@@ -54,15 +50,14 @@
 }
 
 #EuCookieBanner.is-hiding {
-  transform: translateX(-50%) translateY(calc(100% + 3rem));
+  transform: translateX(-50%) translateY(calc(100% + 4rem));
   opacity: 0;
   pointer-events: none;
   transition:
-    transform 0.45s cubic-bezier(0.4, 0, 1, 1),
+    transform 0.4s cubic-bezier(0.4,0,1,1),
     opacity   0.3s ease;
 }
 
-/* Inner layout */
 .eu-ck__inner {
   display: flex;
   flex-direction: column;
@@ -70,7 +65,6 @@
   padding: 1.75rem 2rem;
 }
 
-/* Top row: icon + text */
 .eu-ck__body {
   display: flex;
   align-items: flex-start;
@@ -79,38 +73,35 @@
 
 .eu-ck__icon {
   flex-shrink: 0;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   background: linear-gradient(135deg, var(--ck-accent), #e8c89e);
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(201, 169, 110, 0.3);
+  box-shadow: 0 4px 14px rgba(201,169,110,0.35);
 }
 
 .eu-ck__icon svg {
   width: 22px;
   height: 22px;
-  color: #ffffff;
+  color: #fff;
 }
 
-.eu-ck__text {
-  flex: 1;
-  min-width: 0;
-}
+.eu-ck__text { flex: 1; min-width: 0; }
 
 .eu-ck__title {
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-weight: 700;
   color: var(--ck-text);
-  margin: 0 0 0.35rem;
+  margin: 0 0 0.4rem;
   letter-spacing: -0.01em;
 }
 
 .eu-ck__desc {
   font-size: 0.8125rem;
-  line-height: 1.6;
+  line-height: 1.65;
   color: var(--ck-text);
   opacity: 0.65;
   margin: 0;
@@ -123,10 +114,8 @@
   font-weight: 600;
   transition: opacity 0.2s ease;
 }
-
 .eu-ck__policy:hover { opacity: 0.75; }
 
-/* Bottom row: buttons */
 .eu-ck__actions {
   display: flex;
   align-items: center;
@@ -134,9 +123,29 @@
   justify-content: flex-end;
 }
 
-/* Base button */
+.eu-ck__region {
+  margin-right: auto;
+  font-size: 0.625rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ck-text);
+  opacity: 0.3;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.eu-ck__region::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ck-accent);
+  opacity: 0.8;
+}
+
+/* Buttons */
 .eu-ck__btn {
-  position: relative;
   padding: 0.65rem 1.75rem;
   border-radius: 50px;
   font-size: 0.8125rem;
@@ -146,123 +155,51 @@
   border: 2px solid transparent;
   cursor: pointer;
   white-space: nowrap;
-  /* 3D lift effect */
   transform: translateY(0) scale(1);
   transition:
-    transform  0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.2s ease,
+    transform  0.25s cubic-bezier(0.34,1.56,0.64,1),
+    box-shadow 0.25s ease,
     background 0.2s ease,
     border-color 0.2s ease;
-  will-change: transform;
 }
+.eu-ck__btn:hover  { transform: translateY(-3px) scale(1.04); }
+.eu-ck__btn:active { transform: translateY(0)    scale(0.97); }
 
-.eu-ck__btn:hover {
-  transform: translateY(-3px) scale(1.03);
-}
-
-.eu-ck__btn:active {
-  transform: translateY(0) scale(0.98);
-}
-
-/* Accept button */
 .eu-ck__btn--accept {
   background: var(--ck-accent);
-  color: #ffffff;
-  box-shadow:
-    0 4px 14px rgba(201, 169, 110, 0.35),
-    0 1px 0 rgba(255,255,255,0.2) inset;
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(201,169,110,0.35), 0 1px 0 rgba(255,255,255,0.2) inset;
 }
-
 .eu-ck__btn--accept:hover {
-  box-shadow:
-    0 8px 24px rgba(201, 169, 110, 0.45),
-    0 1px 0 rgba(255,255,255,0.2) inset;
+  box-shadow: 0 8px 24px rgba(201,169,110,0.45), 0 1px 0 rgba(255,255,255,0.2) inset;
 }
 
-/* Decline button */
 .eu-ck__btn--decline {
   background: transparent;
   color: var(--ck-text);
-  border-color: rgba(0, 0, 0, 0.12);
-  box-shadow: none;
+  border-color: rgba(0,0,0,0.15);
 }
-
 .eu-ck__btn--decline:hover {
-  border-color: rgba(0, 0, 0, 0.3);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-color: rgba(0,0,0,0.35);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.07);
 }
 
-/* Region badge (small GDPR label) */
-.eu-ck__region {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.625rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ck-text);
-  opacity: 0.35;
-  margin-right: auto;
-}
-
-.eu-ck__region::before {
-  content: '';
-  display: block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--ck-accent);
-  opacity: 0.7;
-}
-
-/* Responsive */
+/* Mobile */
 @media (max-width: 480px) {
   #EuCookieBanner {
-    bottom: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    transform: translateY(calc(100% + 1rem));
+    bottom: 0; left: 0; right: 0; width: 100%;
+    transform: translateY(calc(100% + 2rem));
     border-radius: 20px 20px 0 0;
   }
-
-  #EuCookieBanner.is-visible {
-    transform: translateY(0);
-  }
-
-  #EuCookieBanner.is-hiding {
-    transform: translateY(calc(100% + 1rem));
-  }
-
-  .eu-ck__inner {
-    padding: 1.5rem 1.25rem 2rem;
-  }
-
-  .eu-ck__actions {
-    flex-direction: column-reverse;
-  }
-
-  .eu-ck__btn {
-    width: 100%;
-    text-align: center;
-    padding: 0.85rem 1.5rem;
-  }
+  #EuCookieBanner.is-visible  { transform: translateY(0); }
+  #EuCookieBanner.is-hiding   { transform: translateY(calc(100% + 2rem)); }
+  .eu-ck__inner { padding: 1.5rem 1.25rem 2rem; }
+  .eu-ck__actions { flex-direction: column-reverse; }
+  .eu-ck__btn { width: 100%; text-align: center; padding: 0.85rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  #EuCookieBanner,
-  #EuCookieBanner.is-hiding,
-  .eu-ck__btn {
-    transition: opacity 0.2s ease;
-    transform: none !important;
-  }
-
-  #EuCookieBanner {
-    bottom: 1rem;
-    left: 50%;
-    transform: translateX(-50%) !important;
-  }
+  #EuCookieBanner, .eu-ck__btn { transition: opacity 0.2s ease !important; }
 }
 </style>
 
@@ -274,19 +211,15 @@
   aria-hidden="true"
 >
   <div class="eu-ck__inner">
-
     <div class="eu-ck__body">
-      <!-- Cookie icon -->
       <div class="eu-ck__icon" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/>
           <path d="M8.5 8.5v.01"/><path d="M16 15.5v.01"/><path d="M12 12v.01"/>
         </svg>
       </div>
-
-      <!-- Text -->
       <div class="eu-ck__text">
-        <p class="eu-ck__title">{{ 'general.privacy.cookie_title' | t | default: 'We value your privacy' }}</p>
+        <p class="eu-ck__title">We value your privacy</p>
         <p class="eu-ck__desc">
           {{ msg }}
           <a href="{{ policy_url }}" class="eu-ck__policy" target="_blank" rel="noopener">{{ lbl_policy }}</a>
@@ -296,31 +229,36 @@
 
     <div class="eu-ck__actions">
       <span class="eu-ck__region" id="EuCkRegionLabel">GDPR</span>
-
-      <button type="button" class="eu-ck__btn eu-ck__btn--decline" id="EuCookieDecline">
-        {{ lbl_decline }}
-      </button>
-      <button type="button" class="eu-ck__btn eu-ck__btn--accept" id="EuCookieAccept">
-        {{ lbl_accept }}
-      </button>
+      <button type="button" class="eu-ck__btn eu-ck__btn--decline" id="EuCookieDecline">{{ lbl_decline }}</button>
+      <button type="button" class="eu-ck__btn eu-ck__btn--accept"  id="EuCookieAccept">{{ lbl_accept }}</button>
     </div>
-
   </div>
 </div>
 
 <script>
 (function () {
-  var banner      = document.getElementById('EuCookieBanner');
-  var acceptBtn   = document.getElementById('EuCookieAccept');
-  var declineBtn  = document.getElementById('EuCookieDecline');
-  var regionLabel = document.getElementById('EuCkRegionLabel');
+  var banner     = document.getElementById('EuCookieBanner');
+  var acceptBtn  = document.getElementById('EuCookieAccept');
+  var declineBtn = document.getElementById('EuCookieDecline');
+  var regionEl   = document.getElementById('EuCkRegionLabel');
   if (!banner) return;
 
-  /* ── Helpers ── */
+  var COOKIE_KEY = 'eu_ck_consent_v2';
+
+  /* ── Cookie helpers ── */
+  function getCk(name) {
+    var m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return m ? m.pop() : null;
+  }
+  function setCk(name, val, days) {
+    var d = new Date();
+    d.setTime(d.getTime() + days * 864e5);
+    document.cookie = name + '=' + val + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax;Secure';
+  }
+
+  /* ── Show / hide ── */
   function show() {
-    banner.removeAttribute('aria-hidden');
     banner.setAttribute('aria-hidden', 'false');
-    /* rAF ensures transition fires after display */
     requestAnimationFrame(function () {
       requestAnimationFrame(function () {
         banner.classList.add('is-visible');
@@ -328,87 +266,67 @@
     });
   }
 
-  function hide() {
+  function hide(callback) {
+    banner.classList.remove('is-visible');
     banner.classList.add('is-hiding');
     banner.setAttribute('aria-hidden', 'true');
     setTimeout(function () {
-      banner.classList.remove('is-visible', 'is-hiding');
+      banner.classList.remove('is-hiding');
+      if (callback) callback();
     }, 500);
   }
 
-  /* ── Shopify Customer Privacy API ── */
-  function initWithShopify() {
-    var api = window.Shopify && window.Shopify.customerPrivacy;
-    if (!api) {
-      /* Fallback: cookie-based only */
-      initFallback();
-      return;
-    }
+  /* ── Already consented? Stop. ── */
+  if (getCk(COOKIE_KEY)) return;
 
-    /* Update region label */
+  /* ── Shopify Customer Privacy API path ── */
+  function runWithShopifyAPI(api) {
+    /* Update region badge */
     try {
-      var reg = api.getRegulation();
-      if (regionLabel && reg && reg !== 'not_applicable') {
-        regionLabel.textContent = reg.replace(/_/g, ' ');
-      } else if (regionLabel) {
-        regionLabel.style.display = 'none';
+      var reg = api.getRegulation ? api.getRegulation() : null;
+      if (reg && reg !== 'not_applicable' && regionEl) {
+        regionEl.textContent = reg.replace(/_/g, ' ');
+      } else if (regionEl) {
+        regionEl.style.display = 'none';
       }
     } catch(e) {}
 
-    /* Should banner show? */
-    var shouldShow = false;
-    try { shouldShow = api.shouldShowGDPRBanner(); } catch(e) {}
+    /* shouldShowBanner covers all regulation types */
+    var needed = false;
+    try { needed = api.shouldShowBanner();      } catch(e) {}
+    if (!needed) { try { needed = api.shouldShowGDPRBanner(); } catch(e) {} }
 
-    /* Also try shouldShowBanner (older API) */
-    if (!shouldShow) {
-      try { shouldShow = api.shouldShowBanner(); } catch(e) {}
-    }
+    /* Always show when no consent cookie exists — don't rely solely on Shopify check */
+    if (!needed && !getCk(COOKIE_KEY)) needed = true;
 
-    if (!shouldShow) return; /* Consent already given */
+    if (!needed) return;
 
     setTimeout(show, 800);
 
     acceptBtn && acceptBtn.addEventListener('click', function () {
+      setCk(COOKIE_KEY, 'accepted', 365);
       try {
-        api.setTrackingConsent(true, function() {
-          /* Shopify confirmed — reload so analytics fires */
-          hide();
-          setTimeout(function () { window.location.reload(); }, 500);
-        });
+        api.setTrackingConsent(true, function () { hide(function () { window.location.reload(); }); });
       } catch(e) { hide(); }
     });
 
     declineBtn && declineBtn.addEventListener('click', function () {
+      setCk(COOKIE_KEY, 'declined', 30);
       try {
-        api.setTrackingConsent(false, function() { hide(); });
+        api.setTrackingConsent(false, function () { hide(); });
       } catch(e) { hide(); }
     });
   }
 
-  /* ── Fallback (no Shopify API / non-EU) ── */
-  function initFallback() {
-    var COOKIE_KEY = 'eu_ck_v2';
-
-    function getCk(name) {
-      var m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-      return m ? m[2] : null;
-    }
-
-    function setCk(name, val, days) {
-      var d = new Date();
-      d.setTime(d.getTime() + days * 864e5);
-      document.cookie = name + '=' + val + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
-    }
-
-    if (getCk(COOKIE_KEY)) return; /* Already consented */
-
+  /* ── Fallback path (no Shopify API) ── */
+  function runFallback() {
+    if (regionEl) regionEl.style.display = 'none';
     setTimeout(show, 800);
 
     acceptBtn && acceptBtn.addEventListener('click', function () {
       setCk(COOKIE_KEY, 'accepted', 365);
       hide();
     });
-
     declineBtn && declineBtn.addEventListener('click', function () {
       setCk(COOKIE_KEY, 'declined', 30);
       hide();
@@ -417,15 +335,17 @@
 
   /* ── Bootstrap ── */
   if (window.Shopify && window.Shopify.customerPrivacy) {
-    initWithShopify();
+    runWithShopifyAPI(window.Shopify.customerPrivacy);
   } else if (window.Shopify && window.Shopify.loadFeatures) {
-    /* Load the Customer Privacy API */
-    window.Shopify.loadFeatures([{ name: 'consent-tracking-api', version: '0.1' }], function (err) {
-      if (err) { initFallback(); return; }
-      initWithShopify();
-    });
+    window.Shopify.loadFeatures(
+      [{ name: 'consent-tracking-api', version: '0.1' }],
+      function (err) {
+        if (err || !window.Shopify.customerPrivacy) { runFallback(); return; }
+        runWithShopifyAPI(window.Shopify.customerPrivacy);
+      }
+    );
   } else {
-    initFallback();
+    runFallback();
   }
 
 }());
