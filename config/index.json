@@ -1,0 +1,82 @@
+{
+  "sections": {
+    "promo-sidebar": {
+      "type": "promo-sidebar",
+      "disabled": false,
+      "settings": {
+        "offer_text": "GET 20% OFF",
+        "description": "Shop our exclusive collection of premium luxury items",
+        "promo_text": "GET OFFER NOW",
+        "button_label": "Shop Now",
+        "button_link": "/collections/all",
+        "button_padding": "1rem 3rem",
+        "bg_color_primary": "#1a1a1a",
+        "bg_color_secondary": "#2a2a2a",
+        "sidebar_bg": "#0f0f0f",
+        "offer_text_color": "#ffffff",
+        "desc_text_color": "#c9a96e",
+        "promo_text_color": "#c9a96e",
+        "social_bg": "rgba(255, 255, 255, 0.08)",
+        "social_text": "#ffffff",
+        "social_hover_bg": "#c9a96e",
+        "social_hover_text": "#1a1a1a",
+        "button_bg": "#c9a96e",
+        "button_text": "#1a1a1a",
+        "button_hover_bg": "#e8c89e"
+      },
+      "blocks": {
+        "social-facebook": {
+          "type": "social",
+          "settings": {
+            "icon": "facebook",
+            "link": "https://facebook.com",
+            "label": "Facebook"
+          }
+        },
+        "social-twitter": {
+          "type": "social",
+          "settings": {
+            "icon": "twitter",
+            "link": "https://twitter.com",
+            "label": "X (Twitter)"
+          }
+        },
+        "social-instagram": {
+          "type": "social",
+          "settings": {
+            "icon": "instagram",
+            "link": "https://instagram.com",
+            "label": "Instagram"
+          }
+        },
+        "social-youtube": {
+          "type": "social",
+          "settings": {
+            "icon": "youtube",
+            "link": "https://youtube.com",
+            "label": "YouTube"
+          }
+        },
+        "product-image-1": {
+          "type": "product",
+          "settings": {}
+        },
+        "product-image-2": {
+          "type": "product",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "social-facebook",
+        "social-twitter",
+        "social-instagram",
+        "social-youtube",
+        "product-image-1",
+        "product-image-2"
+      ]
+    }
+  },
+  "content_for_index": [
+    "promo-sidebar"
+  ]
+}
