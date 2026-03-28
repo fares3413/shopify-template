@@ -128,9 +128,7 @@
     {%- render 'newsletter-popup' -%}
   {%- endif -%}
 
-  {%- if settings.cookie_enabled -%}
-    {%- render 'cookie-consent' -%}
-  {%- endif -%}
+  {%- render 'eu-cookie-banner' -%}
 
   <script src="{{ 'theme.js' | asset_url }}" defer></script>
 

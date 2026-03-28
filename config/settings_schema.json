@@ -79,42 +79,64 @@
     "settings": [
       {
         "type": "header",
-        "content": "Cookie Consent Banner"
+        "content": "EU Cookie Banner (GDPR)"
       },
       {
-        "type": "checkbox",
-        "id": "cookie_enabled",
-        "label": "Enable cookie consent banner",
-        "default": true
+        "type": "paragraph",
+        "content": "Uses the Shopify Customer Privacy API to block tracking until consent is given. Automatically detects GDPR, CCPA, and other regulations."
       },
       {
         "type": "textarea",
         "id": "cookie_message",
-        "label": "Cookie message",
-        "default": "We use cookies to enhance your experience, analyze site traffic, and personalize content. By continuing to use this site, you agree to our use of cookies."
+        "label": "Banner message",
+        "default": "We use cookies to personalise content, analyse traffic, and improve your experience. You can choose which cookies you allow."
       },
       {
         "type": "text",
         "id": "cookie_accept_label",
-        "label": "Accept button label",
+        "label": "Accept button text",
         "default": "Accept all"
       },
       {
         "type": "text",
         "id": "cookie_decline_label",
-        "label": "Decline button label",
+        "label": "Decline button text",
         "default": "Decline"
       },
       {
         "type": "url",
         "id": "cookie_policy_link",
-        "label": "Cookie policy page link"
+        "label": "Privacy policy page",
+        "info": "Defaults to /policies/privacy-policy"
       },
       {
         "type": "text",
         "id": "cookie_policy_label",
-        "label": "Cookie policy link text",
-        "default": "Learn more"
+        "label": "Privacy policy link text",
+        "default": "Privacy Policy"
+      },
+      {
+        "type": "header",
+        "content": "Banner Colors"
+      },
+      {
+        "type": "color",
+        "id": "cookie_banner_bg",
+        "label": "Background",
+        "default": "rgba(255,255,255,0.9)",
+        "info": "Supports rgba for glassmorphism effect"
+      },
+      {
+        "type": "color",
+        "id": "cookie_banner_text",
+        "label": "Text color",
+        "default": "#1a1a1a"
+      },
+      {
+        "type": "color",
+        "id": "cookie_banner_accent",
+        "label": "Accent / button color",
+        "default": "#c9a96e"
       }
     ]
   },
