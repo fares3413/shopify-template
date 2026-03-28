@@ -1,0 +1,570 @@
+{%- assign s = section.settings -%}
+{%- assign sid = section.id -%}
+
+<style>
+/* ════════════════════════════════════════════════════
+   Promo Sidebar  ·  section #PromoSidebar-{{ sid }}
+   ════════════════════════════════════════════════════ */
+#PromoSidebar-{{ sid }} {
+  position: relative;
+  min-height: 100vh;
+  background: linear-gradient(135deg, {{ s.bg_color_primary }} 0%, {{ s.bg_color_secondary }} 100%);
+  overflow: hidden;
+  display: flex;
+  align-items: stretch;
+}
+
+/* ── Left sidebar: Social icons + promo text ── */
+#PromoSidebar-{{ sid }} .ps__sidebar {
+  width: 120px;
+  background: {{ s.sidebar_bg }};
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3rem 1.5rem;
+  gap: 3rem;
+  position: relative;
+  z-index: 2;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Social icons stack */
+#PromoSidebar-{{ sid }} .ps__socials {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+#PromoSidebar-{{ sid }} .ps__social-link {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: {{ s.social_bg }};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: {{ s.social_text }};
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition:
+    background 0.3s var(--ease-component),
+    transform 0.3s var(--ease-component);
+  border: 2px solid transparent;
+}
+
+#PromoSidebar-{{ sid }} .ps__social-link:hover {
+  background: {{ s.social_hover_bg }};
+  color: {{ s.social_hover_text }};
+  transform: scale(1.12);
+}
+
+/* Promo text (vertical) */
+#PromoSidebar-{{ sid }} .ps__promo {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-align: center;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: {{ s.promo_text_color }};
+  white-space: nowrap;
+}
+
+/* ── Center content ── */
+#PromoSidebar-{{ sid }} .ps__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 3rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+#PromoSidebar-{{ sid }} .ps__offer {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  font-weight: 900;
+  color: {{ s.offer_text_color }};
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+#PromoSidebar-{{ sid }} .ps__description {
+  font-size: 1.125rem;
+  color: {{ s.desc_text_color }};
+  margin: 0 0 2.5rem;
+  max-width: 400px;
+  opacity: 0.85;
+  line-height: 1.6;
+}
+
+#PromoSidebar-{{ sid }} .ps__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: {{ s.button_padding }};
+  background: {{ s.button_bg }};
+  color: {{ s.button_text }};
+  border: 2px solid {{ s.button_bg }};
+  border-radius: 50px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition:
+    background 0.3s var(--ease-component),
+    border-color 0.3s var(--ease-component),
+    transform 0.3s var(--ease-component);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+#PromoSidebar-{{ sid }} .ps__btn:hover {
+  background: {{ s.button_hover_bg }};
+  border-color: {{ s.button_hover_bg }};
+  transform: translateY(-3px);
+}
+
+/* ── Right side: Product showcase ── */
+#PromoSidebar-{{ sid }} .ps__products {
+  width: 280px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  padding: 3rem 2rem;
+  align-content: center;
+}
+
+#PromoSidebar-{{ sid }} .ps__product {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  aspect-ratio: 0.9;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform 0.5s var(--ease-component),
+    box-shadow 0.5s var(--ease-component),
+    border-color 0.3s var(--ease-component);
+  cursor: pointer;
+}
+
+#PromoSidebar-{{ sid }} .ps__product:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+#PromoSidebar-{{ sid }} .ps__product-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s var(--ease-component);
+  display: block;
+}
+
+#PromoSidebar-{{ sid }} .ps__product:hover .ps__product-img {
+  transform: scale(1.08);
+}
+
+#PromoSidebar-{{ sid }} .ps__product-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(201, 169, 110, 0.1), rgba(201, 169, 110, 0.05));
+  color: rgba(255, 255, 255, 0.3);
+}
+
+#PromoSidebar-{{ sid }} .ps__product-placeholder svg {
+  width: 64px;
+  height: 64px;
+}
+
+/* ── Responsive: tablet ── */
+@media (max-width: 1023px) {
+  #PromoSidebar-{{ sid }} {
+    min-height: auto;
+    flex-direction: column;
+  }
+
+  #PromoSidebar-{{ sid }} .ps__sidebar {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 2rem;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  #PromoSidebar-{{ sid }} .ps__socials {
+    flex-direction: row;
+    gap: 1.5rem;
+  }
+
+  #PromoSidebar-{{ sid }} .ps__promo {
+    writing-mode: horizontal-tb;
+    transform: none;
+  }
+
+  #PromoSidebar-{{ sid }} .ps__content {
+    padding: 3rem 2rem;
+  }
+
+  #PromoSidebar-{{ sid }} .ps__products {
+    width: 100%;
+    padding: 2rem;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Responsive: mobile ── */
+@media (max-width: 480px) {
+  #PromoSidebar-{{ sid }} .ps__sidebar {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  #PromoSidebar-{{ sid }} .ps__content {
+    padding: 2rem 1.5rem;
+  }
+
+  #PromoSidebar-{{ sid }} .ps__offer {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+  }
+
+  #PromoSidebar-{{ sid }} .ps__description {
+    font-size: 1rem;
+    margin: 0 0 1.5rem;
+  }
+
+  #PromoSidebar-{{ sid }} .ps__products {
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  #PromoSidebar-{{ sid }} .ps__social-link {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+}
+
+/* ── Accessibility ── */
+@media (prefers-reduced-motion: reduce) {
+  #PromoSidebar-{{ sid }} .ps__social-link,
+  #PromoSidebar-{{ sid }} .ps__product,
+  #PromoSidebar-{{ sid }} .ps__btn {
+    transition: none;
+  }
+}
+</style>
+
+<div id="PromoSidebar-{{ sid }}">
+
+  {%- comment -%} Left Sidebar: Social Links + Promo Text {%- endcomment -%}
+  <div class="ps__sidebar">
+    {%- if section.blocks.size > 0 -%}
+      <div class="ps__socials">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'social' -%}
+            <a
+              href="{{ block.settings.link }}"
+              title="{{ block.settings.label }}"
+              class="ps__social-link"
+              target="_blank"
+              rel="noopener noreferrer"
+              {{ block.shopify_attributes }}
+            >
+              {%- case block.settings.icon -%}
+                {%- when 'facebook' -%}f
+                {%- when 'twitter' -%}𝕏
+                {%- when 'instagram' -%}📷
+                {%- when 'youtube' -%}▶
+                {%- when 'tiktok' -%}♪
+                {%- when 'pinterest' -%}📌
+                {%- else -%}•
+              {%- endcase -%}
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if s.promo_text != blank -%}
+      <p class="ps__promo">{{ s.promo_text }}</p>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} Center: Promotional Offer {%- endcomment -%}
+  <div class="ps__content">
+    {%- if s.offer_text != blank -%}
+      <h1 class="ps__offer">{{ s.offer_text }}</h1>
+    {%- endif -%}
+
+    {%- if s.description != blank -%}
+      <p class="ps__description">{{ s.description }}</p>
+    {%- endif -%}
+
+    {%- if s.button_label != blank -%}
+      <a href="{{ s.button_link | default: '#' }}" class="ps__btn">
+        {{ s.button_label }}
+        <span>→</span>
+      </a>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} Right: Product Showcase {%- endcomment -%}
+  <div class="ps__products">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'product' -%}
+        <div class="ps__product" {{ block.shopify_attributes }}>
+          {%- if block.settings.image != blank -%}
+            <img
+              src="{{ block.settings.image | image_url: width: 600 }}"
+              alt="{{ block.settings.image.alt | default: 'Product' | escape }}"
+              class="ps__product-img"
+              loading="lazy"
+              width="300"
+              height="300"
+            >
+          {%- else -%}
+            <div class="ps__product-placeholder">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+</div>
+
+{% schema %}
+{
+  "name": "Promo Sidebar",
+  "tag": "section",
+  "class": "section-promo-sidebar",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Promo Content"
+    },
+    {
+      "type": "text",
+      "id": "offer_text",
+      "label": "Main offer text",
+      "default": "GET 20% OFF",
+      "info": "e.g., GET 20% OFF, LIMITED TIME, EXCLUSIVE DEAL"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Shop our exclusive collection of premium luxury items",
+      "info": "Brief description of the offer"
+    },
+    {
+      "type": "text",
+      "id": "promo_text",
+      "label": "Sidebar promo text",
+      "default": "GET OFFER NOW",
+      "info": "Text that appears vertically on the sidebar"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Shop Now"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "button_padding",
+      "label": "Button padding",
+      "default": "1rem 3rem",
+      "info": "CSS padding value, e.g., 1rem 3rem"
+    },
+    {
+      "type": "header",
+      "content": "Colors - Background"
+    },
+    {
+      "type": "color",
+      "id": "bg_color_primary",
+      "label": "Background color primary",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "bg_color_secondary",
+      "label": "Background color secondary",
+      "default": "#2a2a2a",
+      "info": "Creates gradient with primary"
+    },
+    {
+      "type": "color",
+      "id": "sidebar_bg",
+      "label": "Sidebar background",
+      "default": "#0f0f0f"
+    },
+    {
+      "type": "header",
+      "content": "Colors - Text"
+    },
+    {
+      "type": "color",
+      "id": "offer_text_color",
+      "label": "Offer text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "desc_text_color",
+      "label": "Description text color",
+      "default": "#c9a96e"
+    },
+    {
+      "type": "color",
+      "id": "promo_text_color",
+      "label": "Sidebar promo text color",
+      "default": "#c9a96e"
+    },
+    {
+      "type": "header",
+      "content": "Colors - Social Icons"
+    },
+    {
+      "type": "color",
+      "id": "social_bg",
+      "label": "Social icon background",
+      "default": "rgba(255, 255, 255, 0.08)"
+    },
+    {
+      "type": "color",
+      "id": "social_text",
+      "label": "Social icon text",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "social_hover_bg",
+      "label": "Social icon hover background",
+      "default": "#c9a96e"
+    },
+    {
+      "type": "color",
+      "id": "social_hover_text",
+      "label": "Social icon hover text",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "header",
+      "content": "Colors - Button"
+    },
+    {
+      "type": "color",
+      "id": "button_bg",
+      "label": "Button background",
+      "default": "#c9a96e"
+    },
+    {
+      "type": "color",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "button_hover_bg",
+      "label": "Button hover background",
+      "default": "#e8c89e"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "social",
+      "name": "Social Link",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Social platform",
+          "options": [
+            { "value": "facebook", "label": "Facebook" },
+            { "value": "twitter", "label": "X (Twitter)" },
+            { "value": "instagram", "label": "Instagram" },
+            { "value": "youtube", "label": "YouTube" },
+            { "value": "tiktok", "label": "TikTok" },
+            { "value": "pinterest", "label": "Pinterest" }
+          ],
+          "default": "facebook"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Social profile link",
+          "default": "https://facebook.com"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label (for accessibility)",
+          "default": "Facebook"
+        }
+      ]
+    },
+    {
+      "type": "product",
+      "name": "Product Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Product image"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promo Sidebar",
+      "blocks": [
+        { "type": "social", "settings": { "icon": "facebook", "link": "https://facebook.com", "label": "Facebook" } },
+        { "type": "social", "settings": { "icon": "twitter", "link": "https://twitter.com", "label": "Twitter" } },
+        { "type": "social", "settings": { "icon": "instagram", "link": "https://instagram.com", "label": "Instagram" } },
+        { "type": "social", "settings": { "icon": "youtube", "link": "https://youtube.com", "label": "YouTube" } },
+        { "type": "product" },
+        { "type": "product" }
+      ]
+    }
+  ]
+}
+{% endschema %}
