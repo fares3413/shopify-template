@@ -37,7 +37,7 @@
    ════════════════════════════════════════════════════ */
 #ScrollCarousel-{{ sid }} {
   background: {{ s.bg_color | default: '#1a1a1a' }};
-  padding: 5rem 0;
+  padding: var(--section-pad, 5.5rem) 0;
   overflow: hidden;
 }
 
@@ -47,10 +47,10 @@
   max-width: var(--page-width, 1320px);
   margin: 0 auto;
   padding: 0 var(--gutter, 2rem) 3.5rem;
+  font-family: var(--font-body-family, 'Inter', sans-serif);
 }
 #ScrollCarousel-{{ sid }} .sc__eyebrow {
   display: inline-block;
-  font-family: var(--font-body-family, 'Inter', sans-serif);
   font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -59,7 +59,6 @@
   margin: 0 0 1rem;
 }
 #ScrollCarousel-{{ sid }} .sc__heading {
-  font-family: var(--font-body-family, 'Inter', sans-serif);
   font-size: clamp(1.75rem, 3vw, 2.75rem);
   font-weight: 800;
   color: {{ s.text_color | default: '#ffffff' }};
@@ -68,7 +67,6 @@
   letter-spacing: -0.02em;
 }
 #ScrollCarousel-{{ sid }} .sc__desc {
-  font-family: var(--font-body-family, 'Inter', sans-serif);
   font-size: 1rem;
   line-height: 1.7;
   color: {{ s.text_color | default: '#ffffff' }};
@@ -115,6 +113,8 @@
   gap: {{ gap }}px;
   width: {{ grid_w }}px;
   animation: sc-scroll-up-{{ sid }} {{ dur }}s linear infinite;
+  transform-origin: center;
+  transition: transform 0.1s linear;
 }
 
 /* Pause on hover or keyboard focus inside the clip */
@@ -124,7 +124,7 @@
 }
 
 /* ════════════════
-   Card — styled to match the page (white card on dark section)
+   Card — scroll entry animation + hover effects
    ════════════════ */
 #ScrollCarousel-{{ sid }} .sc__card {
   width: {{ card_w }}px;
@@ -132,15 +132,29 @@
   border-radius: var(--radius-lg, 16px);
   overflow: hidden;
   background: var(--color-bg, #ffffff);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.14);
-  transition: transform 0.32s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-              box-shadow 0.32s ease;
+  box-shadow: var(--shadow-md);
+  position: relative;
+
+  /* Entry animation — starts invisible, JS adds .is-visible */
+  opacity: 0;
+  transform: translateY(28px) scale(0.96);
+  transition:
+    opacity 0.7s var(--ease-reveal),
+    transform 0.7s var(--ease-reveal),
+    box-shadow var(--ease-component);
 }
+
+#ScrollCarousel-{{ sid }} .sc__card.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
 #ScrollCarousel-{{ sid }} .sc__card:hover {
+  box-shadow: var(--shadow-float);
   transform: translateY(-5px) scale(1.018);
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
 }
 
 /* Card inner — link or div wrapper fills the full card */
@@ -164,7 +178,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.5s ease;
+  transition: transform 0.5s var(--ease-component);
 }
 #ScrollCarousel-{{ sid }} .sc__card:hover .sc__card-img {
   transform: scale(1.06);
@@ -181,7 +195,7 @@
   width: 40px;
   height: 40px;
   opacity: 0.28;
-  color: var(--color-text-muted, #888);
+  color: var(--color-text-muted, #666666);
 }
 
 /* Info strip — exactly matches cl-card__info style from the theme */
@@ -190,9 +204,9 @@
   padding: 0.75rem 1rem 0.875rem;
   border-top: 1px solid var(--color-border, #e8e8e8);
   background: var(--color-bg, #ffffff);
+  font-family: var(--font-body-family, 'Inter', sans-serif);
 }
 #ScrollCarousel-{{ sid }} .sc__card-label {
-  font-family: var(--font-body-family, 'Inter', sans-serif);
   font-size: 0.875rem;
   font-weight: 600;
   color: var(--color-primary, #1a1a1a);
@@ -203,9 +217,8 @@
   text-overflow: ellipsis;
 }
 #ScrollCarousel-{{ sid }} .sc__card-sublabel {
-  font-family: var(--font-body-family, 'Inter', sans-serif);
   font-size: 0.75rem;
-  color: var(--color-text-muted, #888);
+  color: var(--color-text-muted, #666666);
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -213,7 +226,7 @@
 }
 
 /* ── Mobile: switch to horizontal drag-scroll ── */
-@media (max-width: 768px) {
+@media (max-width: 1023px) {
   #ScrollCarousel-{{ sid }} {
     padding: 3.5rem 0;
   }
@@ -258,6 +271,19 @@
   #ScrollCarousel-{{ sid }} .sc__card-img-wrap {
     flex: none;
     aspect-ratio: 4 / 3;
+  }
+}
+
+/* ── Accessibility: disable animations for reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  #ScrollCarousel-{{ sid }} .sc__card {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none;
+  }
+  #ScrollCarousel-{{ sid }} .sc__track {
+    animation: none !important;
+    transform: none !important;
   }
 }
 </style>
@@ -377,6 +403,78 @@
   </div>
 
 </div>
+
+<script>
+(function () {
+  var section = document.getElementById('ScrollCarousel-{{ sid }}');
+  var track   = section && section.querySelector('.sc__track');
+  if (!section || !track) return;
+
+  /* ── Entry animation: observe the section wrapper ── */
+  if ('IntersectionObserver' in window) {
+    var cards = Array.from(section.querySelectorAll('.sc__card:not([aria-hidden="true"])'));
+
+    var sectionObs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        cards.forEach(function (card, i) {
+          setTimeout(function () {
+            card.classList.add('is-visible');
+          }, i * 60); /* 60ms stagger between cards */
+        });
+        sectionObs.disconnect();
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -80px 0px' });
+
+    sectionObs.observe(section);
+  } else {
+    /* Fallback: show all cards immediately */
+    section.querySelectorAll('.sc__card').forEach(function (c) {
+      c.classList.add('is-visible');
+    });
+  }
+
+  /* ── Scroll velocity skew ── */
+  var lastY   = window.scrollY;
+  var current = 0;       /* interpolated skew value */
+  var target  = 0;       /* target skew value */
+  var raf;
+
+  function lerp(a, b, t) { return a + (b - a) * t; }
+
+  function tick() {
+    current = lerp(current, target, 0.12); /* smooth decay */
+    if (Math.abs(current) > 0.05) {
+      track.style.transform = 'skewY(' + current.toFixed(3) + 'deg)';
+      raf = requestAnimationFrame(tick);
+    } else {
+      track.style.transform = '';
+      raf = null;
+    }
+  }
+
+  function isSectionInView() {
+    var rect = section.getBoundingClientRect();
+    return rect.top < window.innerHeight && rect.bottom > 0;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!isSectionInView()) return;
+    var dy  = window.scrollY - lastY;
+    lastY   = window.scrollY;
+    target  = Math.max(-3, Math.min(3, dy * 0.25)); /* ±3deg max */
+    target *= 0.6; /* dampen */
+    if (!raf) raf = requestAnimationFrame(tick);
+  }, { passive: true });
+
+  /* Respect prefers-reduced-motion */
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    section.querySelectorAll('.sc__card').forEach(function (c) {
+      c.classList.add('is-visible');
+    });
+  }
+}());
+</script>
 
 {% schema %}
 {

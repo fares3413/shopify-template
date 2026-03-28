@@ -21,8 +21,8 @@
   padding: 0 var(--gutter, 2rem);
 }
 #ImgCarousel-{{ sid }} .ic__eyebrow {
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-accent, #c9a96e);
@@ -67,20 +67,74 @@
   to   { transform: translateX(-50%); }
 }
 
-/* Cards */
+/* Cards — 3D Tilt + Glassmorphism */
 #ImgCarousel-{{ sid }} .ic__card {
+  /* 3D tilt state variables (updated by JS) */
+  --tilt-x:   0deg;
+  --tilt-y:   0deg;
+  --glare-x:  50%;
+  --glare-y:  50%;
+
   flex-shrink: 0;
   width: var(--ic-width);
   border-radius: 20px;
   overflow: hidden;
-  background: var(--color-bg-soft, #f5f5f3);
-  transition: transform 0.35s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.3s ease;
-  cursor: default;
+  position: relative;
+
+  /* Glassmorphism — crisp white + light edge + depth */
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.06),
+    0 1px 0 rgba(255, 255, 255, 0.7) inset;
+
+  /* 3D perspective applied here */
+  transform:
+    perspective(700px)
+    rotateX(var(--tilt-x))
+    rotateY(var(--tilt-y))
+    scale(1);
+  transform-style: preserve-3d;
+  transition:
+    transform 0.08s ease-out,
+    box-shadow 0.35s var(--ease-component);
+  will-change: transform;
+  cursor: pointer;
 }
-#ImgCarousel-{{ sid }} .ic__card:hover {
-  transform: scale(1.025) translateY(-4px);
-  box-shadow: 0 20px 48px rgba(0,0,0,0.13);
+
+/* Glare overlay */
+#ImgCarousel-{{ sid }} .ic__card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--glare-x) var(--glare-y),
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.04) 55%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 3;
+  mix-blend-mode: overlay;
 }
+
+#ImgCarousel-{{ sid }} .ic__card.is-tilting::before {
+  opacity: 1;
+}
+
+/* Hover shadow bloom */
+#ImgCarousel-{{ sid }} .ic__card.is-tilting {
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.14),
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 1px 0 rgba(255, 255, 255, 0.7) inset;
+}
+
 #ImgCarousel-{{ sid }} .ic__card-img-wrap {
   width: 100%;
   {%- if s.image_ratio == 'square' -%}
@@ -92,15 +146,17 @@
   {%- endif -%}
   overflow: hidden;
 }
+
 #ImgCarousel-{{ sid }} .ic__card-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.5s ease;
+  transition: transform 0.5s var(--ease-component);
 }
-#ImgCarousel-{{ sid }} .ic__card:hover .ic__card-img {
-  transform: scale(1.05);
+
+#ImgCarousel-{{ sid }} .ic__card.is-tilting .ic__card-img {
+  transform: scale(1.04) translateZ(20px);
 }
 #ImgCarousel-{{ sid }} .ic__card-placeholder {
   width: 100%;
@@ -117,10 +173,20 @@
 }
 #ImgCarousel-{{ sid }} .ic__card-label {
   padding: 1rem 1.25rem;
-  font-size: 0.9375rem;
-  font-weight: 600;
+  font-size: var(--text-base);
+  font-weight: var(--fw-semibold);
   color: var(--ic-text);
   letter-spacing: -0.01em;
+}
+
+/* 3D tilt — no animations for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  #ImgCarousel-{{ sid }} .ic__card {
+    transition: box-shadow 0.35s ease;
+    transform: none !important;
+  }
+  #ImgCarousel-{{ sid }} .ic__card::before { display: none; }
+  #ImgCarousel-{{ sid }} .ic__track { animation: none !important; }
 }
 
 @media (max-width: 768px) {
@@ -205,17 +271,58 @@
 
 </div>
 
-{%- if s.pause_on_hover -%}
 <script>
 (function () {
+  var wrap  = document.getElementById('ImgCarousel-{{ sid }}');
   var track = document.getElementById('IcTrack-{{ sid }}');
-  var wrap  = track && track.closest('#ImgCarousel-{{ sid }}');
-  if (!wrap) return;
+  if (!wrap || !track) return;
+
+  /* ── Pause on hover ── */
+  {% if s.pause_on_hover -%}
   wrap.addEventListener('mouseenter', function () { track.classList.add('is-paused'); });
   wrap.addEventListener('mouseleave', function () { track.classList.remove('is-paused'); });
+  {%- endif %}
+
+  /* ── 3D Tilt per card ── */
+  var MAX_TILT = 12; // degrees
+
+  function applyTilt(card, e) {
+    var rect  = card.getBoundingClientRect();
+    var x     = (e.clientX || (e.touches && e.touches[0].clientX)) - rect.left;
+    var y     = (e.clientY || (e.touches && e.touches[0].clientY)) - rect.top;
+    var cx    = rect.width  / 2;
+    var cy    = rect.height / 2;
+    var rotX  = ((y - cy) / cy) * -MAX_TILT;
+    var rotY  = ((x - cx) / cx) *  MAX_TILT;
+    card.style.setProperty('--tilt-x',   rotX.toFixed(2) + 'deg');
+    card.style.setProperty('--tilt-y',   rotY.toFixed(2) + 'deg');
+    card.style.setProperty('--glare-x',  ((x / rect.width)  * 100).toFixed(1) + '%');
+    card.style.setProperty('--glare-y',  ((y / rect.height) * 100).toFixed(1) + '%');
+    card.classList.add('is-tilting');
+  }
+
+  function resetTilt(card) {
+    card.style.setProperty('--tilt-x', '0deg');
+    card.style.setProperty('--tilt-y', '0deg');
+    card.classList.remove('is-tilting');
+  }
+
+  /* Only observe REAL cards (not aria-hidden duplicates) */
+  wrap.querySelectorAll('.ic__card:not([aria-hidden])').forEach(function (card) {
+    card.addEventListener('mousemove',  function (e) { applyTilt(card, e); });
+    card.addEventListener('touchmove',  function (e) { applyTilt(card, e); }, { passive: true });
+    card.addEventListener('mouseleave', function ()  { resetTilt(card); });
+    card.addEventListener('touchend',   function ()  { resetTilt(card); });
+  });
+
+  /* Respect prefers-reduced-motion */
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    wrap.querySelectorAll('.ic__card').forEach(function (c) {
+      c.removeEventListener('mousemove', applyTilt);
+    });
+  }
 }());
 </script>
-{%- endif -%}
 
 {% schema %}
 {
