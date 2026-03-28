@@ -11,87 +11,78 @@
   top: 50%;
   transform: translateY(-50%);
   width: 100px;
+  height: auto;
   background: #ffffff;
-  border-radius: 0 16px 16px 0;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  border-radius: 0 20px 20px 0;
+  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
-  padding: 2rem 1rem;
+  gap: 2.5rem;
+  padding: 2.5rem 1.25rem;
   z-index: 999;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition:
+    box-shadow 0.3s var(--ease-component, ease),
+    transform 0.3s var(--ease-component, ease);
+}
+
+.promo-sidebar-global:hover {
+  box-shadow: 0 15px 60px rgba(0, 0, 0, 0.2);
+  transform: translateY(-50%) translateX(5px);
 }
 
 .promo-sidebar__socials {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.75rem;
   align-items: center;
+  justify-content: center;
 }
 
 .promo-sidebar__social-link {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #f5f5f5 0%, #ebebeb 100%);
+  background: #ffffff;
+  border: 1.5px solid #e8e8e8;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #1a1a1a;
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   font-weight: 700;
   text-decoration: none;
   transition:
     background 0.3s var(--ease-component, ease),
+    border-color 0.3s var(--ease-component, ease),
     transform 0.3s var(--ease-component, ease),
     color 0.3s var(--ease-component, ease);
-  border: 2px solid transparent;
+  cursor: pointer;
+  pointer-events: none;
 }
 
-.promo-sidebar__social-link:hover {
-  background: #c9a96e;
+.promo-sidebar-global:hover .promo-sidebar__social-link {
+  transform: scale(1.1);
+  background: #1a1a1a;
   color: #ffffff;
-  transform: scale(1.15);
+  border-color: #1a1a1a;
 }
 
 .promo-sidebar__promo {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
   text-align: center;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #c9a96e;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #1a1a1a;
   white-space: nowrap;
+  line-height: 1.2;
   padding: 1rem 0;
-}
-
-.promo-sidebar__btn {
-  padding: 0.75rem 1.5rem;
-  background: #c9a96e;
-  color: #ffffff;
-  border: 2px solid #c9a96e;
-  border-radius: 50px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-decoration: none;
-  letter-spacing: 0.05em;
-  transition:
-    background 0.3s var(--ease-component, ease),
-    transform 0.3s var(--ease-component, ease);
-  cursor: pointer;
-  white-space: nowrap;
-  text-align: center;
-}
-
-.promo-sidebar__btn:hover {
-  background: #e8c89e;
-  border-color: #e8c89e;
-  transform: translateY(-2px);
+  pointer-events: none;
 }
 
 /* Mobile: hide on small screens */
@@ -100,54 +91,60 @@
     display: none;
   }
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .promo-sidebar-global,
+  .promo-sidebar__social-link {
+    transition: none;
+  }
+}
 </style>
 
-<div class="promo-sidebar-global">
+<div class="promo-sidebar-global" id="PromoSidebarTab">
   <!-- Social Links -->
   <div class="promo-sidebar__socials">
     {%- if settings.social_facebook_link != blank -%}
-      <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener noreferrer" class="promo-sidebar__social-link" title="Facebook" aria-label="Follow on Facebook">f</a>
+      <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener noreferrer" class="promo-sidebar__social-link" title="Facebook">f</a>
     {%- endif -%}
     {%- if settings.social_twitter_link != blank -%}
-      <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener noreferrer" class="promo-sidebar__social-link" title="X (Twitter)" aria-label="Follow on X">𝕏</a>
+      <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener noreferrer" class="promo-sidebar__social-link" title="X">𝕏</a>
     {%- endif -%}
     {%- if settings.social_instagram_link != blank -%}
-      <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener noreferrer" class="promo-sidebar__social-link" title="Instagram" aria-label="Follow on Instagram">📷</a>
+      <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener noreferrer" class="promo-sidebar__social-link" title="Instagram">📷</a>
     {%- endif -%}
     {%- if settings.social_youtube_link != blank -%}
-      <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener noreferrer" class="promo-sidebar__social-link" title="YouTube" aria-label="Subscribe on YouTube">▶</a>
+      <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener noreferrer" class="promo-sidebar__social-link" title="YouTube">▶</a>
     {%- endif -%}
   </div>
 
-  <!-- Promo Text -->
+  <!-- Promo Text (clickable) -->
   <p class="promo-sidebar__promo">{{ settings.promo_tab_text | default: 'GET 20% OFF' }}</p>
-
-  <!-- CTA Button -->
-  {%- if settings.popup_enabled -%}
-    <button class="promo-sidebar__btn" id="PromoSidebarBtn" type="button">
-      SHOP
-    </button>
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var btn = document.getElementById('PromoSidebarBtn');
-      var popup = document.getElementById('NewsletterPopup');
-      if (!btn || !popup) return;
-      btn.addEventListener('click', function () {
-        popup.setAttribute('aria-hidden', 'false');
-        popup.classList.add('is-open');
-        document.body.style.overflow = 'hidden';
-        setTimeout(function () {
-          var input = popup.querySelector('.nl-popup__input');
-          if (input) input.focus();
-        }, 300);
-      });
-    });
-    </script>
-  {%- else -%}
-    <a href="{{ settings.promo_tab_link | default: routes.collections_url }}" class="promo-sidebar__btn">
-      SHOP
-    </a>
-  {%- endif -%}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var sidebarTab = document.getElementById('PromoSidebarTab');
+  var popup = document.getElementById('NewsletterPopup');
+
+  if (!sidebarTab || !popup) return;
+
+  // Open popup when sidebar is clicked
+  sidebarTab.addEventListener('click', function (e) {
+    // Don't open popup if clicking on social links
+    if (e.target.closest('.promo-sidebar__social-link')) {
+      return;
+    }
+
+    popup.setAttribute('aria-hidden', 'false');
+    popup.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+
+    setTimeout(function () {
+      var input = popup.querySelector('.nl-popup__input');
+      if (input) input.focus();
+    }, 300);
+  });
+});
+</script>
 
 {%- endunless -%}
