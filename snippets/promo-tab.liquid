@@ -1,148 +1,154 @@
 {%- unless settings.show_sidebar_social -%}
 
 <style>
-/* ════════════════════════════════════════════════════
-   Promo Sidebar Tab  ·  Global promo display
-   ════════════════════════════════════════════════════ */
-
-.promo-sidebar-global {
+.promo-tab-v2 {
   position: fixed;
   left: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: 100px;
-  height: auto;
+  width: 68px;
   background: #ffffff;
-  border-radius: 0 20px 20px 0;
-  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.15);
+  border-radius: 0 24px 24px 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 2.5rem;
-  padding: 2.5rem 1.25rem;
+  padding: 1.75rem 0.875rem;
+  gap: 1.5rem;
   z-index: 999;
   cursor: pointer;
-  transition:
-    box-shadow 0.3s var(--ease-component, ease),
-    transform 0.3s var(--ease-component, ease);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
-.promo-sidebar-global:hover {
-  box-shadow: 0 15px 60px rgba(0, 0, 0, 0.2);
-  transform: translateY(-50%) translateX(5px);
+.promo-tab-v2:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  transform: translateY(-50%) translateX(4px);
 }
 
-.promo-sidebar__socials {
+.promo-tab-v2__icons {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
   align-items: center;
-  justify-content: center;
+  gap: 1.25rem;
 }
 
-.promo-sidebar__social-link {
-  width: 48px;
-  height: 48px;
+.promo-tab-v2__icon {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: #ffffff;
   border: 1.5px solid #e8e8e8;
+  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #1a1a1a;
-  font-size: 1.25rem;
-  font-weight: 700;
   text-decoration: none;
-  transition:
-    background 0.3s var(--ease-component, ease),
-    border-color 0.3s var(--ease-component, ease),
-    transform 0.3s var(--ease-component, ease),
-    color 0.3s var(--ease-component, ease);
-  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.promo-tab-v2__icon:hover {
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #fff;
+}
+
+.promo-tab-v2__icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
   pointer-events: none;
 }
 
-.promo-sidebar-global:hover .promo-sidebar__social-link {
-  transform: scale(1.1);
-  background: #1a1a1a;
-  color: #ffffff;
-  border-color: #1a1a1a;
+.promo-tab-v2__divider {
+  width: 32px;
+  height: 1px;
+  background: #e8e8e8;
+  flex-shrink: 0;
 }
 
-.promo-sidebar__promo {
+.promo-tab-v2__label {
   writing-mode: vertical-rl;
   transform: rotate(180deg);
-  text-align: center;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 0.7rem;
+  font-size: 0.625rem;
   font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: #1a1a1a;
   white-space: nowrap;
-  line-height: 1.2;
-  padding: 1rem 0;
   pointer-events: none;
+  padding: 0.5rem 0;
 }
 
-/* Mobile: hide on small screens */
 @media (max-width: 768px) {
-  .promo-sidebar-global {
-    display: none;
-  }
+  .promo-tab-v2 { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .promo-sidebar-global,
-  .promo-sidebar__social-link {
-    transition: none;
-  }
+  .promo-tab-v2 { transition: none; }
+  .promo-tab-v2__icon { transition: none; }
 }
 </style>
 
-<div class="promo-sidebar-global" id="PromoSidebarTab">
-  <!-- Social Links -->
-  <div class="promo-sidebar__socials">
+<div class="promo-tab-v2" id="PromoTabV2">
+
+  <div class="promo-tab-v2__icons">
     {%- if settings.social_facebook_link != blank -%}
-      <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener noreferrer" class="promo-sidebar__social-link" title="Facebook">f</a>
+      <a href="{{ settings.social_facebook_link }}" target="_blank" rel="noopener" class="promo-tab-v2__icon" aria-label="Facebook" id="PromoFb">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
     {%- endif -%}
     {%- if settings.social_twitter_link != blank -%}
-      <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener noreferrer" class="promo-sidebar__social-link" title="X">𝕏</a>
+      <a href="{{ settings.social_twitter_link }}" target="_blank" rel="noopener" class="promo-tab-v2__icon" aria-label="X" id="PromoX">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
     {%- endif -%}
     {%- if settings.social_instagram_link != blank -%}
-      <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener noreferrer" class="promo-sidebar__social-link" title="Instagram">📷</a>
+      <a href="{{ settings.social_instagram_link }}" target="_blank" rel="noopener" class="promo-tab-v2__icon" aria-label="Instagram" id="PromoIg">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+      </a>
     {%- endif -%}
     {%- if settings.social_youtube_link != blank -%}
-      <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener noreferrer" class="promo-sidebar__social-link" title="YouTube">▶</a>
+      <a href="{{ settings.social_youtube_link }}" target="_blank" rel="noopener" class="promo-tab-v2__icon" aria-label="YouTube" id="PromoYt">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-1.96C18.88 4 12 4 12 4s-6.88 0-8.6.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.94 1.96C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#fff"/></svg>
+      </a>
     {%- endif -%}
   </div>
 
-  <!-- Promo Text (clickable) -->
-  <p class="promo-sidebar__promo">{{ settings.promo_tab_text | default: 'GET 20% OFF' }}</p>
+  <div class="promo-tab-v2__divider"></div>
+
+  <span class="promo-tab-v2__label">{{ settings.promo_tab_text | default: 'GET 20% OFF' }}</span>
+
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var sidebarTab = document.getElementById('PromoSidebarTab');
-  var popup = document.getElementById('NewsletterPopup');
+  var tab    = document.getElementById('PromoTabV2');
+  var popup  = document.getElementById('NewsletterPopup');
+  if (!tab) return;
 
-  if (!sidebarTab || !popup) return;
+  /* Social link IDs — clicking these should navigate, not open popup */
+  var socialIds = ['PromoFb', 'PromoX', 'PromoIg', 'PromoYt'];
 
-  // Open popup when sidebar is clicked
-  sidebarTab.addEventListener('click', function (e) {
-    // Don't open popup if clicking on social links
-    if (e.target.closest('.promo-sidebar__social-link')) {
-      return;
+  tab.addEventListener('click', function (e) {
+    /* If a social link (or child of one) was clicked → let browser handle it */
+    for (var i = 0; i < socialIds.length; i++) {
+      var el = document.getElementById(socialIds[i]);
+      if (el && el.contains(e.target)) return;
     }
 
-    popup.setAttribute('aria-hidden', 'false');
-    popup.classList.add('is-open');
-    document.body.style.overflow = 'hidden';
-
-    setTimeout(function () {
-      var input = popup.querySelector('.nl-popup__input');
-      if (input) input.focus();
-    }, 300);
+    /* Open popup */
+    if (popup) {
+      popup.setAttribute('aria-hidden', 'false');
+      popup.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      setTimeout(function () {
+        var input = popup.querySelector('.nl-popup__input');
+        if (input) input.focus();
+      }, 300);
+    } else {
+      /* Fallback: navigate to promo link */
+      window.location.href = '{{ settings.promo_tab_link | default: routes.collections_url }}';
+    }
   });
 });
 </script>
