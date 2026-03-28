@@ -12,6 +12,14 @@
     "promo_tab_text": "GET 20% OFF",
     "phone_number": "+21 (0) 987654321",
     "email_address": "hello@domain.com",
+    "popup_enabled": true,
+    "popup_delay": 5,
+    "popup_show_once": true,
+    "popup_kicker": "FIRST TIMER?",
+    "popup_heading": "Sign up and get <em>20% off</em> your first order",
+    "popup_placeholder": "Enter your email",
+    "popup_success": "You're in! Check your inbox for your discount code.",
+    "popup_dismiss_label": "No thanks, I prefer full price",
     "sections": {
       "announcement-bar": {
         "type": "announcement-bar",
