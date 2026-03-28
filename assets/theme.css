@@ -189,11 +189,11 @@
   letter-spacing: 0.02em;
   border-radius: var(--radius-full);
   transition:
-    background var(--ease-micro),
-    color var(--ease-micro),
-    border-color var(--ease-micro),
-    transform var(--ease-micro),
-    box-shadow var(--ease-micro);
+    background 0.15s var(--ease-micro),
+    color 0.15s var(--ease-micro),
+    border-color 0.15s var(--ease-micro),
+    transform 0.15s var(--ease-micro),
+    box-shadow 0.15s var(--ease-micro);
   white-space: nowrap;
   cursor: pointer;
   border: 2px solid transparent;
@@ -4518,8 +4518,8 @@ body {
 /* ── Magnetic product card ── */
 .product-card {
   transition:
-    transform var(--ease-component),
-    box-shadow var(--ease-component);
+    transform 0.35s var(--ease-component),
+    box-shadow 0.35s var(--ease-component);
   will-change: transform;
 }
 .product-card:hover {
@@ -4537,8 +4537,8 @@ body {
 /* ── Collection card magnetic lift ── */
 .cl-card__inner {
   transition:
-    transform var(--ease-component),
-    box-shadow var(--ease-component);
+    transform 0.35s var(--ease-component),
+    box-shadow 0.35s var(--ease-component);
   will-change: transform;
 }
 .cl-card__inner:hover {
@@ -4549,8 +4549,8 @@ body {
 /* ── Story card lift ── */
 .story-card {
   transition:
-    transform var(--ease-component),
-    box-shadow var(--ease-component);
+    transform 0.35s var(--ease-component),
+    box-shadow 0.35s var(--ease-component);
   will-change: transform;
 }
 .story-card:hover {
@@ -4561,8 +4561,8 @@ body {
 /* ── Instagram grid item ── */
 .instagram-feed__item {
   transition:
-    transform var(--ease-component),
-    box-shadow var(--ease-component);
+    transform 0.35s var(--ease-component),
+    box-shadow 0.35s var(--ease-component);
 }
 .instagram-feed__item:hover {
   transform: scale(1.03);
@@ -4593,14 +4593,14 @@ body {
 .hero-slider__dot,
 .testimonials__dot {
   transition:
-    background var(--ease-component),
-    transform var(--ease-component),
-    width var(--ease-component);
+    background 0.35s var(--ease-component),
+    transform 0.35s var(--ease-component),
+    width 0.35s var(--ease-component);
 }
 
 /* ── Footer trust items ── */
 .footer__trust-item {
-  transition: transform var(--ease-component);
+  transition: transform 0.35s var(--ease-component);
 }
 .footer__trust-item:hover {
   transform: translateY(-2px);
@@ -4611,8 +4611,8 @@ body {
   opacity: 0;
   transform: translateY(8px);
   transition:
-    opacity var(--ease-component),
-    transform var(--ease-component);
+    opacity 0.35s var(--ease-component),
+    transform 0.35s var(--ease-component);
 }
 .product-card:hover .product-card__quick-add {
   opacity: 1;
@@ -4622,9 +4622,9 @@ body {
 /* ── Best sellers tab click feedback ── */
 .best-sellers__tab {
   transition:
-    background var(--ease-micro),
-    color var(--ease-micro),
-    border-color var(--ease-micro);
+    background 0.15s var(--ease-micro),
+    color 0.15s var(--ease-micro),
+    border-color 0.15s var(--ease-micro);
 }
 
 /* ── Smooth focus ring globally ── */
